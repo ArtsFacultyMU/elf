@@ -4,7 +4,7 @@ require_once($CFG->libdir.'/pagelib.php');
 
 define('PAGE_CHAT_VIEW',   'mod-chat-view');
 
-page_map_class('mod-chat-view', 'page_chat');
+page_map_class(PAGE_CHAT_VIEW, 'page_chat');
 
 /**
  * Class that models the behavior of a chat
