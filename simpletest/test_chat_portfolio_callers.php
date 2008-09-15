@@ -1,5 +1,5 @@
 <?php // $Id$
-require_once($CFG->libdir.'/simpletest/testportfoliolib.php');
+require_once($CFG->libdir.'/simpletest/portfolio_testclass.php');
 require_once($CFG->dirroot.'/mod/chat/lib.php');
 require_once($CFG->dirroot.'/admin/generator.php');
 
@@ -17,7 +17,7 @@ class testChatPortfolioCallers extends portfoliolib_test {
 
         parent::setUp();
 
-        $settings = array('quiet' => 1, 'database_prefix' => 'tst_', 'pre_cleanup' => 1,
+        $settings = array('quiet' => 1, 'pre_cleanup' => 1,
                           'modules_list' => array($this->module_type),
                           'number_of_students' => 15, 'students_per_course' => 15, 'number_of_sections' => 1,
                           'number_of_modules' => 1, 'messages_per_chat' => 15);
@@ -42,5 +42,8 @@ class testChatPortfolioCallers extends portfoliolib_test {
         $this->assertEqual($sha1, $this->caller->get_sha1());
     }
 
+    public function test_caller_with_plugins() {
+        parent::test_caller_with_plugins();
+    }
 }
 ?>
