@@ -16,17 +16,19 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Folder module version information
+ * Definition of log events
  *
  * @package    mod
  * @subpackage folder
- * @copyright  2009 Petr Skoda  {@link http://skodak.org}
+ * @copyright  2010 Petr Skoda (http://skodak.org)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$module->version  = 2010080300;
-$module->requires = 2010080300;  // Requires this Moodle version
-$module->cron     = 0;
-
+$logs = array(
+    array('module'=>'folder', 'action'=>'view', 'mtable'=>'folder', 'field'=>'name'),
+    array('module'=>'folder', 'action'=>'view all', 'mtable'=>'folder', 'field'=>'name'),
+    array('module'=>'folder', 'action'=>'update', 'mtable'=>'folder', 'field'=>'name'),
+    array('module'=>'folder', 'action'=>'add', 'mtable'=>'folder', 'field'=>'name'),
+);
