@@ -153,7 +153,7 @@ function xmldb_data_upgrade($oldversion) {
     // Moodle v2.9.0 release upgrade line.
     // Put any upgrade step following this.
 
-    if ($oldversion < 2015070300) {
+    if ($oldversion < 2015092200) {
 
         // Define field manageapproved to be added to data.
         $table = new xmldb_table('data');
@@ -165,7 +165,7 @@ function xmldb_data_upgrade($oldversion) {
         }
 
         // Data savepoint reached.
-        upgrade_mod_savepoint(true, 2015070300, 'data');
+        upgrade_mod_savepoint(true, 2015092200, 'data');
     }
 
     return true;
