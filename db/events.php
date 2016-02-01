@@ -15,16 +15,22 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file contains the version information for the comments feedback plugin
+ * EditPDF event handler definition.
  *
  * @package assignfeedback_editpdf
- * @copyright  2012 Davo Smith
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @category event
+ * @copyright 2016 Damyon Wiese
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
-$plugin->version   = 2016021601;
-$plugin->requires  = 2015111000;
-$plugin->component = 'assignfeedback_editpdf';
-
+// List of observers.
+$observers = array(
+    array(
+        'eventname'   => '\mod_assign\event\submission_created',
+        'callback'    => '\assignfeedback_editpdf\event\observer::submission_created',
+    ),
+    array(
+        'eventname'   => '\mod_assign\event\submission_updated',
+        'callback'    => '\assignfeedback_editpdf\event\observer::submission_updated',
+    ),
+);

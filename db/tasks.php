@@ -15,16 +15,30 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file contains the version information for the comments feedback plugin
+ * Definition of core scheduled tasks.
  *
- * @package assignfeedback_editpdf
- * @copyright  2012 Davo Smith
+ * The handlers defined on this file are processed and registered into
+ * the Moodle DB after any install or upgrade operation. All plugins
+ * support this.
+ *
+ * @package   core
+ * @category  task
+ * @copyright 2016 Damyon Wiese
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2016021601;
-$plugin->requires  = 2015111000;
-$plugin->component = 'assignfeedback_editpdf';
+/* List of handlers */
 
+$tasks = array(
+    array(
+        'classname' => 'assignfeedback_editpdf\task\convert_submissions',
+        'blocking' => 0,
+        'minute' => '*/15',
+        'hour' => '*',
+        'day' => '*',
+        'dayofweek' => '*',
+        'month' => '*'
+    ),
+);
