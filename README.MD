@@ -133,6 +133,10 @@ git branch -D split-mod-folder
 
 ## CREATING CUSTOM PLUGIN
 
+### FROM SCRATCH
+
+### EXTRACTING FROM EXISTING CODE
+
 TODO
 
 ## KEEPING THIRD-PARTY PLUGIN UP TO DATE
@@ -162,13 +166,52 @@ Assuming we are not modifying this plugin, there should be no conflicts (case wh
 
 ## CUSTOMIZING THIRD-PARTY PLUGIN
 
-TODO
+First thing you have to do, when you want to customize some third-party plugin is to fork the original repository on github. It is recommended to use same naming strategy as with customized core plugins, so elf- prefix plus hyphenated working directory path. Let's say we are customizing mod-attendance, so we will fork it's repository and the new repository will be called elf-mod-attendance.
 
-## KEEPING CUSTOMIZED THIRD-PARTY OR CUSTOM PLUGIN UP TO DATE
+When we have forked repository, we have to say our main elf repository to use the fork as a remote instead of original repository, we can use ```git remote set-url <remote-name> <remote-url>``` command for this and then we will fetch the remote for updates. So we will set-url for remote referencing to original repository and replace it with url of our fork, like this (assuming url of our fork is https://github.com/ArtsFacultyMU/elf-mod-attendance.git) :
 
-TODO
+```shell
+ git remote set-url mod-attendance https://github.com/ArtsFacultyMU/elf-mod-attendance.git
+ git fetch mod-attendance
+```
 
-## KEEPING CUSTOMIZED CORE PLUGIN UP TO DATE
+Configuration is done for now, so what to do when we want to actually modify plugin through our fork? We have to clone the repository with ```git clone https://github.com/ArtsFacultyMU/elf-mod-attendance.git``` and in our local repository make changes. Then we commit and push them as usual. Now we have modified the plugin repository only, but how to synchronize main repository with those changes? Actually it is same principle as mentioned earlier. We have to go to our local repository with main elf repository, fetch remote, merge changes, commit and push. So use the following (assuming, that in fork we are working on same branch as with original repository, thus MOODLE_31_STABLE):
+
+```shell
+git fetch
+git merge -s subtree --squash mod-attendance/MOODLE_31_STABLE
+# if it fails START 
+git reset --merge ORIG_HEAD
+git merge -X subtree=mod/attendance --squash mod-attendance/MOODLE_31_STABLE
+# if it fails END
+git commit -m "Updated the mod attendance plugin"
+git push
+```
+
+There is also possibility to make changes directly in new repository and then synchronizing plugin repository, but we will talk about this one later. Right now, we know how to make changes to customized third-party plugin and how to reflect them in main repository, but now since we have created fork and thus lost the synchronization with original plugin we need to keep our fork up to date. Let's se how to do that now.
+
+## KEEPING CUSTOMIZED THIRD-PARTY PLUGIN UP TO DATE
+
+To make things easier and avoid unnecessary merging problems we will merge the original plugin repository changes into our fork and not into main project. We can do this quite an easy way. First thing we need to do is to get into our local fork repository and create remote referencing to original repository, it is usually called upstream. We already now the way, so in case of our attendance plugin, we will just use ```git remote add upstream https://github.com/danmarsden/moodle-mod_attendance.git```. Now we have the connection, so as usual, let's fetch the changes with ```git fetch upstream```. We also need to make sure, that we are on the branch, that we want to update, so to make sure let's checkout that branch (in our case MOODLE_31_STABLE) with ```git checkout MOODLE_31_STABLE``` and now we can finally merge with ```git merge upstream/<branch-to-merge>```, so ```git merge upstream/MOODLE_31_STABLE``` and that's it, possibly we will have to resolve some conflicts, but there is no way to avoid that. Now we only have to commit and push changes to our plugin repository and after that also merge our plugin repository to main repository the way it was described in previous part.
+
+## WORKING WITH CUSTOMIZED CORE PLUGIN AND KEEPING IT UP TO DATE
+
+Approach to customized core plugins is very similar to customized third-party plugin approach. You simply clone the repository, make changes, commit and push them and then you merge it to main repository. So let's say we are working with mod-folder core plugin, we would use following commands to merge plugin repo with the main one (assuming repo has only master branch):
+
+```shell
+git fetch
+git merge -s subtree --squash mod-folder/master
+# if it fails START 
+git reset --merge ORIG_HEAD
+git merge -X subtree=mod/folder --squash mod-folder/master
+# if it fails END
+git commit -m "Updated the mod folder plugin"
+git push
+```
+
+As you can see, this part is basically same as with third-party plugin, but what about synchronization with original repo. We will have to slightly modify our approach, since core plugins doesn't have separate original repository and they are extracted from original moodle repo, our upstream branch will be actually referencing to moodle repository. So first we need to create our upstream remote with ```git remote add upstream https://github.com/moodle/moodle.git```. So far, so good, but now we have to combine extraction and merging approach.
+
+## WORKING WITH CUSTOM PLUGIN
 
 TODO
 
