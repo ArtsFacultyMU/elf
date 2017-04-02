@@ -48,6 +48,7 @@ To initial connection with all connected repositories (by creating remotes on yo
 
 ```shell
 # Third-party moduly
+git remote add moodle https://github.com/moodle/moodle.git
 git remote add mod-hotpot https://github.com/gbateson/moodle-mod_hotpot.git
 git remote add mod-questionnaire https://github.com/remotelearner/moodle-mod_questionnaire.git
 git remote add mod-tab https://github.com/oohoo/moodle-mod_tab.git
@@ -178,7 +179,7 @@ When we have forked repository, we have to say our main elf repository to use th
 Configuration is done for now, so what to do when we want to actually modify plugin through our fork? We have to clone the repository with ```git clone https://github.com/ArtsFacultyMU/elf-mod-attendance.git``` and in our local repository make changes. Then we commit and push them as usual. Now we have modified the plugin repository only, but how to synchronize main repository with those changes? Actually it is same principle as mentioned earlier. We have to go to our local repository with main elf repository, fetch remote, merge changes, commit and push. So use the following (assuming, that in fork we are working on same branch as with original repository, thus MOODLE_31_STABLE):
 
 ```shell
-git fetch
+git fetch mod-attendance
 git merge -s subtree --squash mod-attendance/MOODLE_31_STABLE
 # if it fails START 
 git reset --merge ORIG_HEAD
@@ -199,7 +200,7 @@ To make things easier and avoid unnecessary merging problems we will merge the o
 Approach to customized core plugins is very similar to customized third-party plugin approach. You simply clone the repository, make changes, commit and push them and then you merge it to main repository. So let's say we are working with mod-folder core plugin, we would use following commands to merge plugin repo with the main one (assuming repo has only master branch):
 
 ```shell
-git fetch
+git fetch mod-folder
 git merge -s subtree --squash mod-folder/master
 # if it fails START 
 git reset --merge ORIG_HEAD
@@ -216,7 +217,7 @@ Now we need to create new temporary branch for merging, let's call it merge-upst
 So the last step is to checkout back to master with ```git checkout master``` and merge our temporary branch with master simply with ```git merge merge-upstream```. Now just resolve merge conflicts if there are any, commit, push and clean the mess (temporary branch) with ```git branch -D merge-upstream```, also we need to merge our changes with main repository, as mentioned before, we will just use following (not in plugin local repository, but in main elf local repository):
 
 ```shell
-git fetch
+git fetch mod-folder
 git merge -s subtree --squash mod-folder/master
 # if it fails START 
 git reset --merge ORIG_HEAD
@@ -233,7 +234,16 @@ TODO
 
 ## KEEPING CORE MOODLE UP TO DATE
 
-TODO
+Keeping core moodle up to date is actually situation complementary to keeping core plugins up to date, what we do is that we need to merge all files from origianl repo to our main repo, but we need to omit folders coresponding to our customized core plugins. So, first we need to add remote if there is none (and also fetch), let's call it moodle, with ```git remote add moodle https://github.com/moodle/moodle.git```. But now the thing is, that we don't want to filter to one folder, we want to filter out some folders, in our case it is mod/folder and mod/chat for now. How to do this? We have to ho back to our master branch with ```git checkout master``` and put files and folder we don't want to update into .gitignore, in our case, the commands will look like this:
+
+```shell
+echo README.txt >> .gitignore
+echo README.MD >> .gitignore
+echo mod/folder/** >> .gitignore
+echo mod/chat/** >> .gitignore
+```
+
+In this moment we won't commit the changes and we will merge our master with appropriate moodle branch in our case MOODLE_31_STABLE, we will use ```git merge moodle/MOODLE_31_STABLE``` for this, as usual let's resolve the conflicts. What is important, we need to rollback our gitignore and since we haven't commited its changes, we can use ```git checkout -- .gitignore``` for this. Now we can finally commit and push and the update is done.
 
 ## MODIFYING PLUGIN FROM MAIN REPOSITORY
 
