@@ -209,7 +209,23 @@ git commit -m "Updated the mod folder plugin"
 git push
 ```
 
-As you can see, this part is basically same as with third-party plugin, but what about synchronization with original repo. We will have to slightly modify our approach, since core plugins doesn't have separate original repository and they are extracted from original moodle repo, our upstream branch will be actually referencing to moodle repository. So first we need to create our upstream remote with ```git remote add upstream https://github.com/moodle/moodle.git```. So far, so good, but now we have to combine extraction and merging approach.
+As you can see, this part is basically same as with third-party plugin, but what about synchronization with original repo. We will have to slightly modify our approach, since core plugins doesn't have separate original repository and they are extracted from original moodle repo, our upstream branch will be actually referencing to moodle repository. So first we need to create our upstream remote with ```git remote add upstream https://github.com/moodle/moodle.git```. So far, so good, but now we have to combine extraction and merging approach. First we checkout to branch we want to merge with, in our case MOODLE_31_STABLE, so let's use ```git checkout upstream/MOODLE_31_STABLE```.
+
+Now we need to create new temporary branch for merging, let's call it merge-upstream, with ```git checkout -b merge-upstream```, after this we have to filter this branch to our plugin folder (same way we did during extraction) with ```git filter-branch --subdirectory-filter mod/folder```. This can take some time, but we will end up with branch containing only content of plugin working directory in latest version commited to branch we selected, which is exactly what we want to merge with our repository.
+
+So the last step is to checkout back to master with ```git checkout master``` and merge our temporary branch with master simply with ```git merge merge-upstream```. Now just resolve merge conflicts if there are any, commit, push and clean the mess (temporary branch) with ```git branch -D merge-upstream```, also we need to merge our changes with main repository, as mentioned before, we will just use following (not in plugin local repository, but in main elf local repository):
+
+```shell
+git fetch
+git merge -s subtree --squash mod-folder/master
+# if it fails START 
+git reset --merge ORIG_HEAD
+git merge -X subtree=mod/folder --squash mod-folder/master
+# if it fails END
+git commit -m "Updated the mod folder plugin"
+git push
+```
+
 
 ## WORKING WITH CUSTOM PLUGIN
 
