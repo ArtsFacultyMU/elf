@@ -47,8 +47,9 @@ Remote | Repository | Branch | Path
 To initial connection with all connected repositories (by creating remotes on your local repository) run following:
 
 ```shell
-# Third-party moduly
+# Moodle core
 git remote add moodle https://github.com/moodle/moodle.git
+# Third-party moduly
 git remote add mod-hotpot https://github.com/gbateson/moodle-mod_hotpot.git
 git remote add mod-questionnaire https://github.com/remotelearner/moodle-mod_questionnaire.git
 git remote add mod-tab https://github.com/oohoo/moodle-mod_tab.git
@@ -68,6 +69,8 @@ git remote add lib-editor-tinymce-plugins-helixmedia https://github.com/streamin
 # Core moduly
 git remote add mod-chat https://github.com/ArtsFacultyMU/elf-mod-chat.git
 git remote add mod-folder https://github.com/ArtsFacultyMU/elf-mod-folder.git
+# Custom moduly
+# TODO
 # načtení nově vytvořených remote branches
 git fetch --all
 ```
@@ -134,11 +137,29 @@ git branch -D split-mod-folder
 
 ## CREATING CUSTOM PLUGIN
 
-### FROM SCRATCH
+Creating custom plugin is actually really easy (in terms of versioning), all you have to do is to create new repository, let's say we want to create custom template, in our case it is called elf_bs. We will use the same naming convention as usual, so our repository will be called elf-theme-elf_bs. Then we create folder in our local machine, for our local repository, let's call it same as our repository, so elf-theme-elf_bs, in this folder we will initialize git with command ```git init --bare```. After this if we are creating plugin from scratch, we will copy some basic files for our plugin, if we already have plugin, we will copy content of coresponding folder, in our case theme/elf_bs into our local repository folder. Now we can commit changes with ```git commit -am "Theme elf_bs initial commit"```.
 
-### EXTRACTING FROM EXISTING CODE
+Next thing we have to do is to connect our local repository with our remote repository, let's say it has url https://github.com/ArtsFacultyMU/elf-theme-elf_bs.git, we will do this by adding remote with ```git remote add origin https://github.com/ArtsFacultyMU/elf-theme-elf_bs.git```, then we just have to push the changes to repository with ```git push -u origin master```. That's it we have repository with our custom plugin, but in our case that's just the first part. 
 
-TODO
+We also need to connect it with our main repository, we will do this same way as with third-party plugins, so let's go to our local folder with main repository. There we have to add new remote referencing to our plugin repository and fetching it, in our case:
+
+```shell
+git remote add theme-elf_bs https://github.com/ArtsFacultyMU/elf-theme-elf_bs.git
+git fetch theme-elf_bs
+```
+
+Next step is to add content of plugin repository to corresponding folder with ```git read-tree --prefix=<working-directory-path> -u <remote-name>/<remote-branch-name>``` command, as we have seen in part describing integration of third-party plugins. In our case we have only master branch, but we could definitely have multiple branches, but let's keep it simple and say, that we have only master branch, in this case command will take following form:
+
+```shell
+git read-tree --prefix=theme/elf_bs -u theme-elf_bs
+```
+
+And we are almost there, all we need to do now is to commit and push changes to main repository and we have sucessfully integrated our custom plugin.
+
+```shell
+git commit -m "Added elf_bs theme"
+git push
+```
 
 ## KEEPING THIRD-PARTY PLUGIN UP TO DATE
 
@@ -230,7 +251,20 @@ git push
 
 ## WORKING WITH CUSTOM PLUGIN
 
-TODO
+This one is again the most simple case in our scenario. Since we are the ones responsible for keeping our plugin up to date, it isn't part of core and it isn't fork, so we don't have to synchronize it with any external changes, thus all we need to do is to merge our plugin into our main repository, when we make changes in it and we can be sure, that there won't be any conflicts. We already know the commands, let's assume, that we already have remote branch created in our main repository from previous steps, if we want to update version of our plugin, let's say we are talking about theme-elf_bs, we need to run following commands:
+
+```shell
+git fetch theme-elf_bs
+git merge -s subtree --squash theme-elf_bs/master
+# if it fails START 
+git reset --merge ORIG_HEAD
+git merge -X subtree=theme/elf_bs --squash theme-elf_bs/master
+# if it fails END
+git commit -m "Updated the theme elf_bs plugin"
+git push
+```
+
+And that's all, but don't forget, that one thing is that surely there will be no conflicts, if we are not modifying our plugin from main repository, but it doesn't mean that changes in Moodle doesn't cause us any problems, our plugin will definitely use at least some kind of Moodle functionality and implements some interface and since we are the plugin developers we are the ones who have to maintain the plugin to make it work in the moment when something in Moodle that affects our plugin changes.
 
 ## KEEPING CORE MOODLE UP TO DATE
 
@@ -247,5 +281,30 @@ In this moment we won't commit the changes and we will merge our master with app
 
 ## MODIFYING PLUGIN FROM MAIN REPOSITORY
 
-TODO
+Since moodle plugins doesn't work without Moodle and it is complicated to test them separately, we always have to work with them in our Moodle instance, so it would be nice to edit them inside this instance, our main project, too, otherwise we would have to make change in plugin repository, then copy it to main project and we would copy it there and back all the time, which is not really comfortable and also leaves a huge space for mistakes. But here it gets a bit tricky, how to make changes in our main repository, when we want to track changes, especially because of the merges, in our separate repositories? And what if we want to make some change in our main repository, that is not general for plugin, but is specific for our Moodle instance (like configuration)? And how to split these cases? Many questions, but fortunately it has a quite simple answer and that is powerful git cherrypick command, but let's start from the beggining.
+
+First thing we need to know, that when using subtrees for plugins we can make changes directly in our main repository folder and simply commit and push them, we would merge these changes back to our repository anyway, so why not. The question is how to properly get them to our plugin repositories. First let's think a bit about what kinds of commits can appear in our main repository. In relation to our plugin, there are generally four cases - commits that modify only main module and not the plugin, commits modifying only plugin and they are meant to be backported to its repository, changes that modify plugin and main module and are meant to be backported and changes that modify plugin (and possibly also main module, but that is not relevant for this case) and aren't meant to be backported, which means, they are local and should not be reflected in plugin repository.
+
+First and last case are thus not meant to be part of the plugin repository and should be ommited in them. Second case should be copied as a whole in plugin repository and third case, the most complicated one, should be copied, but not as a whole, we should take only changes that modifies our plugin. So how to solve it? We definitely should copy the files and commit them again from plugin repository, since that would make different commits and could result in some later problems with merging. So what to do?
+
+We will use git cherry-pick command for this, this command lets us to pick commits from one branch and push them to other one. To make things clean let's create new temporary branch for this, we will call it same way as the plugin remote branch, but we'll add backport- prefix to it. This branch should be splitted from branch we want to commit changes to, so branch of the plugin we want to modify, let's say it's master branch of our mod-folder plugin, but we should be in our main repository, not plugin repository, so we will have to checkout branch from our remote, we can do this by following command:
+
+```shell
+git checkout -b backport-mod-folder mod-folder/master
+```
+
+Now we have to cherry-pick changes from branch we modified, so let's say it is our main repository master branch. Cherry-pick is quite complex command and it let's us select commits many ways as shows [git cherry-pick documentation](https://git-scm.com/docs/git-cherry-pick). We will show just the basic ones, to pick one specific commit we use ```git cherry-pick -x --strategy=subtree <commit-to-take>```, to pick multiple commits we use ```git cherry-pick -x --strategy=subtree <commit-to-take-1> <commit-to-take-2>``` and finally to take range of commits we use ```git cherry-pick -x --strategy=subtree <first-commit-to-take>..<last-commit-to-take>```. We can call cherry-pick multiple times and commits will aggregate. The question is how to specify commit, the first option is to use commits hash, the second one is to use some special commands, we will show just one of them, it takes from ```<branch-to-take-from>~<distance-from-last-commit>``` so  master~0 will take the last commit from master, master~3 will take fourth last commit from master and for example development~1 will take second last commit from development branch. So we know how to use cherry-pick, so we can take commits we want, let's say that we have plugin changes in last six commits of main plugin master branch, but the last and third last change are just instance specific, so we don't want to commit them to plugin repository. We can use cherry-pick multiple times, it could look for example like this:
+
+```shell
+git cherry-pick -x --strategy=subtree master~1 # this takes second last change
+git cherry-pick -x --strategy=subtree master~3..master~5 # this takes fourth to sixth last change
+```
+
+When we have cherry-picked all the commits we want to transfer to our temporary branch we will just call ```git push``` to apply them to our branch and since it was checked-out from plugin remote, changes will be pushed to our plugin repository and that's it. Now we can checkout to our regular branch, let's say it's master and remove backport branch with:
+
+```shell
+git checkout master
+git branch -D backport-mod-folder
+```
+
 
