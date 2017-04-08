@@ -4,6 +4,7 @@ This repository is based on [Moodle main repository](https://github.com/moodle/m
 
 # DEVELOPMENT
 **OUR NEW BIBLE**: https://medium.com/@porteneuve/mastering-git-subtrees-943d29a798ec
+
 **HOW TO MAKE PRIVATE FORK**: https://help.github.com/articles/duplicating-a-repository/
 
 ## STRUCTURE
