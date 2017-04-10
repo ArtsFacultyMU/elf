@@ -153,7 +153,7 @@ git fetch theme-elf_bs
 Next step is to add content of plugin repository to corresponding folder with ```git read-tree --prefix=<working-directory-path> -u <remote-name>/<remote-branch-name>``` command, as we have seen in part describing integration of third-party plugins. In our case we have only master branch, but we could definitely have multiple branches, but let's keep it simple and say, that we have only master branch, in this case command will take following form:
 
 ```shell
-git read-tree --prefix=theme/elf_bs -u theme-elf_bs
+git read-tree --prefix=theme/elf_bs -u theme-elf_bs/master
 ```
 
 And we are almost there, all we need to do now is to commit and push changes to main repository and we have sucessfully integrated our custom plugin.
