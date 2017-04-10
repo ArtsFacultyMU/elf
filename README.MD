@@ -44,6 +44,11 @@ mod-folder | [Link](https://github.com/ArtsFacultyMU/elf-mod-folder.git) | maste
 ### CUSTOM PLUGINS
 Remote | Repository | Branch | Path
 ------ | ---------- | ------ | ----
+theme-elf_bs | [Link](https://github.com/ArtsFacultyMU/elf-theme-elf_bs.git) | master | theme/elf_bs
+mod-newassignment | [Link](https://github.com/ArtsFacultyMU/elf-mod-newassignment.git) | master | mod/newassignment
+blocks-is_links | [Link](https://github.com/ArtsFacultyMU/elf-blocks-is_links.git) | master | blocks/is_links
+blocks-copyblok | [Link](https://github.com/ArtsFacultyMU/elf-blocks-copyblok.git) | master | blocks/copyblok
+enrol-ismu | [Link](https://github.com/ArtsFacultyMU/elf-enrol-ismu.git) | master | enrol/ismu
 
 ## INITIALIZATION
 To initial connection with all connected repositories (by creating remotes on your local repository) run following:
@@ -72,7 +77,11 @@ git remote add lib-editor-tinymce-plugins-helixmedia https://github.com/streamin
 git remote add mod-chat https://github.com/ArtsFacultyMU/elf-mod-chat.git
 git remote add mod-folder https://github.com/ArtsFacultyMU/elf-mod-folder.git
 # Custom moduly
-# TODO
+git remote add theme-elf_bs https://github.com/ArtsFacultyMU/elf-theme-elf_bs.git
+git remote add mod-newassignment https://github.com/ArtsFacultyMU/elf-mod-newassignment.git
+git remote add blocks-is_links https://github.com/ArtsFacultyMU/elf-blocks-is_links.git
+git remote add blocks-copyblok https://github.com/ArtsFacultyMU/elf-blocks-copyblok.git
+git remote add enrol-ismu https://github.com/ArtsFacultyMU/elf-enrol-ismu.git
 # načtení nově vytvořených remote branches
 git fetch --all
 ```
@@ -139,7 +148,7 @@ git branch -D split-mod-folder
 
 ## CREATING CUSTOM PLUGIN
 
-Creating custom plugin is actually really easy (in terms of versioning), all you have to do is to create new repository, let's say we want to create custom template, in our case it is called elf_bs. We will use the same naming convention as usual, so our repository will be called elf-theme-elf_bs. Then we create folder in our local machine, for our local repository, let's call it same as our repository, so elf-theme-elf_bs, in this folder we will initialize git with command ```git init```. After this if we are creating plugin from scratch, we will copy some basic files for our plugin, if we already have plugin, we will copy content of coresponding folder, in our case theme/elf_bs into our local repository folder. Now we can commit changes with ```git commit -am "Theme elf_bs initial commit"```.
+Creating custom plugin is actually really easy (in terms of versioning), all you have to do is to create new repository, let's say we want to create custom template, in our case it is called elf_bs. We will use the same naming convention as usual, so our repository will be called elf-theme-elf_bs. Then we create folder in our local machine, for our local repository, let's call it same as our repository, so elf-theme-elf_bs, in this folder we will initialize git with command ```git init```. After this if we are creating plugin from scratch, we will copy some basic files for our plugin, if we already have plugin, we will copy content of coresponding folder, in our case theme/elf_bs into our local repository folder. Now we can commit changes with ```git add .``` and ```git commit -am "Theme elf_bs initial commit"```.
 
 Next thing we have to do is to connect our local repository with our remote repository, let's say it has url https://github.com/ArtsFacultyMU/elf-theme-elf_bs.git, we will do this by adding remote with ```git remote add origin https://github.com/ArtsFacultyMU/elf-theme-elf_bs.git```, then we just have to push the changes to repository with ```git push -u origin master```. That's it we have repository with our custom plugin, but in our case that's just the first part. 
 
