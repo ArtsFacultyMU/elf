@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="mod/newmodule/db" VERSION="20101203" COMMENT="XMLDB file for Moodle mod/newmodule"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="newassignment" COMMENT="This table saves information about an instance of mod_newassingment in a course." NEXT="newassign_submissions">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" NEXT="course"/>
+        <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="id" NEXT="name"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="The name of the instance of the assignment. Displayed at the top of each page." PREVIOUS="course" NEXT="intro"/>
+        <FIELD NAME="intro" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="The description of the assignment. This field is used by feature MOD_INTRO." PREVIOUS="name" NEXT="introformat"/>
+        <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The format of the description field of the assignment. This field is used by feature MOD_INTRO." PREVIOUS="intro" NEXT="alwaysshowdescription"/>
+        <FIELD NAME="alwaysshowdescription" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="If false the assignment intro will only be displayed after the allowsubmissionsfrom date. If true it will always be displayed." PREVIOUS="introformat" NEXT="preventlatesubmissions"/>
+        <FIELD NAME="preventlatesubmissions" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="If true, submissions will not be accepted past the due date." PREVIOUS="alwaysshowdescription" NEXT="sendnotifications"/>
+        <FIELD NAME="sendnotifications" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Allows the disabling of email notifications in the assign module." PREVIOUS="preventlatesubmissions" NEXT="sendlatenotifications"/>
+        <FIELD NAME="sendlatenotifications" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Allows separate enabling of notifications for late assignment submissions." PREVIOUS="sendnotifications" NEXT="duedate"/>
+        <FIELD NAME="duedate" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The due date for the assignment. Displayed to students." PREVIOUS="sendlatenotifications" NEXT="allowsubmissionsfromdate"/>
+        <FIELD NAME="allowsubmissionsfromdate" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="If set, submissions will only be accepted after this date." PREVIOUS="duedate" NEXT="grade"/>
+        <FIELD NAME="grade" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The maximum grade for this assignment. Can be negative to indicate the use of a scale." PREVIOUS="allowsubmissionsfromdate" NEXT="grademethod"/>
+        <FIELD NAME="grademethod" TYPE="char" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="For simple grading" PREVIOUS="grade" NEXT="submissiontype"/>
+        <FIELD NAME="submissiontype" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="onlinetext" SEQUENCE="false" COMMENT="" PREVIOUS="grademethod" NEXT="submissionmaxfilesize"/>
+        <FIELD NAME="submissionmaxfilesize" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="" PREVIOUS="submissiontype" NEXT="submissionmaxfilecount"/>
+        <FIELD NAME="submissionmaxfilecount" TYPE="int" LENGTH="4" NOTNULL="false" SEQUENCE="false" COMMENT="" PREVIOUS="submissionmaxfilesize" NEXT="submissioncomments"/>
+        <FIELD NAME="submissioncomments" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="" PREVIOUS="submissionmaxfilecount" NEXT="publishtime"/>
+        <FIELD NAME="publishtime" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="" PREVIOUS="submissioncomments" NEXT="publishsubmissions"/>
+        <FIELD NAME="publishsubmissions" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="" PREVIOUS="publishtime" NEXT="publishsubmissionsanonymously"/>
+        <FIELD NAME="publishsubmissionsanonymously" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="" PREVIOUS="publishsubmissions" NEXT="publishfeedbacks"/>
+        <FIELD NAME="publishfeedbacks" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="" PREVIOUS="publishsubmissionsanonymously" NEXT="publishfeedbacksanonymously"/>
+        <FIELD NAME="publishfeedbacksanonymously" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="" PREVIOUS="publishfeedbacks" NEXT="newassigncompletition"/>        
+        <FIELD NAME="newassigncompletition" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="" PREVIOUS="publishfeedbacksanonymously" NEXT="timemodified"/>        
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The time the settings for this assign module instance were last modified." PREVIOUS="newassigncompletition"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="The unique id for this assignment instance."/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="course" UNIQUE="false" FIELDS="course" COMMENT="The course this assignment instance belongs to."/>
+      </INDEXES>
+    </TABLE>    
+    <TABLE NAME="newassign_submissions" COMMENT="This table keeps information about student interactions with the mod/assign. This is limited to metadata about a student submission but does not include the submission itself which is stored by plugins." PREVIOUS="newassignment" NEXT="newassign_feedbacks">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" NEXT="version"/>
+        <FIELD NAME="version" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="id" NEXT="assignment"/>
+        <FIELD NAME="assignment" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="version" NEXT="userid"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="assignment" NEXT="timecreated"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The time of the first student submission to this assignment." PREVIOUS="userid" NEXT="timemodified"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The last time this assignment submission was modified by a student." PREVIOUS="timecreated"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="The unique id for this assignment submission.With versions" NEXT="assignment"/>
+        <KEY NAME="assignment" TYPE="foreign" FIELDS="assignment" REFTABLE="assign" REFFIELDS="id" COMMENT="The instance of mod_assign this submission belongs to." PREVIOUS="primary"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="userid" UNIQUE="false" FIELDS="userid"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="newassign_feedbacks" COMMENT="" PREVIOUS="newassign_submissions" NEXT="newassign_grades">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" NEXT="assignment"/>
+        <FIELD NAME="assignment" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="id" NEXT="submission"/>
+        <FIELD NAME="submission" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="assignment" NEXT="userid"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="submission" NEXT="timecreated"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The time of the first student submission to this assignment." PREVIOUS="userid" NEXT="timemodified"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The last time this assignment submission was modified by a student." PREVIOUS="timecreated" NEXT="status" />
+        <FIELD NAME="status" TYPE="char" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="The status of this assignment feedback. The current statuses are ACCEPTED and DECLINED." PREVIOUS="timemodified"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="The unique id for this assignment submission." NEXT="assignment"/>
+        <KEY NAME="assignment" TYPE="foreign" FIELDS="assignment" REFTABLE="newassignment" REFFIELDS="id" COMMENT="The instance of mod_assign this submission belongs to." PREVIOUS="primary" NEXT="submission"/>
+        <KEY NAME="submission" TYPE="foreign" FIELDS="submission" REFTABLE="newassign_submissions" REFFIELDS="id" COMMENT="" PREVIOUS="assignment"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="userid" UNIQUE="false" FIELDS="userid"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="newassign_grades" COMMENT="Grading information about a single assignment submission." PREVIOUS="newassign_feedbacks" NEXT="newassign_rubric_fillings">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" NEXT="assignment"/>
+        <FIELD NAME="assignment" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="id" NEXT="submission"/>
+        <FIELD NAME="submission" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="assignment" NEXT="userid"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="submission" NEXT="timecreated"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The time the assignment submission was first modified by a grader." PREVIOUS="userid" NEXT="timemodified"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The most recent modification time for the assignment submission by a grader." PREVIOUS="timecreated" NEXT="grader"/>
+        <FIELD NAME="grader" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" PREVIOUS="timemodified" NEXT="grade"/>
+        <FIELD NAME="grade" TYPE="number" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" DECIMALS="5" COMMENT="The numerical grade for this assignment submission. Can be determined by scales/advancedgradingforms etc but will always be converted back to a floating point number." PREVIOUS="grader" NEXT="mailed"/>
+        </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="The unique id for this grade." NEXT="assignment"/>
+        <KEY NAME="assignment" TYPE="foreign" FIELDS="assignment" REFTABLE="newassignment" REFFIELDS="id" COMMENT="The assignment instance this grade belongs to." PREVIOUS="primary" NEXT="submission"/>
+        <KEY NAME="submission" TYPE="foreign" FIELDS="submission" REFTABLE="newassign_submissions" REFFIELDS="id" COMMENT="The submission instance this grade belongs to." PREVIOUS="assignment"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="userid" UNIQUE="false" FIELDS="userid" COMMENT="The userid for the submission relating to this grade." NEXT="mailed"/>
+        </INDEXES>
+    </TABLE>
+    <TABLE NAME="newassign_rubric_fillings" COMMENT="Stores the data of how the rubric is filled by a particular rater" PREVIOUS="newassign_grades" NEXT="newassign_guide_fillings">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" NEXT="gradeid"/>
+        <FIELD NAME="gradeid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The ID of the grading form instance" PREVIOUS="id" NEXT="criterionid"/>
+        <FIELD NAME="criterionid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The ID of the criterion (row) in the rubric" PREVIOUS="gradeid" NEXT="levelid"/>
+        <FIELD NAME="levelid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="If a particular level was selected during the assessment, its ID is stored here" PREVIOUS="criterionid" NEXT="remark"/>
+        <FIELD NAME="remark" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" COMMENT="Side note feedback regarding this particular criterion" PREVIOUS="levelid" NEXT="remarkformat"/>
+        <FIELD NAME="remarkformat" TYPE="int" LENGTH="2" NOTNULL="false" SEQUENCE="false" COMMENT="The format of the remark field" PREVIOUS="remark"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="fk_gradeid"/>
+        <KEY NAME="fk_gradeid" TYPE="foreign" FIELDS="gradeid" REFTABLE="newassign_grades" REFFIELDS="id" PREVIOUS="primary" NEXT="fk_criterionid"/>
+        <KEY NAME="fk_criterionid" TYPE="foreign" FIELDS="criterionid" REFTABLE="gradingform_rubric_criteria" REFFIELDS="id" PREVIOUS="fk_gradeid" NEXT="uq_instance_criterion"/>
+        <KEY NAME="uq_grade_criterion" TYPE="unique" FIELDS="gradeid, criterionid" PREVIOUS="fk_criterionid"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="ix_levelid" UNIQUE="false" FIELDS="levelid" COMMENT="levelid acts as a foreign key but null values are allowed"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="newassign_guide_fillings" COMMENT="Stores the data of how the guide is filled by a particular rater" PREVIOUS="newassign_rubric_fillings" NEXT="newassign_sub_onlinetext">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" NEXT="gradeid"/>
+                <FIELD NAME="gradeid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The ID of the grading form instance" PREVIOUS="id" NEXT="criterionid"/>
+                <FIELD NAME="criterionid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The ID of the criterion (row) in the guide" PREVIOUS="gradeid" NEXT="remark"/>
+                <FIELD NAME="remark" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Side note feedback regarding this particular criterion" PREVIOUS="criterionid" NEXT="remarkformat"/>
+                <FIELD NAME="remarkformat" TYPE="int" LENGTH="2" NOTNULL="false" SEQUENCE="false" COMMENT="The format of the remark field" PREVIOUS="remark" NEXT="score"/>
+                <FIELD NAME="score" TYPE="number" LENGTH="10" NOTNULL="true" SEQUENCE="false" DECIMALS="5" COMMENT="The score assigned" PREVIOUS="remarkformat"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="fk_gradeid"/>
+                <KEY NAME="fk_gradeid" TYPE="foreign" FIELDS="gradeid" REFTABLE="newassign_grades" REFFIELDS="id" PREVIOUS="primary" NEXT="fk_criterionid"/>
+                <KEY NAME="fk_criterionid" TYPE="foreign" FIELDS="criterionid" REFTABLE="gradingform_guide_criteria" REFFIELDS="id" PREVIOUS="fk_gradeid" NEXT="uq_instance_criterion"/>
+                <KEY NAME="uq_grade_criterion" TYPE="unique" FIELDS="gradeid, criterionid" PREVIOUS="fk_criterionid"/>
+            </KEYS>
+        </TABLE>
+    <TABLE NAME="newassign_sub_onlinetext" COMMENT="This table keeps information about student interactions with the mod/assign. This is limited to metadata about a student submission but does not include the submission itself which is stored by plugins." PREVIOUS="newassign_guide_fillings" NEXT="newassign_feed_comment">
+      <FIELDS>
+      	<FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" NEXT="submission"/>
+        <FIELD NAME="submission" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" PREVIOUS="id" NEXT="text"/>
+        <FIELD NAME="text" TYPE="text" NOTNULL="true" SEQUENCE="false" PREVIOUS="submission" NEXT="format"/>
+        <FIELD NAME="format" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The format for this online text submission." PREVIOUS="text"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="The unique id for this assignment submission.With versions" NEXT="submission"/>
+        <KEY NAME="submission" TYPE="foreign" FIELDS="submission" REFTABLE="newassign_submissions" REFFIELDS="id" COMMENT="The submission instance this plugin belongs to." PREVIOUS="primary"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="newassign_feed_comment" COMMENT="This table keeps information about student interactions with the mod/assign. This is limited to metadata about a student submission but does not include the submission itself which is stored by plugins." PREVIOUS="newassign_sub_onlinetext">
+      <FIELDS>
+      	<FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" NEXT="feedback"/>
+        <FIELD NAME="feedback" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" PREVIOUS="id" NEXT="text"/>
+        <FIELD NAME="text" TYPE="text" NOTNULL="true" SEQUENCE="false" PREVIOUS="feedback" NEXT="format"/>
+        <FIELD NAME="format" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The format for this online text submission." PREVIOUS="text"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="The unique id for this assignment submission.With versions" NEXT="feedback"/>
+        <KEY NAME="feedback" TYPE="foreign" FIELDS="feedback" REFTABLE="newassign_feedbacks" REFFIELDS="id" COMMENT="The feedback instance this plugin belongs to." PREVIOUS="primary"/>
+      </KEYS>
+    </TABLE>
+  </TABLES>
+</XMLDB>
