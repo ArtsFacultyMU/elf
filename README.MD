@@ -33,6 +33,9 @@ lib-editor-atto-plugins-hr | [Link](https://github.com/damyon/moodle-atto_hr.git
 lib-editor-atto-plugins-fontfamily | [Link](https://github.com/projectestac/moodle-atto_fontfamily.git) | master | lib/editor/atto/plugins/fontfamily
 lib-editor-atto-plugins-fontsize | [Link](https://github.com/andrewnicols/moodle-atto_fontsize.git) | master | lib/editor/atto/plugins/fontsize
 lib-editor-atto-plugins-helixatto | [Link](https://github.com/streamingltd/MEDIAL-Moodle-ATTO.git) | master | lib/editor/atto/plugins/helixatto
+lib-editor-atto-plugins-morefontcolors | [Link](https://github.com/ndunand/moodle-atto_morefontcolors.git | master | lib/editor/atto/plugins/morefontcolors
+lib-editor-atto-plugins-htmlplus | [Link](https://github.com/andrewnicols/moodle-atto_htmlplus.git | master | lib/editor/atto/plugins/htmlplus
+lib-editor-atto-plugins-fullscreen | [Link](https://github.com/dthies/moodle-atto_fullscreen.git | master | lib/editor/atto/plugins/fullscreen
 lib-editor-tinymce-plugins-helixmedia | [Link](https://github.com/streamingltd/MEDIAL-Moodle-TinyMCE.git) | master | lib/editor/tinymce/plugins/helixmedia
 
 ### CUSTOMIZED CORE PLUGINS
@@ -72,6 +75,9 @@ git remote add lib-editor-atto-plugins-hr https://github.com/damyon/moodle-atto_
 git remote add lib-editor-atto-plugins-fontfamily https://github.com/projectestac/moodle-atto_fontfamily.git
 git remote add lib-editor-atto-plugins-fontsize https://github.com/andrewnicols/moodle-atto_fontsize.git
 git remote add lib-editor-atto-plugins-helixatto https://github.com/streamingltd/MEDIAL-Moodle-ATTO.git
+git remote add lib-editor-atto-plugins-morefontcolors https://github.com/ndunand/moodle-atto_morefontcolors.git
+git remote add lib-editor-atto-plugins-htmlplus https://github.com/andrewnicols/moodle-atto_htmlplus.git
+git remote add lib-editor-atto-plugins-fullscreen https://github.com/dthies/moodle-atto_fullscreen.git
 git remote add lib-editor-tinymce-plugins-helixmedia https://github.com/streamingltd/MEDIAL-Moodle-TinyMCE.git
 # Core moduly
 git remote add mod-chat https://github.com/ArtsFacultyMU/elf-mod-chat.git
