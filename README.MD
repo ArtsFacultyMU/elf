@@ -43,6 +43,7 @@ Remote | Repository | Branch | Path
 ------ | ---------- | ------ | ----
 mod-chat | [Link](https://github.com/ArtsFacultyMU/elf-mod-chat.git) | master (but based on MOODLE_31_STABLE fork) | mod/chat
 mod-folder | [Link](https://github.com/ArtsFacultyMU/elf-mod-folder.git) | master (but based on MOODLE_31_STABLE fork) | mod/folder
+question-type-multianswer | [Link](https://github.com/ArtsFacultyMU/elf-question-type-multianswer.git) | master (but based on MOODLE_31_STABLE fork) | question/type/multianswer
 
 ### CUSTOM PLUGINS
 Remote | Repository | Branch | Path
@@ -82,6 +83,7 @@ git remote add lib-editor-tinymce-plugins-helixmedia https://github.com/streamin
 # Core moduly
 git remote add mod-chat https://github.com/ArtsFacultyMU/elf-mod-chat.git
 git remote add mod-folder https://github.com/ArtsFacultyMU/elf-mod-folder.git
+git remote add question-type-multianswer https://github.com/ArtsFacultyMU/elf-question-type-multianswer.git
 # Custom moduly
 git remote add theme-elf_bs https://github.com/ArtsFacultyMU/elf-theme-elf_bs.git
 git remote add mod-newassignment https://github.com/ArtsFacultyMU/elf-mod-newassignment.git
@@ -130,7 +132,7 @@ git checkout -b split-mod-folder
 So we have our special migration branch, now we can filter repository only to plugin working directory and also filter commits to those which involves this directory, we can use ```git filter-branch --subdirectory <working-directory-path>``` command for both of this. In our case, the command would look like this:
 
 ```shell
-git filter-branch --subdirectory mod/folder
+git filter-branch --subdirectory-filter mod/folder
 ```
 
 Now we have files and commits we want to migrate, so we need to add remote referencing to repository we created at the beggining, again using ```git remote add <remote-name> <remote-url>``` command. So in our case, assuming that we called the repository elf-mod-folder and that it is located on following url: https://github.com/ArtsFacultyMU/elf-mod-folder.git, command would look like this:
