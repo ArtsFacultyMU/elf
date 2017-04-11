@@ -319,7 +319,13 @@ git cherry-pick -x --strategy=subtree master~1 # this takes second last change
 git cherry-pick -x --strategy=subtree master~3..master~5 # this takes fourth to sixth last change
 ```
 
-When we have cherry-picked all the commits we want to transfer to our temporary branch we will just call ```git push``` to apply them to our branch and since it was checked-out from plugin remote, changes will be pushed to our plugin repository and that's it. Now we can checkout to our regular branch, let's say it's master and remove backport branch with:
+When we have cherry-picked all the commits we want to transfer to our temporary branch we will just call ```git push <remote-name> HEAD:<remote-branch-name>``` to apply them to our branch, so in our case:
+
+```shell
+git push mod-folder HEAD:master```
+```
+
+Now we can checkout to our regular branch, let's say it's master and remove backport branch with:
 
 ```shell
 git checkout master
