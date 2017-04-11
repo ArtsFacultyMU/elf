@@ -322,7 +322,7 @@ git cherry-pick -x --strategy=subtree master~3..master~5 # this takes fourth to 
 When we have cherry-picked all the commits we want to transfer to our temporary branch we will just call ```git push <remote-name> HEAD:<remote-branch-name>``` to apply them to our branch, so in our case:
 
 ```shell
-git push mod-folder HEAD:master```
+git push mod-folder HEAD:master
 ```
 
 Now we can checkout to our regular branch, let's say it's master and remove backport branch with:
