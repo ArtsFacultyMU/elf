@@ -38,6 +38,7 @@ lib-editor-atto-plugins-morefontcolors | [Link](https://github.com/ndunand/moodl
 lib-editor-atto-plugins-htmlplus | [Link](https://github.com/andrewnicols/moodle-atto_htmlplus.git) | master | lib/editor/atto/plugins/htmlplus
 lib-editor-atto-plugins-fullscreen | [Link](https://github.com/dthies/moodle-atto_fullscreen.git) | master | lib/editor/atto/plugins/fullscreen
 lib-editor-tinymce-plugins-helixmedia | [Link](https://github.com/streamingltd/MEDIAL-Moodle-TinyMCE.git) | master | lib/editor/tinymce/plugins/helixmedia
+repository-recordaudio | [Link](https://github.com/pauln/moodle-repository_recordaudio) | master | repository/recordaudio
 
 ### CUSTOMIZED CORE PLUGINS
 Remote | Repository | Branch | Path
@@ -83,6 +84,7 @@ git remote add lib-editor-atto-plugins-morefontcolors https://github.com/ndunand
 git remote add lib-editor-atto-plugins-htmlplus https://github.com/andrewnicols/moodle-atto_htmlplus.git
 git remote add lib-editor-atto-plugins-fullscreen https://github.com/dthies/moodle-atto_fullscreen.git
 git remote add lib-editor-tinymce-plugins-helixmedia https://github.com/streamingltd/MEDIAL-Moodle-TinyMCE.git
+git remote add repository-recordaudio https://github.com/pauln/moodle-repository_recordaudio.git
 # Core moduly
 git remote add mod-chat https://github.com/ArtsFacultyMU/elf-mod-chat.git
 git remote add mod-folder https://github.com/ArtsFacultyMU/elf-mod-folder.git
