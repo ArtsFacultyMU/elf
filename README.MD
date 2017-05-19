@@ -39,7 +39,7 @@ lib-editor-atto-plugins-morefontcolors | [Link](https://github.com/ndunand/moodl
 lib-editor-atto-plugins-htmlplus | [Link](https://github.com/andrewnicols/moodle-atto_htmlplus.git) | master | lib/editor/atto/plugins/htmlplus
 lib-editor-atto-plugins-fullscreen | [Link](https://github.com/dthies/moodle-atto_fullscreen.git) | master | lib/editor/atto/plugins/fullscreen
 lib-editor-tinymce-plugins-helixmedia | [Link](https://github.com/streamingltd/MEDIAL-Moodle-TinyMCE.git) | master | lib/editor/tinymce/plugins/helixmedia
-repository-recordaudio | [Link](https://github.com/pauln/moodle-repository_recordaudio) | master | repository/recordaudio
+repository-recordaudio | [Link](https://github.com/pauln/moodle-repository_recordaudio) | MOODLE_23_STABLE (newer than master...) | repository/recordaudio
 
 ### CUSTOMIZED CORE PLUGINS
 Remote | Repository | Branch | Path
