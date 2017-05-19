@@ -25,6 +25,7 @@ mod-attendance | [Link](https://github.com/danmarsden/moodle-mod_attendance.git)
 mod-choicegroup | [Link](https://github.com/ndunand/moodle-mod_choicegroup.git) | master | mod/choicegroup
 mod-helixmedia | [Link](https://github.com/streamingltd/MEDIAL-Moodle-Activity.git) | master | mod/helixmedia
 mod-assign-submission-helixassign | [Link](https://github.com/streamingltd/MEDIAL-Moodle-Submission.git) | master | mod/assign/submission/helixassign
+mod-assign-submission-onlineaudio | [Link](https://github.com/pauln/moodle-assignsubmission_onlineaudio) | master | mod/assign/submission/onlineaudio
 question-format-hotpot | [Link](https://github.com/gbateson/moodle-qformat_hotpot) | master | question/format/hotpot
 course-format-grid | [Link](https://github.com/gjb2048/moodle-format_grid.git) | MOODLE_31 | course/format/grid
 plagiarism-urkund | [Link](https://github.com/danmarsden/moodle-plagiarism_urkund.git) | master | plagiarism/urkund
@@ -71,6 +72,7 @@ git remote add mod-attendance https://github.com/danmarsden/moodle-mod_attendanc
 git remote add mod-choicegroup https://github.com/ndunand/moodle-mod_choicegroup.git
 git remote add mod-helixmedia https://github.com/streamingltd/MEDIAL-Moodle-Activity.git
 git remote add mod-assign-submission-helixassign https://github.com/streamingltd/MEDIAL-Moodle-Submission.git
+git remote add mod-assign-submission-onlineaudio https://github.com/pauln/moodle-assignsubmission_onlineaudio.git
 git remote add question-format-hotpot https://github.com/gbateson/moodle-qformat_hotpot.git
 git remote add course-format-grid https://github.com/gjb2048/moodle-format_grid.git
 git remote add plagiarism-urkund https://github.com/danmarsden/moodle-plagiarism_urkund.git
