@@ -53,6 +53,7 @@ mod-newassignment | [Link](https://github.com/ArtsFacultyMU/elf-mod-newassignmen
 blocks-is_links | [Link](https://github.com/ArtsFacultyMU/elf-blocks-is_links.git) | master | blocks/is_links
 blocks-copyblok | [Link](https://github.com/ArtsFacultyMU/elf-blocks-copyblok.git) | master | blocks/copyblok
 enrol-ismu | [Link](https://github.com/ArtsFacultyMU/elf-enrol-ismu.git) | master | enrol/ismu
+local-elf | [Link](https://github.com/ArtsFacultyMU/elf-local.git) | master | local
 
 ## INITIALIZATION
 To initial connection with all connected repositories (by creating remotes on your local repository) run following:
@@ -90,6 +91,7 @@ git remote add mod-newassignment https://github.com/ArtsFacultyMU/elf-mod-newass
 git remote add blocks-is_links https://github.com/ArtsFacultyMU/elf-blocks-is_links.git
 git remote add blocks-copyblok https://github.com/ArtsFacultyMU/elf-blocks-copyblok.git
 git remote add enrol-ismu https://github.com/ArtsFacultyMU/elf-enrol-ismu.git
+git remote add local-elf https://github.com/ArtsFacultyMU/elf-local.git
 # načtení nově vytvořených remote branches
 git fetch --all
 ```
