@@ -20,7 +20,7 @@ Remote | Repository | Branch | Path
 ------ | ---------- | ------ | ----
 mod-hotpot | [Link](https://github.com/gbateson/moodle-mod_hotpot.git) | master | mod/hotpot
 mod-questionnaire | [Link](https://github.com/remotelearner/moodle-mod_questionnaire.git) | MOODLE_31_STABLE | mod/questionnaire
-mod-tab | [Link](https://github.com/oohoo/moodle-mod_tab.git) | master | mod/tab
+mod-tab | [Link](https://github.com/oohoo/moodle-mod_tab.git) | MOODLE_30_STABLE | mod/tab
 mod-attendance | [Link](https://github.com/danmarsden/moodle-mod_attendance.git) | MOODLE_31_STABLE | mod/attendance
 mod-choicegroup | [Link](https://github.com/ndunand/moodle-mod_choicegroup.git) | master | mod/choicegroup
 mod-helixmedia | [Link](https://github.com/streamingltd/MEDIAL-Moodle-Activity.git) | master | mod/helixmedia
