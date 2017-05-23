@@ -46,6 +46,7 @@ Remote | Repository | Branch | Path
 ------ | ---------- | ------ | ----
 mod-chat | [Link](https://github.com/ArtsFacultyMU/elf-mod-chat.git) | master (but based on MOODLE_31_STABLE fork) | mod/chat
 mod-folder | [Link](https://github.com/ArtsFacultyMU/elf-mod-folder.git) | master (but based on MOODLE_31_STABLE fork) | mod/folder
+mod-data | [Link](https://github.com/ArtsFacultyMU/elf-mod-data.git) | master (but based on MOODLE_31_STABLE fork) | mod/data
 question-type-multianswer | [Link](https://github.com/ArtsFacultyMU/elf-question-type-multianswer.git) | master (but based on MOODLE_31_STABLE fork) | question/type/multianswer
 
 ### CUSTOM PLUGINS
@@ -90,6 +91,7 @@ git remote add repository-recordaudio https://github.com/pauln/moodle-repository
 # Core moduly
 git remote add mod-chat https://github.com/ArtsFacultyMU/elf-mod-chat.git
 git remote add mod-folder https://github.com/ArtsFacultyMU/elf-mod-folder.git
+git remote add mod-data https://github.com/ArtsFacultyMU/elf-mod-data.git
 git remote add question-type-multianswer https://github.com/ArtsFacultyMU/elf-question-type-multianswer.git
 # Custom moduly
 git remote add theme-elf_bs https://github.com/ArtsFacultyMU/elf-theme-elf_bs.git
@@ -302,6 +304,8 @@ echo README.txt >> .gitignore
 echo README.MD >> .gitignore
 echo mod/folder/** >> .gitignore
 echo mod/chat/** >> .gitignore
+echo mod/data/** >> .gitignore
+echo question/type/multianswer/** >> .gitignore
 ```
 
 In this moment we won't commit the changes and we will merge our master with appropriate moodle branch in our case MOODLE_31_STABLE, we will use ```git merge moodle/MOODLE_31_STABLE``` for this, as usual let's resolve the conflicts. What is important, we need to rollback our gitignore and since we haven't commited its changes, we can use ```git checkout -- .gitignore``` for this. Now we can finally commit and push and the update is done.
