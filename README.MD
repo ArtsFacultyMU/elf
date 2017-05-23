@@ -28,7 +28,7 @@ mod-assign-submission-helixassign | [Link](https://github.com/streamingltd/MEDIA
 mod-assign-submission-onlineaudio | [Link](https://github.com/pauln/moodle-assignsubmission_onlineaudio) | master | mod/assign/submission/onlineaudio
 question-format-hotpot | [Link](https://github.com/gbateson/moodle-qformat_hotpot) | master | question/format/hotpot
 course-format-grid | [Link](https://github.com/gjb2048/moodle-format_grid.git) | MOODLE_31 | course/format/grid
-plagiarism-urkund | [Link](https://github.com/danmarsden/moodle-plagiarism_urkund.git) | master | plagiarism/urkund
+plagiarism-urkund | [Link](https://github.com/danmarsden/moodle-plagiarism_urkund.git) | master (last compatible https://github.com/danmarsden/moodle-plagiarism_urkund/commit/2dfc34d482cacd36733aa2f3a2fcc547df4c836c, possibly change to MOODLE_32_STABLE) | plagiarism/urkund
 blocks-progress | [Link](https://github.com/deraadt/Moodle-block_progress.git) | master | blocks/progress
 report-customsql | [Link](https://github.com/moodleou/moodle-report_customsql.git) | master | report/customsql
 lib-editor-atto-plugins-hr | [Link](https://github.com/damyon/moodle-atto_hr.git) | master | lib/editor/atto/plugins/hr
