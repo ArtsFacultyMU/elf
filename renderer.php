@@ -70,36 +70,42 @@ class mod_folder_renderer extends plugin_renderer_base {
 				$output .= $this->output->box_start('mod-folder-right', 'picture_here');
 					//$output .= $this->($foldertree); TODO populate picture_here
 				$output .= $this->output->box_end();
-		
+
 			$output .= $this->output->box_end();
 		} else {
 			$output .= $this->output->box($this->render($foldertree), 'generalbox foldertree');
 		}
 
-        // Do not append the edit button on the course page.
-        if ($folder->display != FOLDER_DISPLAY_INLINE) {
-            $containercontents = '';
+            // Do not append the edit button on the course page.
+
             $downloadable = folder_archive_available($folder, $cm);
 
+            $buttons = '';
             if ($downloadable) {
                 $downloadbutton = $this->output->single_button(
                     new moodle_url('/mod/folder/download_folder.php', array('id' => $cm->id)),
                     get_string('downloadfolder', 'folder')
                 );
 
-                $output .= $downloadbutton;
+                $buttons .= $downloadbutton;
             }
 
-            if (has_capability('mod/folder:managefiles', $context)) {
+            // Display the "Edit" button if current user can edit folder contents.
+            // Do not display it on the course page for the teachers because there
+            // is an "Edit settings" button right next to it with the same functionality.
+            if (has_capability('mod/folder:managefiles', $context) &&
+                ($folder->display != FOLDER_DISPLAY_INLINE || !has_capability('moodle/course:manageactivities', $context))) {
                 $editbutton = $this->output->single_button(
                     new moodle_url('/mod/folder/edit.php', array('id' => $cm->id)),
                     get_string('edit')
                 );
 
-                $output .= $editbutton;
+                $buttons .= $editbutton;
             }
 
-        }
+            if ($buttons) {
+                $output .= $this->output->box($buttons, 'generalbox folderbuttons');
+            }
 
         return $output;
     }
@@ -107,7 +113,7 @@ class mod_folder_renderer extends plugin_renderer_base {
     public function render_folder_tree(folder_tree $tree) {
         static $treecounter = 0;
 
-		$content="";
+		$content = '';
 
         $id = 'folder_tree'. ($treecounter++);
         $content .= '<div id="'.$id.'" class="filemanager">';
@@ -118,9 +124,12 @@ class mod_folder_renderer extends plugin_renderer_base {
             $showexpanded = false;
         }
 
-        $display = $tree->folder->display;
+//        Test merge and remove if ok
+//        $display = $tree->folder->display;
 
-        $this->page->requires->js_init_call('M.mod_folder.init_tree', array($id, $showexpanded, $display));
+//        Test merge and remove if ok
+//        $this->page->requires->js_init_call('M.mod_folder.init_tree', array($id, $showexpanded, $display));
+        $this->page->requires->js_init_call('M.mod_folder.init_tree', array($id, $showexpanded));
 
         return $content;
     }
@@ -131,13 +140,13 @@ class mod_folder_renderer extends plugin_renderer_base {
     protected function htmllize_tree($tree, $dir) {
 
         global $CFG;
-		$return_array = array();
+        //        Test merge and remove if ok
+		    //$return_array = array();
 
         if (empty($dir['subdirs']) and empty($dir['files'])) {
             return '';
         }
 
-        
         $result = '<ul class="mod-folder-gallery-ul">';
 
         foreach ($dir['subdirs'] as $subdir) {
@@ -150,13 +159,13 @@ class mod_folder_renderer extends plugin_renderer_base {
 
         foreach ($dir['files'] as $file) {
 
-            $filename = $file->get_filename();
-			
-			$url = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(),
+           $filename = $file->get_filename();
+
+			     $url = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(),
                     $file->get_filearea(), $file->get_itemid(), $file->get_filepath(), $filename, false);
 
-			
-		if ($tree->folder->display == FOLDER_DISPLAY_INLINE) { 
+
+		if ($tree->folder->display == FOLDER_DISPLAY_INLINE) {
 			if (file_extension_in_typegroup($filename, 'web_image')) {
                 $image = $url->out(false, array('preview' => 'tinyicon', 'oid' => $file->get_timemodified()));
                 $image = html_writer::empty_tag('img', array('src' => $image));
@@ -173,31 +182,20 @@ class mod_folder_renderer extends plugin_renderer_base {
 
 
 			if (file_extension_in_typegroup($filename, 'web_image')) {
-                
+
 					$image = $url->out(false, array('preview' => 'thumb', 'oid' => $file->get_timemodified()));
-	                $image = html_writer::empty_tag('img', array('src' => $image));
-$filename = html_writer::tag('span', 
-						html_writer::link($url->out(false, array('forcedownload' => 1)), $filename), 
+	        $image = html_writer::empty_tag('img', array('src' => $image));
+          $filename = html_writer::tag('span',
+						html_writer::link($url->out(false, array('forcedownload' => 1)), $filename),
 						array('class' => 'mod-folder-filename'))."<span class='mod-folder-download-icon'></span><br />". //fp-filename downloadable
 						html_writer::tag('span', $image, array('class' => 'fp-thumbnail'));
 				} else {
-	                $image = $this->output->pix_icon(file_file_icon($file, 24), $filename, 'moodle');
+	        $image = $this->output->pix_icon(file_file_icon($file, 24), $filename, 'moodle');
 					$filename = html_writer::tag('span', $image, array('class' => 'fp-thumbnail')).
-						html_writer::tag('span', 
-						html_writer::link($url->out(false, array('forcedownload' => 1)), $filename), 
+						html_writer::tag('span',
+						html_writer::link($url->out(false, array('forcedownload' => 1)), $filename),
 						array('class' => 'mod-folder-filename')); //fp-filename downloadable
 				}
-				
-				/*$filename = html_writer::tag('span', 
-						html_writer::link($url->out(false, array('forcedownload' => 1)), $filename), 
-						array('class' => 'mod-folder-filename'))."<span class='mod-folder-download-icon'></span><br />". //fp-filename downloadable
-						html_writer::tag('span', $image, array('class' => 'fp-thumbnail'));
-*/
-				/*$filename = html_writer::tag('span',
-                    html_writer::link($url->out(false, array('forcedownload' => 1)), $filename),
-                    array('class' => 'fp-filename-icon'));
-*/
-				
 
 				$filename = html_writer::tag('span', $filename, array('class' => 'mod-folder-filename-icon')); //fp-filename-icon
 
