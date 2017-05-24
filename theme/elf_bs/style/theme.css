@@ -1829,6 +1829,11 @@ select#id_category,
 .course-content .single-section .section-navigation select {
   width: 100%;
 }
+.feedback_itemlist .fitemtitle .fgrouplabel label {
+  position: static;
+  right: 28px;
+  margin-bottom: 0px;
+}
 .fitemtitle .fgrouplabel label {
   position: absolute;
   right: 28px;
