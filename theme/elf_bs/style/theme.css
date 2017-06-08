@@ -1953,6 +1953,9 @@ ul.menutable li.menutitle {
 #page-mod-quiz-mod #id_reviewoptionshdr .fitemtitle {
   height: auto;
 }
+#page-mod-quiz-edit .questionbankformforpopup .paging {
+  background-color: transparent;
+}
 /** COURSE OPTIMALIZATION **/
 .course-bulk-actions.bulk-actions .row,
 .category-bulk-actions.bulk-actions .row {
