@@ -1943,6 +1943,8 @@ ul.menutable li.menutitle {
 /** MOD QUIZ OPTIMALIZATION **/
 #page-mod-quiz-edit ul.slots li.section li.activity .activityinstance {
   width: 88%;
+  max-height: 20px;
+  overflow: hidden;
 }
 #page-mod-quiz-edit ul.slots .activityinstance span.instancename {
   width: 80%;
