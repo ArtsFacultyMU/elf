@@ -1747,6 +1747,7 @@ a.banner-links:HOVER {
   width: 97%;
 }
 body.path-mod section,
+body.path-blog section,
 body.path-blocks section {
   border: 1px solid #A7A9AB;
   background: #FFF;
