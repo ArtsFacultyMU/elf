@@ -280,9 +280,9 @@ class qtype_multianswer_edit_form extends question_edit_form {
                 $question->questiontext) {
 
 			//ELF -- FF -- FB -- setting correct values from DB
-            $default_values['textboxsize'] = $DB->get_field('question_multianswer', 'textboxsize',
+            $defaultvalues['textboxsize'] = $DB->get_field('question_multianswer', 'textboxsize',
                     array('question' => $question->id), '*', MUST_EXIST);
-            $default_values['textboxtype'] = $DB->get_field('question_multianswer', 'textboxtype',
+            $defaultvalues['textboxtype'] = $DB->get_field('question_multianswer', 'textboxtype',
                     array('question' => $question->id), '*', MUST_EXIST);
             //ELF -- FF -- FB -- end
 
