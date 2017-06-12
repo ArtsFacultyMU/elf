@@ -27,7 +27,7 @@ mod-helixmedia | [Link](https://github.com/streamingltd/MEDIAL-Moodle-Activity.g
 mod-assign-submission-helixassign | [Link](https://github.com/streamingltd/MEDIAL-Moodle-Submission.git) | master | mod/assign/submission/helixassign
 mod-assign-submission-onlineaudio | [Link](https://github.com/pauln/moodle-assignsubmission_onlineaudio) | master | mod/assign/submission/onlineaudio
 question-format-hotpot | [Link](https://github.com/gbateson/moodle-qformat_hotpot) | master | question/format/hotpot
-course-format-grid | [Link](https://github.com/gjb2048/moodle-format_grid.git) | MOODLE_31 | course/format/grid
+course-format-grid | [Link](https://github.com/holajric/moodle-format_grid.git) | MOODLE_31 (customized fork) | course/format/grid
 plagiarism-urkund | [Link](https://github.com/danmarsden/moodle-plagiarism_urkund.git) | master (last compatible https://github.com/danmarsden/moodle-plagiarism_urkund/commit/2dfc34d482cacd36733aa2f3a2fcc547df4c836c, possibly change to MOODLE_32_STABLE) | plagiarism/urkund
 blocks-progress | [Link](https://github.com/deraadt/Moodle-block_progress.git) | master | blocks/progress
 report-customsql | [Link](https://github.com/moodleou/moodle-report_customsql.git) | master | report/customsql
@@ -76,7 +76,7 @@ git remote add mod-helixmedia https://github.com/streamingltd/MEDIAL-Moodle-Acti
 git remote add mod-assign-submission-helixassign https://github.com/streamingltd/MEDIAL-Moodle-Submission.git
 git remote add mod-assign-submission-onlineaudio https://github.com/pauln/moodle-assignsubmission_onlineaudio.git
 git remote add question-format-hotpot https://github.com/gbateson/moodle-qformat_hotpot.git
-git remote add course-format-grid https://github.com/gjb2048/moodle-format_grid.git
+git remote add course-format-grid https://github.com/holajric/moodle-format_grid.git
 git remote add plagiarism-urkund https://github.com/danmarsden/moodle-plagiarism_urkund.git
 git remote add blocks-progress https://github.com/deraadt/Moodle-block_progress.git
 git remote add report-customsql https://github.com/moodleou/moodle-report_customsql.git
