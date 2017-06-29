@@ -20,15 +20,15 @@ Remote | Repository | Branch | Path
 ------ | ---------- | ------ | ----
 mod-hotpot | [Link](https://github.com/gbateson/moodle-mod_hotpot.git) | master | mod/hotpot
 mod-questionnaire | [Link](https://github.com/remotelearner/moodle-mod_questionnaire.git) | MOODLE_33_STABLE | mod/questionnaire
-mod-tab | [Link](https://github.com/oohoo/moodle-mod_tab.git) | MOODLE_30_STABLE | mod/tab
+mod-tab | [Link](https://github.com/oohoo/moodle-mod_tab.git) | MOODLE_30_STABLE (newer than master...) | mod/tab
 mod-attendance | [Link](https://github.com/danmarsden/moodle-mod_attendance.git) | MOODLE_33_STABLE | mod/attendance
 mod-choicegroup | [Link](https://github.com/ndunand/moodle-mod_choicegroup.git) | master | mod/choicegroup
 mod-helixmedia | [Link](https://github.com/streamingltd/MEDIAL-Moodle-Activity.git) | master | mod/helixmedia
 mod-assign-submission-helixassign | [Link](https://github.com/streamingltd/MEDIAL-Moodle-Submission.git) | master | mod/assign/submission/helixassign
 mod-assign-submission-onlineaudio | [Link](https://github.com/pauln/moodle-assignsubmission_onlineaudio) | master | mod/assign/submission/onlineaudio
 question-format-hotpot | [Link](https://github.com/gbateson/moodle-qformat_hotpot) | master | question/format/hotpot
-course-format-grid | [Link](https://github.com/holajric/moodle-format_grid.git) | MOODLE_31 (customized fork) | course/format/grid
-plagiarism-urkund | [Link](https://github.com/danmarsden/moodle-plagiarism_urkund.git) | master (last compatible https://github.com/danmarsden/moodle-plagiarism_urkund/commit/2dfc34d482cacd36733aa2f3a2fcc547df4c836c, possibly change to MOODLE_32_STABLE) | plagiarism/urkund
+course-format-grid | [Link](https://github.com/holajric/moodle-format_grid.git) | MOODLE_33 (customized fork) | course/format/grid
+plagiarism-urkund | [Link](https://github.com/danmarsden/moodle-plagiarism_urkund.git) | master (9442b05) | plagiarism/urkund
 blocks-progress | [Link](https://github.com/deraadt/Moodle-block_progress.git) | master | blocks/progress
 report-customsql | [Link](https://github.com/moodleou/moodle-report_customsql.git) | master | report/customsql
 lib-editor-atto-plugins-hr | [Link](https://github.com/damyon/moodle-atto_hr.git) | master | lib/editor/atto/plugins/hr
