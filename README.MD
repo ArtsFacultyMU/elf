@@ -45,10 +45,10 @@ repository-recordaudio | [Link](https://github.com/pauln/moodle-repository_recor
 Remote | Repository | Branch | Path
 ------ | ---------- | ------ | ----
 mod-chat | [Link](https://github.com/ArtsFacultyMU/elf-mod-chat.git) | master (but based on MOODLE_31_STABLE fork) | mod/chat
-mod-folder | [Link](https://github.com/ArtsFacultyMU/elf-mod-folder.git) | master (but based on MOODLE_31_STABLE fork) | mod/folder
-mod-data | [Link](https://github.com/ArtsFacultyMU/elf-mod-data.git) | master (but based on MOODLE_31_STABLE fork) | mod/data
-mod-assign-feedback-editpdf | [Link](https://github.com/ArtsFacultyMU/elf-mod-assign-feedback-editpdf.git) | master (but based on MOODLE_31_STABLE fork) | mod/assign/feedback/edifpdf
-question-type-multianswer | [Link](https://github.com/ArtsFacultyMU/elf-question-type-multianswer.git) | master (but based on MOODLE_31_STABLE fork) | question/type/multianswer
+mod-folder | [Link](https://github.com/ArtsFacultyMU/elf-mod-folder.git) | MOODLE_33_STABLE | mod/folder
+mod-data | [Link](https://github.com/ArtsFacultyMU/elf-mod-data.git) | MOODLE_33_STABLE | mod/data
+mod-assign-feedback-editpdf | [Link](https://github.com/ArtsFacultyMU/elf-mod-assign-feedback-editpdf.git) | MOODLE_33_STABLE | mod/assign/feedback/edifpdf
+question-type-multianswer | [Link](https://github.com/ArtsFacultyMU/elf-question-type-multianswer.git) | MOODLE_33_STABLE | question/type/multianswer
 
 ### CUSTOM PLUGINS
 Remote | Repository | Branch | Path
@@ -308,6 +308,7 @@ echo mod/folder/** >> .gitignore
 echo mod/chat/** >> .gitignore
 echo mod/data/** >> .gitignore
 echo question/type/multianswer/** >> .gitignore
+echo mod/assign/feedback/edifpdf/** >> .gitignore
 ```
 
 In this moment we won't commit the changes and we will merge our master with appropriate moodle branch in our case MOODLE_31_STABLE, we will use ```git merge moodle/MOODLE_31_STABLE``` for this, as usual let's resolve the conflicts. What is important, we need to rollback our gitignore and since we haven't commited its changes, we can use ```git checkout -- .gitignore``` for this. Now we can finally commit and push and the update is done.
