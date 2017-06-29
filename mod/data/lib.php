@@ -3265,7 +3265,7 @@ function data_pluginfile($course, $cm, $context, $filearea, $args, $forcedownloa
         }
 
         // finally send the file
-        send_stored_file($file, 0, 0, true, $options); // download MUST be forced - security!
+        send_stored_file($file, 0, 0, false, $options); // download MUST be forced - security!
     }
 
     return false;
