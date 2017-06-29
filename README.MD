@@ -1,6 +1,6 @@
 # ABOUT
 
-This repository is based on [Moodle main repository](https://github.com/moodle/moodle) MOODLE_31_STABLE branch and it integrates several third party and custom plugins.
+This repository is based on [Moodle main repository](https://github.com/moodle/moodle) MOODLE_33_STABLE branch and it integrates several third party and custom plugins.
 
 # DEVELOPMENT
 **OUR NEW BIBLE**: https://medium.com/@porteneuve/mastering-git-subtrees-943d29a798ec
@@ -13,15 +13,15 @@ There are several remotes that corresponds to repositories containing third-part
 ### CORE
 Remote | Repository | Branch | Path
 ------ | ---------- | ------ | ----
-moodle |  [Link](https://github.com/moodle/moodle) | MOODLE_31_STABLE | root directory
+moodle |  [Link](https://github.com/moodle/moodle) | MOODLE_33_STABLE | root directory
 
 ### THIRD-PARTY PLUGINS
 Remote | Repository | Branch | Path
 ------ | ---------- | ------ | ----
 mod-hotpot | [Link](https://github.com/gbateson/moodle-mod_hotpot.git) | master | mod/hotpot
-mod-questionnaire | [Link](https://github.com/remotelearner/moodle-mod_questionnaire.git) | MOODLE_31_STABLE | mod/questionnaire
+mod-questionnaire | [Link](https://github.com/remotelearner/moodle-mod_questionnaire.git) | MOODLE_33_STABLE | mod/questionnaire
 mod-tab | [Link](https://github.com/oohoo/moodle-mod_tab.git) | MOODLE_30_STABLE | mod/tab
-mod-attendance | [Link](https://github.com/danmarsden/moodle-mod_attendance.git) | MOODLE_31_STABLE | mod/attendance
+mod-attendance | [Link](https://github.com/danmarsden/moodle-mod_attendance.git) | MOODLE_33_STABLE | mod/attendance
 mod-choicegroup | [Link](https://github.com/ndunand/moodle-mod_choicegroup.git) | master | mod/choicegroup
 mod-helixmedia | [Link](https://github.com/streamingltd/MEDIAL-Moodle-Activity.git) | master | mod/helixmedia
 mod-assign-submission-helixassign | [Link](https://github.com/streamingltd/MEDIAL-Moodle-Submission.git) | master | mod/assign/submission/helixassign
