@@ -193,6 +193,12 @@ body.path-login section {
   background-color: transparent !important;
 }
 
+.modal.modal-in-page {
+  position: static;
+  z-index: 0;
+  margin: 30px auto 30px auto;
+}
+
 .moodle-actionmenu[data-enhanced].show .menu a {
   padding: 2px 1em 2px 28px;
 }
