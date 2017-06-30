@@ -53,7 +53,7 @@ question-type-multianswer | [Link](https://github.com/ArtsFacultyMU/elf-question
 ### CUSTOM PLUGINS
 Remote | Repository | Branch | Path
 ------ | ---------- | ------ | ----
-theme-elf_bs | [Link](https://github.com/ArtsFacultyMU/elf-theme-elf_bs.git) | master | theme/elf_bs
+theme-elf_bs | [Link](https://github.com/ArtsFacultyMU/elf-theme-elf_bs.git) | MOODLE_33_STABLE | theme/elf_bs
 mod-newassignment | [Link](https://github.com/ArtsFacultyMU/elf-mod-newassignment.git) | master | mod/newassignment
 blocks-is_links | [Link](https://github.com/ArtsFacultyMU/elf-blocks-is_links.git) | master | blocks/is_links
 blocks-copyblok | [Link](https://github.com/ArtsFacultyMU/elf-blocks-copyblok.git) | master | blocks/copyblok
