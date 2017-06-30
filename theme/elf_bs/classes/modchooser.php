@@ -1,4 +1,5 @@
 <?php
+require_once($CFG->dirroot.'/local/elf/elfconfig/locallib.php');
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -56,10 +57,26 @@ class theme_elf_bs_modchooser extends chooser {
         $sections = [];
         $context = context_course::instance($course->id);
 
-         // Activities.
+	//ELF-FF -- FB array filtering experimental modules
+        $experimental = array();  
+        $extramods = elf_get_experimental_modules();
+
+        foreach($extramods as $extramod)
+            if(isset($modules[$extramod]))
+        	$experimental[$extramod] = $modules[$extramod];
+        //ELF-FF end
+
+        // Activities.
         $activities = array_filter($modules, function($mod) {
             return ($mod->archetype !== MOD_ARCHETYPE_RESOURCE && $mod->archetype !== MOD_ARCHETYPE_SYSTEM);
         });
+
+	//ELF -- FF -- FILTERING FROM ACTIVITIES
+        foreach($extramods as $extramod)
+            if(isset($activities[$extramod]))
+        	unset($activities[$extramod]);
+        //ELF - -FF - end
+
         if (count($activities)) {
             $sections[] = new chooser_section('activities', new lang_string('activities'),
                 array_map(function($module) use ($context) {
@@ -70,6 +87,13 @@ class theme_elf_bs_modchooser extends chooser {
         $resources = array_filter($modules, function($mod) {
             return ($mod->archetype === MOD_ARCHETYPE_RESOURCE);
         });
+
+	//ELF -- FF -- FILTERING FROM RESOURCES
+        foreach($extramods as $extramod)
+            if(isset($resources[$extramod]))
+        	unset($resources[$extramod]);
+        //ELF - -FF - end
+
         if (count($resources)) {
             $sections[] = new chooser_section('resources', new lang_string('resources'),
                 array_map(function($module) use ($context) {
@@ -77,6 +101,18 @@ class theme_elf_bs_modchooser extends chooser {
                 }, $resources)
             );
         }
+
+        //ELF -- FF DISPLAYING EXPERIMENTAL MODULES
+        //experimental
+        if (count($experimental)) {
+            $sections[] = new chooser_section('experimental', new lang_string('experimental', 'local_elf'),
+                array_map(function($module) use ($context) {
+                    return new theme_elf_bs_modchooser_item($module, $context);
+                }, $experimental)
+            );
+        }
+        //ELF -- FF - END
+
 
         $actionurl = new moodle_url('/course/jumpto.php');
         $title = new lang_string('addresourceoractivity');
