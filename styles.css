@@ -180,17 +180,17 @@ div.course-content div.generalbox.folderbuttons {
 display: none;
 }
 
-body .modal { 
+body .ekko-lightbox.modal {
 	width: auto; 
 	margin: 0; 
 	transform: translateX(-50%);
 } 
 
-body .modal.fade.in { 
+body .ekko-lightbox.modal.fade.in {
 	top: 40px;
 }
 
-body .modal-content { 
+body .ekko-lightbox .modal-content {
 	width: inherit;
 } 
 
