@@ -192,6 +192,16 @@ body.path-login section {
 .usermenu .moodle-actionmenu.show {
   background-color: transparent !important;
 }
+
+.moodle-actionmenu[data-enhanced].show .menu a {
+  padding: 2px 1em 2px 28px;
+}
+
+.moodle-actionmenu[data-enhanced].show .menu img.icon {
+  margin: 4px 4px 4px -24px;
+  padding: 4px;
+}
+
 .usermenu .moodle-actionmenu .toggle-display {
   color: #58595B;
 }
