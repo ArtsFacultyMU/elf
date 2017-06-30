@@ -33,112 +33,20 @@ defined('MOODLE_INTERNAL') || die;
 
 class theme_elf_bs_core_course_renderer extends core_course_renderer {
 
+    /**
+     * Build the HTML for the module chooser javascript popup
+     *
+     * @param array $modules A set of modules as returned form @see
+     * get_module_metadata
+     * @param object $course The course that will be displayed
+     * @return string The composed HTML for the module
+     */
     public function course_modchooser($modules, $course) {
-        global $CFG;
-        static $isdisplayed = false;
-        if ($isdisplayed) {
+        if (!$this->page->requires->should_create_one_time_item_now('core_course_modchooser')) {
             return '';
         }
-        $isdisplayed = true;
-
-        // Add the module chooser
-        $this->page->requires->yui_module('moodle-course-modchooser',
-            'M.course.init_chooser',
-            array(array('courseid' => $course->id, 'closeButtonTitle' => get_string('close', 'editor')))
-        );
-        $this->page->requires->strings_for_js(array(
-                'addresourceoractivity',
-                'modchooserenable',
-                'modchooserdisable',
-        ), 'moodle');
-
-        // Add the header
-        $header = html_writer::tag('div', get_string('addresourceoractivity', 'moodle'),
-                array('class' => 'hd choosertitle'));
-
-        $formcontent = html_writer::start_tag('form', array('action' => new moodle_url('/course/jumpto.php'),
-                'id' => 'chooserform', 'method' => 'post'));
-        $formcontent .= html_writer::start_tag('div', array('id' => 'typeformdiv'));
-        $formcontent .= html_writer::tag('input', '', array('type' => 'hidden', 'id' => 'course',
-                'name' => 'course', 'value' => $course->id));
-        $formcontent .= html_writer::tag('input', '',
-                array('type' => 'hidden', 'class' => 'jump', 'name' => 'jump', 'value' => ''));
-        $formcontent .= html_writer::tag('input', '', array('type' => 'hidden', 'name' => 'sesskey',
-                'value' => sesskey()));
-        $formcontent .= html_writer::end_tag('div');
-
-        // Put everything into one tag 'options'
-        $formcontent .= html_writer::start_tag('div', array('class' => 'options'));
-        $formcontent .= html_writer::tag('div', get_string('selectmoduletoviewhelp', 'moodle'),
-                array('class' => 'instruction'));
-        // Put all options into one tag 'alloptions' to allow us to handle scrolling
-        $formcontent .= html_writer::start_tag('div', array('class' => 'alloptions'));
-
-        //ELF-FF -- FB array filtering experimental modules
-        $experimental = array();
-        require_once($CFG->dirroot.'/local/elf/elfconfig/locallib.php');
-        $extramods = elf_get_experimental_modules();
-         
-        foreach($extramods as $extramod)
-            if(isset($modules[$extramod]))
-        	$experimental[$extramod] = $modules[$extramod];
-        //ELF-FF end
-        
-         // Activities
-        $activities = array_filter($modules, create_function('$mod', 'return ($mod->archetype !== MOD_ARCHETYPE_RESOURCE && $mod->archetype !== MOD_ARCHETYPE_SYSTEM);'));
-        
-        //ELF -- FF -- FILTERING FROM ACTIVITIES
-        foreach($extramods as $extramod)
-            if(isset($activities[$extramod]))
-        	unset($activities[$extramod]);
-        //ELF - -FF - end
-                
-        if (count($activities)) {
-            $formcontent .= $this->course_modchooser_title('activities');
-            $formcontent .= $this->course_modchooser_module_types($activities);
-        }
-
-        // Resources
-        $resources = array_filter($modules, create_function('$mod', 'return ($mod->archetype === MOD_ARCHETYPE_RESOURCE);'));
-        
-        //ELF -- FF -- FILTERING FROM RESOURCES
-        foreach($extramods as $extramod)
-            if(isset($resources[$extramod]))
-        	unset($resources[$extramod]);
-        //ELF - -FF - end
-        
-        if (count($resources)) {
-            $formcontent .= $this->course_modchooser_title('resources');
-            $formcontent .= $this->course_modchooser_module_types($resources);
-        }
-        
-        //ELF -- FF DISPLAYING EXPERIMENTAL MODULES
-        //experimental
-        if (count($experimental)) {
-        	$formcontent .= $this->course_modchooser_title('experimental','local_elf');
-        	$formcontent .= $this->course_modchooser_module_types($experimental);
-        }
-        //ELF -- FF - END
-
-        $formcontent .= html_writer::end_tag('div'); // modoptions
-        $formcontent .= html_writer::end_tag('div'); // types
-
-        $formcontent .= html_writer::start_tag('div', array('class' => 'submitbuttons'));
-        $formcontent .= html_writer::tag('input', '',
-                array('type' => 'submit', 'name' => 'submitbutton', 'class' => 'submitbutton', 'value' => get_string('add')));
-        $formcontent .= html_writer::tag('input', '',
-                array('type' => 'submit', 'name' => 'addcancel', 'class' => 'addcancel', 'value' => get_string('cancel')));
-        $formcontent .= html_writer::end_tag('div');
-        $formcontent .= html_writer::end_tag('form');
-
-        // Wrap the whole form in a div
-        $formcontent = html_writer::tag('div', $formcontent, array('id' => 'chooseform'));
-
-        // Put all of the content together
-        $content = $formcontent;
-
-        $content = html_writer::tag('div', $content, array('class' => 'choosercontainer'));
-        return $header . html_writer::tag('div', $content, array('class' => 'chooserdialoguebody'));
+        $modchooser = new theme_elf_bs_modchooser($course, $modules);
+        return $this->render($modchooser);
     }
     
     /**
