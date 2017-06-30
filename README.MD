@@ -44,16 +44,16 @@ repository-recordaudio | [Link](https://github.com/pauln/moodle-repository_recor
 ### CUSTOMIZED CORE PLUGINS
 Remote | Repository | Branch | Path
 ------ | ---------- | ------ | ----
-mod-chat | [Link](https://github.com/ArtsFacultyMU/elf-mod-chat.git) | master (but based on MOODLE_31_STABLE fork) | mod/chat
-mod-folder | [Link](https://github.com/ArtsFacultyMU/elf-mod-folder.git) | master (but based on MOODLE_31_STABLE fork) | mod/folder
-mod-data | [Link](https://github.com/ArtsFacultyMU/elf-mod-data.git) | master (but based on MOODLE_31_STABLE fork) | mod/data
-mod-assign-feedback-editpdf | [Link](https://github.com/ArtsFacultyMU/elf-mod-assign-feedback-editpdf.git) | master (but based on MOODLE_31_STABLE fork) | mod/assign/feedback/edifpdf
-question-type-multianswer | [Link](https://github.com/ArtsFacultyMU/elf-question-type-multianswer.git) | master (but based on MOODLE_31_STABLE fork) | question/type/multianswer
+mod-chat | [Link](https://github.com/ArtsFacultyMU/elf-mod-chat.git) | MOODLE_31_STABLE | mod/chat
+mod-folder | [Link](https://github.com/ArtsFacultyMU/elf-mod-folder.git) | MOODLE_31_STABLE | mod/folder
+mod-data | [Link](https://github.com/ArtsFacultyMU/elf-mod-data.git) | MOODLE_31_STABLE | mod/data
+mod-assign-feedback-editpdf | [Link](https://github.com/ArtsFacultyMU/elf-mod-assign-feedback-editpdf.git) | MOODLE_31_STABLE | mod/assign/feedback/edifpdf
+question-type-multianswer | [Link](https://github.com/ArtsFacultyMU/elf-question-type-multianswer.git) | MOODLE_31_STABLE | question/type/multianswer
 
 ### CUSTOM PLUGINS
 Remote | Repository | Branch | Path
 ------ | ---------- | ------ | ----
-theme-elf_bs | [Link](https://github.com/ArtsFacultyMU/elf-theme-elf_bs.git) | master | theme/elf_bs
+theme-elf_bs | [Link](https://github.com/ArtsFacultyMU/elf-theme-elf_bs.git) | MOODLE_31_STABLE | theme/elf_bs
 mod-newassignment | [Link](https://github.com/ArtsFacultyMU/elf-mod-newassignment.git) | master | mod/newassignment
 blocks-is_links | [Link](https://github.com/ArtsFacultyMU/elf-blocks-is_links.git) | master | blocks/is_links
 blocks-copyblok | [Link](https://github.com/ArtsFacultyMU/elf-blocks-copyblok.git) | master | blocks/copyblok
