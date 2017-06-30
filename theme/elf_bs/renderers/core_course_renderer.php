@@ -34,6 +34,16 @@ defined('MOODLE_INTERNAL') || die;
 class theme_elf_bs_core_course_renderer extends core_course_renderer {
 
     /**
+     * Render a modchooser.
+     *
+     * @param renderable $modchooser The chooser.
+     * @return string
+     */
+    public function render_theme_elf_bs_modchooser(renderable $modchooser) {
+        return $this->render_from_template('core_course/modchooser', $modchooser->export_for_template($this));
+    }
+
+    /**
      * Build the HTML for the module chooser javascript popup
      *
      * @param array $modules A set of modules as returned form @see
