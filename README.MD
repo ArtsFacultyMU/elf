@@ -44,7 +44,7 @@ repository-recordaudio | [Link](https://github.com/pauln/moodle-repository_recor
 ### CUSTOMIZED CORE PLUGINS
 Remote | Repository | Branch | Path
 ------ | ---------- | ------ | ----
-mod-chat | [Link](https://github.com/ArtsFacultyMU/elf-mod-chat.git) | master (but based on MOODLE_31_STABLE fork) | mod/chat
+mod-chat | [Link](https://github.com/ArtsFacultyMU/elf-mod-chat.git) | MOODLE_33_STABLE | mod/chat
 mod-folder | [Link](https://github.com/ArtsFacultyMU/elf-mod-folder.git) | MOODLE_33_STABLE | mod/folder
 mod-data | [Link](https://github.com/ArtsFacultyMU/elf-mod-data.git) | MOODLE_33_STABLE | mod/data
 mod-assign-feedback-editpdf | [Link](https://github.com/ArtsFacultyMU/elf-mod-assign-feedback-editpdf.git) | MOODLE_33_STABLE | mod/assign/feedback/edifpdf
