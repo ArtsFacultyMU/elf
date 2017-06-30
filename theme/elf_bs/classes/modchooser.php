@@ -57,7 +57,7 @@ class theme_elf_bs_modchooser extends chooser {
         $sections = [];
         $context = context_course::instance($course->id);
 
-	//ELF-FF -- FB array filtering experimental modules
+	    //ELF-FF -- FB array filtering experimental modules
         $experimental = array();  
         $extramods = elf_get_experimental_modules();
 
@@ -71,7 +71,7 @@ class theme_elf_bs_modchooser extends chooser {
             return ($mod->archetype !== MOD_ARCHETYPE_RESOURCE && $mod->archetype !== MOD_ARCHETYPE_SYSTEM);
         });
 
-	//ELF -- FF -- FILTERING FROM ACTIVITIES
+	    //ELF -- FF -- FILTERING FROM ACTIVITIES
         foreach($extramods as $extramod)
             if(isset($activities[$extramod]))
         	unset($activities[$extramod]);
@@ -88,7 +88,7 @@ class theme_elf_bs_modchooser extends chooser {
             return ($mod->archetype === MOD_ARCHETYPE_RESOURCE);
         });
 
-	//ELF -- FF -- FILTERING FROM RESOURCES
+	    //ELF -- FF -- FILTERING FROM RESOURCES
         foreach($extramods as $extramod)
             if(isset($resources[$extramod]))
         	unset($resources[$extramod]);
