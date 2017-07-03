@@ -192,7 +192,17 @@ body .ekko-lightbox.modal.fade.in {
 
 body .ekko-lightbox .modal-content {
 	width: inherit;
-} 
+}
+
+.modal-backdrop.fade.in {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1040;
+    background-color: #000;
+}
 
 /*try to remove fixed header for lightbox full window display
 header .navbar-fixed-top {
