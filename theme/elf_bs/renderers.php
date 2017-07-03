@@ -210,17 +210,18 @@ class theme_elf_bs_core_renderer extends theme_bootstrapbase_core_renderer {
             } else {
                 $url = '#cm_submenu_' . $submenucount;
             }
-            $content .= html_writer::start_tag('a', array('href' => $url, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown', 'title' => $menunode->get_title()));
+
+            $content .= html_writer::start_tag('a', array('href' => $url, 'class' => 'dropdown-toggle', 'data-toggle' => 'dropdown', 'data-target' => '.dropdown-menu-container', 'title' => $menunode->get_title()));
             $content .= $menunode->get_text();
             if ($level == 1) {
                 $content .= '<b class="caret"></b>';
             }
             $content .= '</a>';
-            $content .= '<ul class="dropdown-menu">';
+            $content .= '<div class="dropdown-menu-container"><ul class="dropdown-menu">';
             foreach ($menunode->get_children() as $menunode) {
                 $content .= $this->render_custom_menu_item($menunode, 0);
             }
-            $content .= '</ul>';
+            $content .= '</ul></div>';
         } else {
             $content = '<li>';
             // The node doesn't have children so produce a final menuitem.
