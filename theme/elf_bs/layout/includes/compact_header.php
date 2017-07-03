@@ -6,7 +6,7 @@ $PAGE->requires->jquery_plugin('bootstrap', 'theme_elf_bs');
 if (right_to_left()) {
     $regionbsid = 'region-bs-main-and-post';
 } else {
-    $regionbsid = 'region-bs-main-and-pre';
+    $regionbsid = 'region-main-box';
 }
 
 echo $OUTPUT->doctype() ?>

@@ -207,7 +207,12 @@ body.path-login section {
   margin: 4px 4px 4px -24px;
   padding: 4px;
 }
-
+.menu-action img.icon {
+  height: 12px;
+  margin-right: 3px;
+  vertical-align: middle;
+  width: 12px;
+}
 .usermenu .moodle-actionmenu .toggle-display {
   color: #58595B;
 }
@@ -2328,4 +2333,46 @@ a.logo {
 div#tablecontainer {
   overflow-x: scroll;
   max-width: 90vw;
+}
+
+#combinedfeedbackhdr div.fadvcheckbox {
+  margin-bottom: 1em;
+}
+
+.mform .fadvcheckbox input{
+  margin-left: 0;
+}
+
+.mform .fadvcheckbox > span {
+  display: inline-block;
+  margin-top: 5px;
+}
+
+body #region-main .mform:not(.unresponsive) .fitem .fadvcheckbox > span {
+  margin-top: 4px;
+}
+
+.used-region-side-pre.used-region-side-post #region-main .mform:not(.unresponsive) .fitem .fadvcheckbox > span {
+  margin-top: 4px;
+}
+
+.path-mod-feedback .mform.feedback_form .fitem .fadvcheckbox > span {
+  margin-top: 4px;
+}
+
+.path-mod-lesson .answeroption .fadvcheckbox > span{
+  position: relative;
+  float: left;
+}
+
+.path-mod-lesson .answeroption .fadvcheckbox input {
+  position: absolute;
+  top: 2px;
+  margin-top: 0;
+  left: 0;
+}
+
+.path-mod-lesson .answeroption .fadvcheckbox label {
+  padding-left: 20px;
+  float: left;
 }

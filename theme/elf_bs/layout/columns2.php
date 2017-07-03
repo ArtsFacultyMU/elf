@@ -30,10 +30,10 @@
 
 $footer_data = theme_elf_bs_get_data_for_footer_settings($OUTPUT, $PAGE);
  
-$regionbsid = 'region-bs-main-and-pre';
+$regionbsid = 'region-main-box';
 $left = true;
 if (right_to_left()) {
-    $regionbsid = 'region-bs-main-and-pre';
+    $regionbsid = 'region-main-box';
     $left = false;
 }
  
