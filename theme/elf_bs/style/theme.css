@@ -49,7 +49,7 @@ a {
 }
 #page.container-fluid {
   max-width: 95vw;
-  padding-left:0;
+  padding-left:0;s
   padding-right: 0;
 }
 .atto_form.atto_media > .tab-content {
@@ -232,6 +232,28 @@ body.path-login section {
   height: 12px;
   vertical-align: middle;
   width: 12px;
+}
+
+img.iconhelp {
+    margin-left: 10px;
+}
+
+.unassignrolelink img.icon,
+.unenrollink img.icon,
+.editenrollink img.icon,
+.editaction img.icon,
+.copyaction img.icon,
+.previewaction img.icon,
+.deleteaction img.icon,
+.path-mod-data #single tr:last-of-type img.icon,
+table.picture tr:last-of-type img.icon,
+.path-mod-data table.generaltable .lastcol img.icon,
+#page-mod-data-preset .fitem_fradio .fradio label img.icon,
+.path-mod-feedback div[role="main"] > h2 img.icon {
+  width: 12px;
+  height: 12px;
+  vertical-align: middle;
+  cursor: help;
 }
 
 .itemname img.icon {
@@ -822,6 +844,16 @@ input[type="submit"].btn.btn-secondary:hover,
   font-family: 'Open Sans', sans-serif;
 }
 
+.path-my .btn, .path-my .btn.active, .path-my a.btn:focus {
+    background-color: #2687C9;
+    background-image: none;
+    color: white;
+}
+
+input[size] {
+    max-width: 60vw;
+    width: 80%;
+}
 .btn-group > input[type="submit"].btn.btn-secondary, .btn-group > button.btn.btn-secondary {
   position: relative;
   -webkit-border-radius: 0;
@@ -980,10 +1012,26 @@ button.fp-dlg-butoverwrite.btn:focus,
 .path-mod-workshop .assessment-summary.notgraded .singlebutton input[type="submit"]:focus,
 .path-mod-workshop .example-summary.notgraded .singlebutton input[type="submit"]:focus,
 .submissionlinks a.btn:focus,
+input[type="submit"].btn.btn-primary,
 .btn-group.header-button-group > .btn:last-child:focus {
   background: #2687C9;
   color: white;
   text-decoration: none;
+}
+
+.row {
+  background-color: transparent;
+}
+
+.user-enroller-panel .uep-search-results .user.odd {
+  background-color: #ffffff;
+}
+
+
+
+.qnbutton.btn.btn-secondary {
+  color: #2687C9;
+  cursor: pointer;
 }
 #course-category-listings .listing-pagination .yui3-button.active-page {
   background: #2687C9;
