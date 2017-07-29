@@ -47,6 +47,14 @@ a {
 .container-fluid {
   max-width: initial;
 }
+#page.container-fluid {
+  max-width: 95vw;
+  padding-left:0;
+  padding-right: 0;
+}
+.atto_form.atto_media > .tab-content {
+  margin-right: 0;
+}
 .content-wrapper {
   display: table-row;
   height: 100%;
@@ -207,9 +215,21 @@ body.path-login section {
   margin: 4px 4px 4px -24px;
   padding: 4px;
 }
-.menu-action img.icon, .action-list img.icon, .commands img.icon {
+.menu-action:not(.block-control-actions) img.icon, .action-list:not(.block-control-actions) img.icon, .commands:not(.block-control-actions) img.icon {
   height: 12px;
   margin-right: 3px;
+  vertical-align: middle;
+  width: 12px;
+}
+
+.moodle-actionmenu.block-control-actions img.icon {
+  height: 12px;
+  margin-right: 0;
+  vertical-align: middle;
+  width: auto;
+}
+.gradereport-grader-table img.icon:not(.itemicon) {
+  height: 12px;
   vertical-align: middle;
   width: 12px;
 }
@@ -788,7 +808,55 @@ button.fp-dlg-butoverwrite.btn,
 .path-mod-workshop .assessment-summary.notgraded .singlebutton input[type="submit"],
 .path-mod-workshop .example-summary.notgraded .singlebutton input[type="submit"],
 .submissionlinks a.btn,
+.btn.btn-secondary,
+input[type="submit"].btn.btn-secondary,
+.btn.btn-secondary:hover,
+input[type="submit"].btn.btn-secondary:hover,
 .btn-group.header-button-group > .btn:last-child {
+  background: #2687C9;
+  color: white;
+  border-radius: 4px;
+  border: none;
+  text-shadow: none;
+  box-shadow: none;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.btn-group > input[type="submit"].btn.btn-secondary, .btn-group > button.btn.btn-secondary {
+  position: relative;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+}
+
+.btn-group > input[type="submit"].btn.btn-secondary:first-child, button.btn.btn-secondary:first-child {
+  margin-left: 0;
+  -webkit-border-top-left-radius: 4px;
+  -moz-border-radius-topleft: 4px;
+  border-top-left-radius: 4px;
+  -webkit-border-bottom-left-radius: 4px;
+  -moz-border-radius-bottomleft: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.btn-group > input[type="submit"].btn.btn-secondary:last-child, button.btn.btn-secondary:last-child {
+  margin-left: 0;
+  -webkit-border-top-right-radius: 4px;
+  -moz-border-radius-topright: 4px;
+  border-top-right-radius: 4px;
+  -webkit-border-bottom-right-radius: 4px;
+  -moz-border-radius-bottomright: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.messaging-area-container .messaging-area .messages-area .messages-header .btn-link {
+  padding: 0px;
+  line-height: inherit;
+  color: #2687C9;
+  background: transparent;
+}
+
+.messaging-area-container .btn.btn-link {
   background: #2687C9;
   color: white;
   border-radius: 4px;
@@ -1837,6 +1905,9 @@ body #region-main .mform:not(.unresponsive) .fitem .fitemtitle {
         position: relative;
 }
 */
+.fselect select {
+  max-width: 600px;
+}
 .mform fieldset.collapsible legend a.fheader {
   margin-left: 0;
 }
@@ -1863,11 +1934,11 @@ select#id_category,
   right: 28px;
   margin-bottom: 0px;
 }
-.fitemtitle .fgrouplabel label {
+/*.fitemtitle .fgrouplabel label {
   position: absolute;
   right: 28px;
   margin-bottom: 0px;
-}
+}*/
 .fitemtitle .fgrouplabel .helptooltip {
   margin-left: 6px;
   display: inline-block;
@@ -2332,7 +2403,13 @@ a.logo {
 .gradeparent {
   overflow-x: scroll;
   max-width: 90vw;
+  margin-bottom: 2em;
 }
+
+.path-grade-report-grader .gradeparent table {
+  margin-bottom: 0px;
+}
+
 #completion-progress-wrapper {
   overflow-x: scroll;
   max-width: 90vw;
@@ -2386,4 +2463,25 @@ body #region-main .mform:not(.unresponsive) .fitem .fadvcheckbox > span {
 
 .moodle-dialogue-bd .row {
   margin-left: -20px;
+}
+
+.right.side .section_action_menu {
+  margin-top: -10px;
+}
+
+.modal-container .modal .modal-footer {
+  background-color: transparent;
+  border-top: none;
+}
+
+.modal-container .modal .modal-header {
+  background-color: #6C6D6F;
+  text-shadow: none;
+  border-bottom: 1px solid #bbb;
+  background-image: none;
+  color: #FFFFFF;
+}
+
+.modal-container .modal .modal-header h3 {
+  color: #FFFFFF;
 }
