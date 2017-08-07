@@ -249,18 +249,26 @@ img.iconhelp {
 table.picture tr:last-of-type img.icon,
 .path-mod-data table.generaltable .lastcol img.icon,
 #page-mod-data-preset .fitem_fradio .fradio label img.icon,
-.path-mod-feedback div[role="main"] > h2 img.icon {
+.path-mod-feedback div[role="main"] > h2 img.icon,
+.field.col_group .groups .group img.icon {
   width: 12px;
   height: 12px;
   vertical-align: middle;
-  cursor: help;
+  cursor: pointer;
+}
+
+.requirednote img.icon, .feedback_form .feedback_hasvalue .fitemtitle img.icon {
+  width: 8px;
+  height: 12px;
+  vertical-align: middle;
+  cursor: pointer;
 }
 
 .itemname img.icon {
   width: 8px;
   height: 12px;
   vertical-align: middle;
-  cursor: help;
+  cursor: pointer;
 }
 .usermenu .moodle-actionmenu .toggle-display {
   color: #58595B;
@@ -834,14 +842,40 @@ button.fp-dlg-butoverwrite.btn,
 input[type="submit"].btn.btn-secondary,
 .btn.btn-secondary:hover,
 input[type="submit"].btn.btn-secondary:hover,
-.btn-group.header-button-group > .btn:last-child {
+.btn-group.header-button-group > .btn {
   background: #2687C9;
   color: white;
-  border-radius: 4px;
   border: none;
   text-shadow: none;
   box-shadow: none;
   font-family: 'Open Sans', sans-serif;
+}
+
+.btn-group.header-button-group > .btn {
+    border-right: 2px white solid;
+}
+
+.btn {
+  text-shadow: none;
+}
+
+.modal-footer .btn.btn-secondary, .modal-footer .btn.btn-secondary:hover{
+  background: #6C6D6F;
+}
+
+.btn-group.header-button-group > .btn:last-child {
+  border-bottom-right-radius: 4px;
+  border-top-right-radius: 4px;
+  border-right: none;
+}
+
+.btn-group.header-button-group > .btn:first-child {
+  border-bottom-left-radius: 4px;
+  border-top-left-radius: 4px;
+}
+
+.togglecompletion button.btn.btn-link {
+    background-color: transparent;
 }
 
 .path-my .btn, .path-my .btn.active, .path-my a.btn:focus {
@@ -1023,10 +1057,26 @@ input[type="submit"].btn.btn-primary,
   background-color: transparent;
 }
 
-.user-enroller-panel .uep-search-results .user.odd {
+.user-enroller-panel .uep-search-results .user {
   background-color: #ffffff;
+  border-bottom: 1px solid #ddd;
+  border-top: 1px solid #eee;
 }
 
+input[type="text"] + input[type="button"].uep-search-btn {
+  margin-bottom: 0;
+}
+
+#mod_quiz_preflight_form.mform .fitem .felement.fgroup {
+  margin-left: 200px;
+}
+.filemanager.fm-noitems .fm-empty-container {
+  padding-top: 75px;
+}
+.user-enroller-panel .totalusers {
+  border-bottom: 1px solid #ddd;
+  border-top: 1px solid #eee;
+}
 
 
 .qnbutton.btn.btn-secondary {
@@ -1061,7 +1111,20 @@ input[type="reset"][disabled] {
   color: #333;
   background-color: #e6e6e6;
 }
-button.disabled:hover,
+
+input[type="submit"]:first-child {
+  margin-left: 0;
+}
+.block_navigation .block_tree p.hasicon {
+   text-indent: 0;
+   padding-left: 0;
+}
+
+.btn-group.m-b-1 {
+  margin-top: 5px;
+}
+
+/*button.disabled:hover,
 input.form-submit.disabled:hover,
 input[type="button"].disabled:hover,
 input[type="submit"].disabled:hover,
@@ -1073,8 +1136,8 @@ input[type="submit"][disabled]:hover,
 input[type="reset"][disabled]:hover {
   color: #333;
   background-color: #e6e6e6;
-}
-button.disabled:active,
+}*/
+/*button.disabled:active,
 input.form-submit.disabled:active,
 input[type="button"].disabled:active,
 input[type="submit"].disabled:active,
@@ -1099,7 +1162,7 @@ input[type="submit"][disabled]:focus,
 input[type="reset"][disabled]:focus {
   color: #333;
   background-color: #e6e6e6;
-}
+}*/
 /**
 * BUTTONS ON GRAY BACKGROUND
 */
@@ -2520,6 +2583,10 @@ body #region-main .mform:not(.unresponsive) .fitem .fadvcheckbox > span {
 .modal-container .modal .modal-footer {
   background-color: transparent;
   border-top: none;
+}
+
+#notice .modal-footer {
+  text-align: center;
 }
 
 .modal-container .modal .modal-header {
