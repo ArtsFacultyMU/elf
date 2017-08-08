@@ -70,11 +70,11 @@ var handleBoxClick=function(e){
 		for (var i = 0; i < this.size(); i++) { 
 			img_src = "img_src";
 			var this_img_class = this.item(i).one('img').getAttribute('class')
-
 			if(this_img_class != "smallicon") {
-				img_src = this.item(i).one('img').getAttribute('src').match("(.*)\\?")[1];
+				img_src = this.item(i).one('img').getAttribute('src').match("(.*)\\?");
+				if(img_src != null)
+					img_src = img_src[1];
 			}
-
 			if (img_src == clicked) { 
 				display = "class = 'folder-mod-a-visible'";
 			} else {
@@ -84,7 +84,6 @@ var handleBoxClick=function(e){
 				text += "<a href='"+img_src+"' data-toggle='lightbox' data-gallery='multiimages'  "+ display +"><img class='mod-folder-image-view' src='"+img_src+"' /></a>";
 			}
 		}
-
 		picture_div.innerHTML = text;
 
     //e.currentTarget.setHTML('ouch!');
