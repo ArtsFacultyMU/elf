@@ -1,6 +1,7 @@
 <?php
 
 namespace enrol_ismu\tasks\cron;
+define('COURSE_CREATOR',2);
 
 class sync_data_from_ismu extends \core\task\scheduled_task 
 {
@@ -138,7 +139,10 @@ class sync_data_from_ismu extends \core\task\scheduled_task
             $user->firstname = addslashes($newUser->firstname);
             $user->lastname = addslashes($newUser->surname); 
             $user->email = $newUser->uco.'@mail.muni.cz';
-            $DB->insert_record('user', $user);
+            $userId = $DB->insert_record('user', $user);
+            $context = \context_system::instance();
+            if(!user_has_role_assignment($userId,COURSE_CREATOR, $context->id))
+                role_assign(COURSE_CREATOR, $userId, $context->id);
         }
     }
     
