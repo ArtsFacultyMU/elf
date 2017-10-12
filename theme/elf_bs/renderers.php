@@ -112,7 +112,12 @@ class theme_elf_bs_core_renderer extends theme_bootstrapbase_core_renderer {
     public function footer_html($footer_data) {
         global $OUTPUT;
 
-        $r = '<div class="row-fluid"><div class="span2-5">';
+        $r = '<div class="row-fluid">';
+        if(isloggedin() && !isguestuser()) {
+            $r .= '<div class="span2-5">';
+        } else {
+            $r .= '<div class="span4">';
+        }
         $r .= '<h3>' . get_string('contacts', 'theme_elf_bs') . '</h3>';
         $r .= '<div>' . format_text($footer_data->workplace) . '</div>';
 		$r .= '<div>' . format_text($footer_data->department) . '</div>';
@@ -124,7 +129,11 @@ class theme_elf_bs_core_renderer extends theme_bootstrapbase_core_renderer {
         $r .= '<div>'.get_string('mobile','theme_elf_bs').': ' . $footer_data->mobile . '</div>';
         $r .= '</div>';
 
-		$r .= '<div class="span5">';
+        if(isloggedin() && !isguestuser()) {
+            $r .= '<div class="span5">';
+        } else {
+            $r .= '<div class="span8">';
+        }
 		
 		$r .= '<div>';
 		$r .= '<div class="span6">';
@@ -162,24 +171,25 @@ class theme_elf_bs_core_renderer extends theme_bootstrapbase_core_renderer {
 		$r .= '</div>';
 		
         $r .= '</div>';
+        if(isloggedin() && !isguestuser()) {
+            $url = new moodle_url('/theme/elf_bs/contactsupport.php');
+            $r .= '<div class="span4-5">';
+            $r .= '<h3>' . get_string('contactus', 'theme_elf_bs') . '</h3>';
+            $r .= '<form id="contact-form" action="'.$url->out().'" method="post">';
+            $r .= '<input type="text" name="contact-subject" class="input-text subject" placeholder="' . get_string('subject', 'theme_elf_bs') . '" id="contact-subject" />';
+            $r .= '<input type="text" name="contact-email" class="input-text email" placeholder="' . get_string('email', 'theme_elf_bs') . '" id="contact-email" />';
+            $r .= '<div class="clearfix"></div>';
+            $r .= '<div class="contact-email-error" style="display:none;">'.get_string('valid-email','theme_elf_bs').'</div>';
+            $r .= '<textarea name="contact-message" id="contact-message"></textarea>';
+            $r .= '<div class="contact-message-error" style="display:none;">'.get_string('valid-message','theme_elf_bs').'</div>';
+            $r .= '<input type="submit" value="' . get_string('send', 'theme_elf_bs') . '" class="button"/>';
+            $r .= '</form>';
+            $r .= '</div>';
 
-		$url = new moodle_url('/theme/elf_bs/contactsupport.php');
-        $r .= '<div class="span4-5">';
-        $r .= '<h3>' . get_string('contactus', 'theme_elf_bs') . '</h3>';
-        $r .= '<form id="contact-form" action="'.$url->out().'" method="post">';
-        $r .= '<input type="text" name="contact-subject" class="input-text subject" placeholder="' . get_string('subject', 'theme_elf_bs') . '" id="contact-subject" />';
-        $r .= '<input type="text" name="contact-email" class="input-text email" placeholder="' . get_string('email', 'theme_elf_bs') . '" id="contact-email" />';
-		$r .= '<div class="clearfix"></div>';
-		$r .= '<div class="contact-email-error" style="display:none;">'.get_string('valid-email','theme_elf_bs').'</div>';
-        $r .= '<textarea name="contact-message" id="contact-message"></textarea>';
-		$r .= '<div class="contact-message-error" style="display:none;">'.get_string('valid-message','theme_elf_bs').'</div>';
-        $r .= '<input type="submit" value="' . get_string('send', 'theme_elf_bs') . '" class="button"/>';
-        $r .= '</form>';
-        $r .= '</div>';
-
-        $r .= '</div><div class="row-fluid">';
-        $r .= '<div class="span12" id="copyright-note">' . format_text($footer_data->copyright) . '</div>';
-        $r .= '</div>';
+            $r .= '</div><div class="row-fluid">';
+            $r .= '<div class="span12" id="copyright-note">' . format_text($footer_data->copyright) . '</div>';
+            $r .= '</div>';
+        }
         return $r;
     }
 
@@ -217,7 +227,7 @@ class theme_elf_bs_core_renderer extends theme_bootstrapbase_core_renderer {
                 $content .= '<b class="caret"></b>';
             }
             $content .= '</a>';
-            $content .= '<div class="dropdown-menu-container"><ul class="dropdown-menu">';
+            $content .= '<div class="dropdown-menu-containergit c"><ul class="dropdown-menu">';
             foreach ($menunode->get_children() as $menunode) {
                 $content .= $this->render_custom_menu_item($menunode, 0);
             }
