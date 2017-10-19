@@ -227,7 +227,7 @@ class theme_elf_bs_core_renderer extends theme_bootstrapbase_core_renderer {
                 $content .= '<b class="caret"></b>';
             }
             $content .= '</a>';
-            $content .= '<div class="dropdown-menu-containergit c"><ul class="dropdown-menu">';
+            $content .= '<div class="dropdown-menu-container"><ul class="dropdown-menu">';
             foreach ($menunode->get_children() as $menunode) {
                 $content .= $this->render_custom_menu_item($menunode, 0);
             }
