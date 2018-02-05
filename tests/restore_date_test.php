@@ -15,44 +15,35 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Search area for mod_folder activities.
+ * Restore date tests.
  *
  * @package    mod_folder
- * @copyright  2015 David Monllao {@link http://www.davidmonllao.com}
+ * @copyright  2017 onwards Ankit Agarwal <ankit.agrr@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-namespace mod_folder\search;
 
 defined('MOODLE_INTERNAL') || die();
 
+global $CFG;
+require_once($CFG->libdir . "/phpunit/classes/restore_date_testcase.php");
+
 /**
- * Search area for mod_folder activities.
+ * Restore date tests.
  *
  * @package    mod_folder
- * @copyright  2015 David Monllao {@link http://www.davidmonllao.com}
+ * @copyright  2017 onwards Ankit Agarwal <ankit.agrr@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class activity extends \core_search\base_activity {
+class mod_folder_restore_date_testcase extends restore_date_testcase {
 
-    /**
-     * Returns true if this area uses file indexing.
-     *
-     * @return bool
-     */
-    public function uses_file_indexing() {
-        return true;
-    }
+    public function test_restore_dates() {
+        global $DB;
 
-    /**
-     * Return the context info required to index files for
-     * this search area.
-     *
-     * @return array
-     */
-    public function get_search_fileareas() {
-        $fileareas = array('intro', 'content'); // Fileareas.
+        list($course, $folder) = $this->create_course_and_module('folder');
 
-        return $fileareas;
+        // Do backup and restore.
+        $newcourseid = $this->backup_and_restore($course);
+        $newfolder = $DB->get_record('folder', ['course' => $newcourseid]);
+        $this->assertFieldsNotRolledForward($folder, $newfolder, ['timemodified']);
     }
 }
