@@ -157,6 +157,8 @@ class qtype_multianswer extends question_type {
             $multianswer = new stdClass();
             $multianswer->question = $question->id;
             $multianswer->sequence = implode(',', $sequence);
+			$multianswer->textboxtype = ($question->textboxtype!=null)?$question->textboxtype:'variable'; // ELF FF FB -- store our custom textbox length settings
+            $multianswer->textboxsize = ($question->textboxsize!=null)?$question->textboxsize:'0'; // ELF FF FB -- store our custom textbox length settings
             if ($oldid = $DB->get_field('question_multianswer', 'id',
                     array('question' => $question->id))) {
                 $multianswer->id = $oldid;
