@@ -87,6 +87,20 @@ class qtype_multianswer_edit_form extends question_edit_form {
         $mform->addElement('hidden', 'reload', 1);
         $mform->setType('reload', PARAM_INT);
 
+		// ELF -- FF -- FB -- textboxsize settings
+        $mform->addElement('select', 'textboxtype', get_string('textboxtype','qtype_multianswer'), array('variable' => get_string('size_variable','qtype_multianswer'), 'fixed' => get_string('size_fixed','qtype_multianswer')));
+        $mform->addHelpButton('textboxtype', 'textboxtype', 'qtype_multianswer');
+        $mform->setDefault('textboxtype','variable');
+		$mform->setType('textboxtype', PARAM_TEXT);
+        
+        $mform->addElement('text','textboxsize',  get_string('textboxsize','qtype_multianswer'),'size="5"');
+        $mform->addHelpButton('textboxsize','textboxsize','qtype_multianswer');
+        $mform->disabledIf('textboxsize','textboxtype','eq','variable');
+        $mform->setDefault('textboxsize','20');
+        $mform->addRule('textboxsize', get_string('textboxsize_numeric_error','qtype_multianswer'), 'numeric', '', 'server', false, false);
+		 $mform->setType('textboxsize', PARAM_INT);
+        // ELF - END
+		
         // Remove meaningless defaultmark field.
         $mform->removeElement('defaultmark');
         $this->confirm = optional_param('confirm', false, PARAM_BOOL);
@@ -264,6 +278,13 @@ class qtype_multianswer_edit_form extends question_edit_form {
         $defaultvalues = array();
         if (isset($question->id) and $question->id and $question->qtype &&
                 $question->questiontext) {
+
+			//ELF -- FF -- FB -- setting correct values from DB
+            $defaultvalues['textboxsize'] = $DB->get_field('question_multianswer', 'textboxsize',
+                    array('question' => $question->id), '*', MUST_EXIST);
+            $defaultvalues['textboxtype'] = $DB->get_field('question_multianswer', 'textboxtype',
+                    array('question' => $question->id), '*', MUST_EXIST);
+            //ELF -- FF -- FB -- end
 
             foreach ($question->options->questions as $key => $wrapped) {
                 if (!empty($wrapped)) {

@@ -1,0 +1,88 @@
+#page-footer {
+    background: #F0F1F1;
+    border-top: 2px solid #024660;
+    text-align: left;
+
+    h3 {
+        font-size: 15px;
+        color: #024660;
+        margin-bottom:0;
+        line-height:30px;
+    }
+
+    .span2-5 {
+        width: 20.56625%;
+    }
+
+    .span4-5 {
+        width: 33.6%;
+    }
+}
+
+#contact-form {
+    text-align:right;
+    position: relative;
+
+    .input-text {
+        font-family: 'Open Sans', sans-serif;
+        border-radius: 0;
+        border: 1px solid #A7A9AB;
+        padding: 0 6px;
+        line-height: 20px;
+        height: 18px;
+        font-size: 12px;
+        font-style: italic;
+        color: #929494;
+        width: 43%;
+        &.email {
+            float:right;
+        }
+        &.subject {
+            float:left;
+        }
+    }
+
+    textarea {
+        width: 95.5%;
+        padding: 5px 2%;
+    }
+
+    .contact-message-error,
+    .contact-email-error {
+        font-size: 12px;
+        margin-bottom: 14px;
+        color: red;
+        line-height: 4px;
+    }
+}
+
+#scroll-up {
+    display: block;
+    background: url([[pix:theme|up_arrow]]) no-repeat 0 0;
+    width: 53px;
+    height: 54px;
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    z-index: 9999;
+
+    &.allow-cookies {
+        bottom: 42px;
+    }
+
+    &:HOVER {
+        background: url([[pix:theme|up_arrow_hover]]) no-repeat 0 0;
+    }
+}
+
+#copyright-note {
+    color: #344243;
+    font-style:italic;
+    text-align: right;
+    margin-top: 12px;
+}
+
+#notice {
+    padding-top: 15px;
+    text-align: center;
+}
