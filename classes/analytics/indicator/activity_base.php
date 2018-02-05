@@ -15,14 +15,32 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    datafield
- * @subpackage number
- * @copyright  1999 onwards Martin Dougiamas (http://dougiamas.com)
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * Activity base class.
+ *
+ * @package   mod_data
+ * @copyright 2017 onwards Ankit Agarwal <ankit.agrr@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+namespace mod_data\analytics\indicator;
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2017111300;        // The current plugin version (Date: YYYYMMDDXX)
-$plugin->requires  = 2017110800;        // Requires this Moodle version
-$plugin->component = 'datafield_number'; // Full name of the plugin (used for diagnostics)
+/**
+ * Activity base class.
+ *
+ * @package   mod_data
+ * @copyright 2017 onwards Ankit Agarwal <ankit.agrr@gmail.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+abstract class activity_base extends \core_analytics\local\indicator\community_of_inquiry_activity {
+
+    /**
+     * Returns the name of the field that controls activity availability.
+     *
+     * @return null|string
+     */
+    protected function get_timeclose_field() {
+        return 'timeavailableto';
+    }
+}
