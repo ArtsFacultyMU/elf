@@ -226,7 +226,7 @@ class pdf extends \FPDI {
         $this->SetFontSize(12 * $this->scale);
         $this->SetMargins(100 * $this->scale, 120 * $this->scale, -1, true);
         $this->SetAutoPageBreak(true, 100 * $this->scale);
-        $this->setHeaderFont(array('helvetica', '', 24 * $this->scale));
+        $this->setHeaderFont(array('freesans', '', 24 * $this->scale));
         $this->setHeaderMargin(24 * $this->scale);
         $this->setHeaderData('', 0, '', get_string('commentindex', 'assignfeedback_editpdf'));
 
