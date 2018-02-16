@@ -2602,3 +2602,9 @@ body #region-main .mform:not(.unresponsive) .fitem .fadvcheckbox > span {
 .modal-container .modal .modal-header h3 {
   color: #FFFFFF;
 }
+
+.userlist table#participants {
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+}
