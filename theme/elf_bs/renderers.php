@@ -171,6 +171,7 @@ class theme_elf_bs_core_renderer extends theme_bootstrapbase_core_renderer {
 		$r .= '</div>';
 		
         $r .= '</div>';
+        /* CONTACT FORM IN FOOTER - disabled in 03/2018
         if(isloggedin() && !isguestuser()) {
             $url = new moodle_url('/theme/elf_bs/contactsupport.php');
             $r .= '<div class="span4-5">';
@@ -190,6 +191,7 @@ class theme_elf_bs_core_renderer extends theme_bootstrapbase_core_renderer {
             $r .= '<div class="span12" id="copyright-note">' . format_text($footer_data->copyright) . '</div>';
             $r .= '</div>';
         }
+        */
         return $r;
     }
 
