@@ -113,15 +113,11 @@ class theme_elf_bs_core_renderer extends theme_bootstrapbase_core_renderer {
         global $OUTPUT;
 
         $r = '<div class="row-fluid">';
-        if(isloggedin() && !isguestuser()) {
-            $r .= '<div class="span2-5">';
-        } else {
-            $r .= '<div class="span4">';
-        }
+        $r .= '<div class="span4">';
         $r .= '<h3>' . get_string('contacts', 'theme_elf_bs') . '</h3>';
         $r .= '<div>' . format_text($footer_data->workplace) . '</div>';
-		$r .= '<div>' . format_text($footer_data->department) . '</div>';
-		$r .= '<div>' . format_text($footer_data->institution) . '</div>';
+		    $r .= '<div>' . format_text($footer_data->department) . '</div>';
+		    $r .= '<div>' . format_text($footer_data->institution) . '</div>';
         $r .= '<div>' . $footer_data->address . '</div>';
         $r .= '<div><a href="mailto:' . $footer_data->email . '" title="' . get_string('email', 'theme_elf_bs') . '">' . $footer_data->email . '</a></div>';
         $r .= '<div><a href="http://'.$footer_data->web.'" >' . $footer_data->web . '</a></div>';
@@ -129,69 +125,44 @@ class theme_elf_bs_core_renderer extends theme_bootstrapbase_core_renderer {
         $r .= '<div>'.get_string('mobile','theme_elf_bs').': ' . $footer_data->mobile . '</div>';
         $r .= '</div>';
 
-        if(isloggedin() && !isguestuser()) {
-            $r .= '<div class="span5">';
-        } else {
-            $r .= '<div class="span8">';
-        }
-		
-		$r .= '<div>';
-		$r .= '<div class="span6">';
-		if(isset($footer_data->sections[0])) {
-			$r .= '<h3>' . format_text($footer_data->sections[0]['name']) . '</h3>';
-			foreach($footer_data->sections[0]['items'] as $item)
-					$r .= '<div><a href="'.$item['url'].'">'.format_text($item['name']).'</a></div>';
-		}
-		$r .= '</div>';
-		$r .= '<div class="span6">';
-		if(isset($footer_data->sections[2])) {
-			$r .= '<h3>' . format_text($footer_data->sections[2]['name']) . '</h3>';
-			foreach($footer_data->sections[2]['items'] as $item)
+        $r .= '<div class="span8">';
+        $r .= '<div>';
+		    $r .= '<div class="span6">';
+		    if(isset($footer_data->sections[0])) {
+			    $r .= '<h3>' . format_text($footer_data->sections[0]['name']) . '</h3>';
+			    foreach($footer_data->sections[0]['items'] as $item)
+					  $r .= '<div><a href="'.$item['url'].'">'.format_text($item['name']).'</a></div>';
+		    }
+		    $r .= '</div>';
+		    $r .= '<div class="span6">';
+		    if(isset($footer_data->sections[2])) {
+		    $r .= '<h3>' . format_text($footer_data->sections[2]['name']) . '</h3>';
+			  foreach($footer_data->sections[2]['items'] as $item)
 				$r .= '<div><a href="'.$item['url'].'">'.format_text($item['name']).'</a></div>';
-		}	
-		$r .= '</div>';
-		$r .= '<div class="clearfix"></div>';
-		$r .= '</div>';
+		    }
+		    $r .= '</div>';
+		    $r .= '<div class="clearfix"></div>';
+		    $r .= '</div>';
 		
-		$r .= '<div>';
-		$r .= '<div class="span6">';
-		if(isset($footer_data->sections[1])) {
-			$r .= '<h3>' . format_text($footer_data->sections[1]['name']) . '</h3>';
-			foreach($footer_data->sections[1]['items'] as $item)
-					$r .= '<div><a href="'.$item['url'].'">'.format_text($item['name']).'</a></div>';
-		}
-		$r .= '</div>';
-		$r .= '<div class="span6">';
-		$r .= '<div class="social-links">';
-		foreach($footer_data->social as $social => $url) 
-			$r .= '<div><a href="'.$url.'" target="_blank"><img src="'.$OUTPUT->pix_url('social_'.$social, 'theme_elf_bs').'" /></a></div>';
-		$r .= '</div>';
-		$r .= '</div>';
-		$r .= '<div class="clearfix"></div>';
-		$r .= '</div>';
+        $r .= '<div>';
+        $r .= '<div class="span6">';
+        if(isset($footer_data->sections[1])) {
+          $r .= '<h3>' . format_text($footer_data->sections[1]['name']) . '</h3>';
+          foreach($footer_data->sections[1]['items'] as $item)
+              $r .= '<div><a href="'.$item['url'].'">'.format_text($item['name']).'</a></div>';
+        }
+        $r .= '</div>';
+        $r .= '<div class="span6">';
+        $r .= '<div class="social-links">';
+        foreach($footer_data->social as $social => $url)
+          $r .= '<div><a href="'.$url.'" target="_blank"><img src="'.$OUTPUT->pix_url('social_'.$social, 'theme_elf_bs').'" /></a></div>';
+        $r .= '</div>';
+        $r .= '</div>';
+        $r .= '<div class="clearfix"></div>';
+        $r .= '</div>';
 		
         $r .= '</div>';
-        /* CONTACT FORM IN FOOTER - disabled in 03/2018
-        if(isloggedin() && !isguestuser()) {
-            $url = new moodle_url('/theme/elf_bs/contactsupport.php');
-            $r .= '<div class="span4-5">';
-            $r .= '<h3>' . get_string('contactus', 'theme_elf_bs') . '</h3>';
-            $r .= '<form id="contact-form" action="'.$url->out().'" method="post">';
-            $r .= '<input type="text" name="contact-subject" class="input-text subject" placeholder="' . get_string('subject', 'theme_elf_bs') . '" id="contact-subject" />';
-            $r .= '<input type="text" name="contact-email" class="input-text email" placeholder="' . get_string('email', 'theme_elf_bs') . '" id="contact-email" />';
-            $r .= '<div class="clearfix"></div>';
-            $r .= '<div class="contact-email-error" style="display:none;">'.get_string('valid-email','theme_elf_bs').'</div>';
-            $r .= '<textarea name="contact-message" id="contact-message"></textarea>';
-            $r .= '<div class="contact-message-error" style="display:none;">'.get_string('valid-message','theme_elf_bs').'</div>';
-            $r .= '<input type="submit" value="' . get_string('send', 'theme_elf_bs') . '" class="button"/>';
-            $r .= '</form>';
-            $r .= '</div>';
 
-            $r .= '</div><div class="row-fluid">';
-            $r .= '<div class="span12" id="copyright-note">' . format_text($footer_data->copyright) . '</div>';
-            $r .= '</div>';
-        }
-        */
         return $r;
     }
 
