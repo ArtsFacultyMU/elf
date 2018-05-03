@@ -139,26 +139,6 @@ require(['core/yui'], function (Y) {
                     dialogue.show();
                 });
             }
-
-            Y.one('#contact-form').on('submit', function (e) {
-                var error = false;
-                if (!validateEmail(Y.one('#contact-email').get('value'))) {
-                    e.preventDefault();
-                    Y.one('.contact-email-error').show();
-                    error = true;
-                } else {
-                    Y.one('.contact-email-error').hide();
-                }
-                if (emptyStr(Y.one('#contact-message').get('value'))) {
-                    e.preventDefault();
-                    Y.one('.contact-message-error').show();
-                    error = true;
-                } else {
-                    Y.one('.contact-message-error').hide();
-                }
-                return !error;                
-            });
-
         });
     });
 
