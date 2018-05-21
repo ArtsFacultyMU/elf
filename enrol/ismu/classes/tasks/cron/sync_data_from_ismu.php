@@ -34,20 +34,29 @@ class sync_data_from_ismu extends \core\task\scheduled_task
         global $DB;
         $transaction = $DB->start_delegated_transaction();
         try {
-            $ismuEnroller->delete_students();
-            foreach(array(1423, 1421, 1451, 1431) as $faculty) {
-                $this->download_students_from_is_mu($period, $faculty, $ismuEnroller);
-            }
-            $this->sync_missing_users($ismuEnroller->get_not_inserted_students());
-            
+            // Generates list of faculty IDs interested in ELF
+            $interested_faculties = array(
+                \enrol_ismu\helper::ELF_FACULTY_FSS,
+                \enrol_ismu\helper::ELF_FACULTY_PHIL,
+                \enrol_ismu\helper::ELF_FACULTY_FSPS,
+                \enrol_ismu\helper::ELF_FACULTY_SCI
+            );
+
+            // Enrols teacher, students and studies
             $ismuEnroller->delete_teachers();
-            foreach(array(1423, 1421, 1451, 1431) as $faculty) {
+            foreach($interested_faculties as $faculty) {
                 $this->download_teachers_from_is_mu($period, $faculty, $ismuEnroller);
             }
-            $this->sync_missing_users($ismuEnroller->get_not_inserted_teachers());
+            $this->sync_missing_users($ismuEnroller->get_not_inserted_teachers(), true);
+            
+            $ismuEnroller->delete_students();
+            foreach($interested_faculties as $faculty) {
+                $this->download_students_from_is_mu($period, $faculty, $ismuEnroller);
+            }
+            $this->sync_missing_users($ismuEnroller->get_not_inserted_students(), false);
             
             $ismuEnroller->delete_studies();
-            foreach(array(1423, 1421, 1451, 1431) as $faculty) {
+            foreach($interested_faculties as $faculty) {
                 $this->download_studies_from_is_mu($period, $faculty, $ismuEnroller);
             }
 
@@ -129,19 +138,37 @@ class sync_data_from_ismu extends \core\task\scheduled_task
             throw new \Exception('Could not download studies from IS MU for faculty ' . $faculty);
         }
     }
-    
-    protected function sync_missing_users(array $notEnroledUsers)
+
+    /**
+     * Creates new Moodle users from not enrolled IS users.
+     *
+     * @param array $notEnrolledUsers Array of not imported IS users
+     * @param bool $teachers Set TRUE if users are teachers
+     * @throws \coding_exception
+     * @throws \dml_exception
+     */
+    protected function sync_missing_users(array $notEnrolledUsers, bool $teachers = null)
     {
+        // Gets database object
         global $DB;
+
+        // Creates standard-class user object
         $user = $this->get_default_moodle_user_object();
-        foreach ($notEnroledUsers as $newUser) {
+
+        // Iterates over not-enrolled users
+        foreach ($notEnrolledUsers as $newUser) {
+            // Rewrites information specific for this user
             $user->username = $newUser->username;
             $user->firstname = addslashes($newUser->firstname);
             $user->lastname = addslashes($newUser->surname); 
             $user->email = $newUser->uco.'@mail.muni.cz';
+
+            // Inserts information about user into the database and gets context
             $userId = $DB->insert_record('user', $user);
             $context = \context_system::instance();
-            if(!user_has_role_assignment($userId,COURSE_CREATOR, $context->id))
+
+            // TEACHER-SPECIFIC: If teacher doesn't have "Course creator" role, adds it
+            if(!user_has_role_assignment($userId,COURSE_CREATOR, $context->id) && $teachers)
                 role_assign(COURSE_CREATOR, $userId, $context->id);
         }
     }

@@ -185,7 +185,7 @@ class enrol_ismu_plugin extends enrol_plugin {
         }
         $data = (array) $this->helper->convert_ismu_to_moodle_settings((object) $fields);
         $enrolId = parent::add_instance($course, $data);
-        $this->helper->task_sync_users_from_ismu($course->id, 5);
+        $this->helper->task_sync_users_from_ismu($course->id, STUDENT_ROLE);
         return $enrolId;
     }
     
@@ -211,7 +211,7 @@ class enrol_ismu_plugin extends enrol_plugin {
             }
         }
         if($data->enrol_ismu_period == $currentIsmuActivePeriod) {
-            $this->helper->task_sync_users_from_ismu($instance->courseid, 5);
+            $this->helper->task_sync_users_from_ismu($instance->courseid, STUDENT_ROLE);
         }
         return $update;
     }
@@ -273,7 +273,7 @@ class enrol_ismu_plugin extends enrol_plugin {
             }
         }
         if($data->enrol_ismu_period == $currentIsmuActivePeriod) {
-            $this->helper->task_sync_users_from_ismu($course->id, 5);
+            $this->helper->task_sync_users_from_ismu($course->id, STUDENT_ROLE);
         }
 
         $DB->update_record('enrol', $this->helper->convert_ismu_to_moodle_settings($data, $instance));

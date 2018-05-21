@@ -31,10 +31,10 @@ class ismu_enroler
         return $students;
     }
     
-    public function get_course_students($courseCode, $enrolStaus)
+    public function get_course_students($courseCode, $enrolStatus)
     {
         global $DB;
-        switch ($enrolStaus) {
+        switch ($enrolStatus) {
             case helper::ISMU_STUDENTS_IMPORT_REGISTERED :
                 $query = "SELECT DISTINCT(student.id) AS userid 
                     FROM
