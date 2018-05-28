@@ -50,6 +50,7 @@ $string['modulename_help'] = 'The MEDIAL module provides a customised LTI based 
 $string['modulename_link'] = 'mod/helixmedia/view';
 $string['modulenameplural'] = 'MEDIAL';
 $string['modulenamepluralformatted'] = 'MEDIAL Instances';
+$string['moodlemobile'] = 'MEDIAL videos embedded in other activity modules are not available via MoodleMobile. Please use the open in browser option to view this video.';
 $string['nohelixmedias'] = 'No MEDIAL Instances found.';
 $string['org_id'] = 'Organisation ID';
 $string['org_id2'] = 'The organisation ID or name which will be sent to the MEDIAL server. The URL of your MEDIAL installation will be sent if this is left blank.';

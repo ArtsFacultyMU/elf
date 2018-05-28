@@ -625,16 +625,62 @@ function helixmedia_get_instance_size($preid, $course) {
     $url = trim(get_config("helixmedia", "launchurl"));
     $pos = str_contains($url, "/Launch", true);
     $url = substr($url, 0, $pos)."PlayerWidth";
-    $retdata = helixmedia_curl_post_launch_html(array("context_id" => $course, "resource_link_id" => $preid), $url);
+    $retdata = helixmedia_curl_post_launch_html(array("context_id" => $course, "resource_link_id" => $preid, "include_height" => "Y"), $url);
 
-    return intval($retdata);
+    $parts = explode(":", $retdata);
+    // If there is more than one part, then MEDIAL undersatnds the include_height param
+    if (count($parts)>1) {
+        $vals=new stdclass();
+        $vals->width = intval($parts[0]);
+        $vals->height = intval($parts[1]);
+        if (count($parts)>1 && $parts[2] == 'Y') {
+            $vals->audioonly = true;
+        } else {
+            $vals->audioonly = false;
+        }
+        return $vals;
+    }
+
+    // Old version of MEDIAL, return standard data
+    $vals=new stdclass();
+    $vals->width = intval($retdata);
+    $vals->height = -1;
+    $vals->audioonly = false;
+    return $vals;
 }
 
 function helixmedia_get_status_url() {
+    return helixmedia_get_alturl("SessionStatus");
+}
+
+function helixmedia_get_upload_url() {
+    return helixmedia_get_alturl("UploadStatus");
+}
+
+function helixmedia_get_alturl($alt) {
     $status_url = trim(get_config("helixmedia", "launchurl"));
     $pos = str_contains($status_url, "/Launch", true);
-    return substr($status_url, 0, $pos)."SessionStatus";
+    return substr($status_url, 0, $pos).$alt;
 }
+
+function helixmedia_is_preid_empty($preid, $as) {
+    global $CFG, $USER;
+
+    $retdata = helixmedia_curl_post_launch_html(array("resource_link_id" => $preid, "user_id" => $USER->id), helixmedia_get_upload_url());
+
+    // We got a 404, the MEDIAL server doesn't support this call, so return false
+    // The old method was to check for the presence of a resource link ID so this is consistent
+    if(strpos($retdata, "HTTP 404") > 0) {
+        return false;
+    }
+
+    if ($retdata == "Y") {
+        return false;
+    }
+
+    return true;
+}
+
 
 function str_contains($haystack, $needle, $ignoreCase = false) {
     if ($ignoreCase) {

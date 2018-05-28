@@ -45,11 +45,11 @@ class assign_submission_helixassign extends assign_submission_plugin {
         global $DB;
         $aid=$this->assignment->get_instance()->id;
         if ($aid)
-		{
+        {
             $ret=$DB->get_record('assignsubmission_helixassign', array('assignment'=>$aid, 'submission'=>$submissionid));
-			if ($ret)
-			    return $ret;
-	    }
+            if ($ret)
+                return $ret;
+        }
 
         return false;
     }
@@ -327,8 +327,10 @@ class assign_submission_helixassign extends assign_submission_plugin {
      */
     public function is_empty(stdClass $submission) {
         $helixassignsubmission = $this->get_helixassign_submission($submission->id);
-        if ($helixassignsubmission)
-            return false;
+        if ($helixassignsubmission) {
+            return helixmedia_is_preid_empty($helixassignsubmission->preid, $this);
+        }
+
         return true;
     }
 

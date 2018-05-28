@@ -9,8 +9,9 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-header("Content-Type: text/javascript");
+
 require_once("../../config.php");
+header("Content-Type: text/javascript");
 global $CFG;
 ?>
 var activity_dialog;
