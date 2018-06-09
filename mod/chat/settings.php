@@ -22,6 +22,7 @@ if ($ADMIN->fulltree) {
 
     $options = array();
     $options['ajax']      = get_string('methodajax', 'chat');
+	$options['ajax_elf']  = get_string('methodajaxelf', 'chat'); //ELF--FB--method with textarea input -- our own gui_ajax_elf
     $options['header_js'] = get_string('methodnormal', 'chat');
     $options['sockets']   = get_string('methoddaemon', 'chat');
     $settings->add(new admin_setting_configselect('chat_method', get_string('method', 'chat'),

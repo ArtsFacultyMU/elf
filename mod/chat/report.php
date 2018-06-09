@@ -209,7 +209,6 @@ foreach ($sessions as $session) {
     echo '<p>'.userdate($session->sessionstart).' --> '. userdate($session->sessionend).'</p>';
 
     echo $OUTPUT->box_start();
-
     arsort($session->sessionusers);
     foreach ($session->sessionusers as $sessionuser => $usermessagecount) {
         if ($user = $DB->get_record('user', array('id' => $sessionuser))) {

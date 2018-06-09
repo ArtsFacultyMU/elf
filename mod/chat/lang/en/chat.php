@@ -86,6 +86,7 @@ $string['method'] = 'Chat method';
 $string['methoddaemon'] = 'Chat server daemon';
 $string['methodnormal'] = 'Normal method';
 $string['methodajax'] = 'Ajax method';
+$string['methodajaxelf'] = 'Version using Ajax with textarea input';
 $string['modulename'] = 'Chat';
 $string['modulename_help'] = 'The chat activity module enables participants to have text-based, real-time synchronous discussions.
 
