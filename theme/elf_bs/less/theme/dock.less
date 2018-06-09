@@ -1,0 +1,69 @@
+#dock {
+    top: 50px;
+    
+    .dockeditem_container {
+        margin-top: 51px;
+    }
+    
+    .dockedtitle {
+        background-image: none;
+        background-color: white;
+        text-shadow: none;
+        box-shadow: none;
+        border: 1px solid #A7A9AB;
+        border-radius: 3px;
+        
+        h2 {
+            font-size: 14px;
+            font-weight: normal;
+            color: #2687C9;
+            margin-left: 4px;
+            border: none;
+            border-radius: 4px;
+        }
+    }
+
+    .dockedtitle:hover,
+    .dockedtitle.activeitem {
+        border-color: #024660;
+        background: #024660;
+        
+        h2 {
+            color: white;
+        }
+    }
+
+    .dockedtitle > div {
+        padding-bottom: 9px;
+    }
+
+    .controls {
+        position:relative;
+        bottom: 0;
+        top: 1em; 
+    }
+}
+
+#dockeditempanel {
+    padding-left: 3px;
+
+    .dockeditempanel_content {
+        background-color: white;
+        border: 1px solid #A7A9AB;
+        box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+    }
+
+    .dockeditempanel_hd { 
+        padding: 0px;
+        border-bottom: none;
+        
+        .commands {
+            float:right;
+            padding: 3px 15px;
+        }
+    }
+
+    .dockeditempanel_bd>* {
+        margin: 0;
+    }
+}

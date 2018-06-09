@@ -1,0 +1,347 @@
+
+.courses .coursebox.even {
+    background-color: #FFF;
+}
+.courses .coursebox.odd {
+    background-color: #FFF;
+}
+
+.course-content {
+    position: relative;
+}
+
+.course-content h3.sectionname {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.path-course-view .completionprogress {
+    position: absolute;
+    top: 4px;
+    right: 8px;
+}
+
+.coursebox, .coursebox.collapsed {
+    padding: 5px;
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+
+.coursebox > .info {
+    position:relative;
+}
+
+.coursebox > .info .moreinfo {
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+}
+
+.coursebox .enrolmenticons {
+    position: absolute;
+    bottom: 10px;
+    right: 50px;
+}
+
+.coursebox .content {
+
+}
+
+.coursebox .content .teachers {
+    float: left;
+    width: 171px;
+    clear: left;
+    margin: 15px 10px 10px 9px;
+}
+
+.coursebox .content .summary {
+    float: none;
+    width: auto;
+    padding-top: 15px;
+    border-top: 1px solid #58585B;
+    margin: 0 20px 10px 190px;
+}
+
+.coursebox > .info > a.courseimage {
+    display: block;
+    float: left;
+    margin: 5px 25px 5px 5px;
+    width: 160px;
+}
+
+.coursebox > .info > a.courseimage img {
+    object-fit: cover;
+    height: 100px;
+    width: 160px;
+}
+
+.coursebox > .info > div.course-info-container {
+    margin-left: 190px;
+    position: relative;
+    padding-top: 50px;
+}
+
+.coursebox > .info > div.course-info-container > h3.coursename {
+    padding: 10px 0 0px 0;
+    margin: 0;
+    position: absolute;
+    right: 10px;
+    left: 0;
+    top: 0;
+}
+
+.coursebox > .info > .categorylink {
+
+}
+
+.coursebox > .info > div.course-info-container > .categorylink:last-child {
+    margin-bottom:10px;
+}
+
+.coursebox > .info .coursename span {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.coursebox > .info .coursename span a {
+    background-image: none;
+    color: #00425F;
+    font-size: 22px;
+    padding: 0;
+}
+
+.coursebox > .info .coursename a:HOVER {
+    text-decoration: none;
+}
+
+.block, 
+.course-content ul li.section.main, 
+.coursebox, 
+.course-content .single-section, 
+.courses .coursebox.collapsed,
+body.path-course section .coursebox.loaded {
+    border: 1px solid #A7A9AB;
+    background: #FFF;
+    box-shadow: none;
+    border-radius: 3px;
+    padding: 0px; /**pozor, prida to medzeru do zoznamu kurzov**/
+}
+
+.coursebox > .info .coursename span a.dimmed {
+    color: #999;
+}
+
+.section .activity .contentafterlink {
+    margin-right: 30px;
+}
+
+.course-content .single-section ul.topics li.section .summary, 
+.course-content .single-section ul.weeks li.section .summary {
+    border-bottom: 1px solid #A7A9AB;
+}
+
+.course-content .single-section .section-navigation {
+    font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+    padding: 0 30px;
+    margin: 0;
+}
+
+.single-section h3.sectionname {
+    font-size: 20px;
+    color: #004762;
+    border-bottom: 1px solid #A7ABAE;
+    padding-bottom: 12px;
+}
+
+.course-content .single-section ul li.section.main {
+    border: none;
+    border-radius: 0px;
+    margin: 0;
+    padding: 0;
+}
+
+.course-content ul.topics  li.section.main, .course-content ul.weeks  li.section.main {
+    margin-bottom: 20px;
+}
+
+.course-content ul.topics li.section .content, .course-content ul.weeks li.section .content {
+    margin: 0;
+}
+.course-content {
+    h3 {
+        font-size: 20px;
+        font-weight: bold;
+        color: #004863;
+    }
+
+    h4 {
+        font-size: 18px;
+        font-weight: normal;
+        color: #004863;
+    }
+
+    h5 {
+        font-size: 16px;
+        font-weight: normal;
+        font-style: italic;
+        color: #353838;
+    }
+
+    .single-section {
+        padding: 20px 0 30px 0;
+    }
+
+    ul.weeks,
+    ul.topics {
+        li.section {
+            
+            .left {
+                padding-top: 13px;
+            }
+            
+            &.main {
+                &.current {
+                    border-color: #024660;
+                    
+                    h3.section-title, 
+                    h3.sectionname {
+                        background: #024660;
+                        color:#fff;
+                        margin: 0 0 25px 0;
+                        a {
+                            color: #fff;
+                        }
+                    } 
+                    
+                    .moodle-actionmenu.section-actions a.textmenu,
+                    .moodle-actionmenu.section-actions a.textmenu:hover {
+                        color: #fff;
+                    }
+                }
+
+                h3.section-title,
+                h3.sectionname {
+                    font-size: 20px;
+                    margin: 0 0 10px 0;
+                    padding: 0 30px;
+                    line-height: 40px;
+                    color: #004762;
+                }
+            }
+
+            .availabilityinfo {
+                margin: 0 30px;
+            }
+
+            .left,
+            .right {
+                width: 30px;
+            }
+
+            ul.section {
+                margin: 0 1em 0 0;
+            }
+        }
+    }
+    
+    .section-summary .section-summary-activities .activity-count {
+        margin: 0px 3px;
+    }
+    
+    ul li.section.hidden {
+        .sectionname>span,
+        .activity .activityinstance {
+            margin: 0px;
+        }
+    }
+}
+
+.editing {
+    .course-content ul.weeks li.section.main h3.sectionname, 
+    .course-content ul.topics li.section.main h3.sectionname {
+        padding: 0 70px 0 30px;
+    }
+}
+.section .side.right {
+    right: 0px;
+}
+
+.course-content ul.topics li.section .summary,
+.course-content ul.weeks li.section .summary,
+.course-content ul.topics li.section.hidden .summary, 
+.course-content ul.weeks li.section.hidden .content>div.summary {
+    margin: 20px 30px 0 30px
+}
+
+.course-content ul.section.hidden {
+    margin: 1em;
+}
+
+.course-content .section-summary .summarytext {
+    margin:0;
+    padding: 0 30px;
+    border-bottom: 1px solid #A7ABAE;
+}
+
+.course-content .section-summary .summarytext:last-child {
+    border-bottom: none;
+}
+
+.course-content ul.weeks li.section.main.current.hidden h3.sectionname, 
+.course-content ul.topics li.section.main.current.hidden h3.sectionname {
+    background: #81A3B0;
+}
+
+.course-content ul.weeks li.section.hidden h3.sectionname, 
+.course-content ul.topics li.section.hidden h3.sectionname {
+    margin-right: 60px;
+    margin-left: 30px;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.editing .course-content ul li.section .activity .activityinstance  {
+    padding-right: 200px;
+}
+
+.course-content ul li.section.hidden .activity .activityinstance,
+.course-content ul li.section.hidden .content>div {
+    margin-right: 0;
+    margin-left: 0;
+    opacity: .5;
+}
+
+.course-content .section-modchooser {
+    padding: 0 10px;
+}
+
+.course-content  ul li.section .activity .activityinstance {
+    padding-right: 40px;
+}
+
+#course-category-listings .detail-pair>.pair-value {
+    margin-left: 0px;
+}
+
+.section .activity .mod-indent-outer,
+.path-course-view .section .label .mod-indent-outer {
+    padding-left: 30px; 
+}
+
+.userinfobox {
+    border-top: 0px;
+    border-right: 0px;
+    border-left: 0px;
+    border-bottom: 1px solid #A7A9AB;
+    
+    .left,
+    .side {
+        width: 110px;
+    }
+}
+
+.pagelayout-report .no-overflow {
+    overflow: auto;
+}
