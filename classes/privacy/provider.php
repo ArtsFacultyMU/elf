@@ -15,24 +15,32 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information for the multi-answer question type.
+ * Privacy Subsystem implementation for qtype_multianswer.
  *
- * @package    qtype
- * @subpackage multianswer
- * @copyright  1999 onwards Martin Dougiamas  {@link http://moodle.com}
+ * @package    qtype_multianswer
+ * @copyright  2018 Andrew Nicols <andrew@nicols.co.uk>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace qtype_multianswer\privacy;
+
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'qtype_multianswer';
-$plugin->version   = 2018051400;
+/**
+ * Privacy Subsystem for qtype_multianswer implementing null_provider.
+ *
+ * @copyright  2018 Andrew Nicols <andrew@nicols.co.uk>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class provider implements \core_privacy\local\metadata\null_provider {
 
-$plugin->requires  = 2018050800;
-$plugin->dependencies = array(
-    'qtype_multichoice' => 2018050800,
-    'qtype_numerical'   => 2018050800,
-    'qtype_shortanswer' => 2018050800,
-);
-
-$plugin->maturity  = MATURITY_STABLE;
+    /**
+     * Get the language string identifier with the component's language
+     * file to explain why this plugin stores no data.
+     *
+     * @return  string
+     */
+    public static function get_reason() : string {
+        return 'privacy:metadata';
+    }
+}
