@@ -86,7 +86,7 @@ class pdf extends \FPDI {
         $this->setPrintHeader(false);
         $this->setPrintFooter(false);
         $this->scale = 72.0 / 100.0;
-        $this->SetFont('helvetica', '', 16.0 * $this->scale);
+        $this->SetFont('freesans', '', 16.0 * $this->scale);
         $this->SetTextColor(0, 0, 0);
 
         $totalpagecount = 0;
@@ -133,7 +133,7 @@ class pdf extends \FPDI {
 
         $this->setPageUnit('pt');
         $this->scale = 72.0 / 100.0;
-        $this->SetFont('helvetica', '', 16.0 * $this->scale);
+        $this->SetFont('freesans', '', 16.0 * $this->scale);
         $this->SetFillColor(255, 255, 176);
         $this->SetDrawColor(0, 0, 0);
         $this->SetLineWidth(1.0 * $this->scale);
@@ -226,7 +226,7 @@ class pdf extends \FPDI {
         $this->SetFontSize(12 * $this->scale);
         $this->SetMargins(100 * $this->scale, 120 * $this->scale, -1, true);
         $this->SetAutoPageBreak(true, 100 * $this->scale);
-        $this->setHeaderFont(array('helvetica', '', 24 * $this->scale));
+        $this->setHeaderFont(array('freesans', '', 24 * $this->scale));
         $this->setHeaderMargin(24 * $this->scale);
         $this->setHeaderData('', 0, '', get_string('commentindex', 'assignfeedback_editpdf'));
 
