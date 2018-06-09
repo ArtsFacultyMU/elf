@@ -64,8 +64,16 @@ $string['questionsaveasedited'] = 'The question will be saved as edited';
 $string['questiontypechanged'] = 'Question type changed';
 $string['questiontypechangedcomment'] = 'At least one question type has been changed.<br />Did you add, delete or move a question?<br />Look ahead.';
 $string['questionusedinquiz'] = 'This question is used in {$a->nb_of_quiz} quiz(s), total attempt(s) : {$a->nb_of_attempts} ';
+$string['size_fixed'] = 'Fixed size'; // ELF -- FF -- FB -- textboxsize settings
+$string['size_variable'] = 'Variable size'; // ELF -- FF -- FB -- textboxsize settings
 $string['storedqtype'] = 'Stored question type {$a}';
 $string['subqresponse'] = 'part {$a->i}: {$a->response}';
+$string['textboxsize'] = 'Textbox size'; // ELF -- FF -- FB -- textboxsize settings
+$string['textboxsize_help'] = 'If you are using the <i>Fixed size</i> textbox type for your cloze question, you can specify the size of the text boxes here (the figure refers to the number of visible characters within the text field).';
+$string['textboxtype_help'] = '<ul><li>When using the <i><b>variable size</b></i> textbox type, the size of individual text boxes included within your cloze question will vary according to the length of the pre-defined correct answers for each item; in this way, each text box will be of different size/length.</li>
+<li>When using the <i><b>fixed size</b></i> textbox type, all the text boxes included within your cloze question will be of the same size, no matter what correct answers have been set for the individual items. You can specify the required length of the textboxes in the <i>Textbox size</i> setting below.</li></ul>'; // ELF -- FF -- FB -- textboxsize settings
+$string['textboxsize_numeric_error'] = 'You have to type some numeric value'; // ELF -- FF -- FB -- textboxsize settings
+$string['textboxtype'] = 'Textbox type'; // ELF -- FF -- FB -- textboxsize settings
 $string['unknownquestiontypeofsubquestion'] = 'Unknown question type: {$a->type} of question part # {$a->sub}';
 $string['warningquestionmodified'] = '<b>WARNING</b>';
 $string['youshouldnot'] = '<b>YOU SHOULD NOT</b>';

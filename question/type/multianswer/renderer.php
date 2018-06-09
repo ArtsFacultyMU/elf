@@ -186,7 +186,8 @@ class qtype_multianswer_textfield_renderer extends qtype_multianswer_subq_render
 
     public function subquestion(question_attempt $qa, question_display_options $options,
             $index, question_graded_automatically $subq) {
-
+		global $DB;
+		
         $fieldprefix = 'sub' . $index . '_';
         $fieldname = $fieldprefix . 'answer';
 
@@ -208,12 +209,30 @@ class qtype_multianswer_textfield_renderer extends qtype_multianswer_subq_render
             }
         }
 
-        // Work out a good input field size.
-        $size = max(1, core_text::strlen(trim($response)) + 1);
-        foreach ($subq->answers as $ans) {
-            $size = max($size, core_text::strlen(trim($ans->answer)));
+		//ELF -- FF -- FB -- variable and fixed length
+        $sizetype = $DB->get_field('question_multianswer', 'textboxtype',
+                array('question' => $qa->get_question()->id), '*', MUST_EXIST);
+        $size = 0;
+        if($sizetype == 'fixed') {
+            $size = $DB->get_field('question_multianswer', 'textboxsize',
+                array('question' => $qa->get_question()->id), '*', MUST_EXIST);;
+        } else {
+            // Work out a good input field size.
+            $size = max(1, core_text::strlen(trim($response)) + 1);
+            foreach ($subq->answers as $ans) {
+                $size = max($size, core_text::strlen(trim($ans->answer)));
+            }
+            $size = min(60, round($size + rand(0, $size*0.15)));
+            // The rand bit is to make guessing harder.
         }
-        $size = min(60, round($size + rand(0, $size * 0.15)));
+        //ELF -- FF -- FB -- end
+		
+        // Work out a good input field size.
+        // $size = max(1, core_text::strlen(trim($response)) + 1);
+        // foreach ($subq->answers as $ans) {
+        //     $size = max($size, core_text::strlen(trim($ans->answer)));
+        // }
+        // $size = min(60, round($size + rand(0, $size * 0.15)));
         // The rand bit is to make guessing harder.
 
         $inputattributes = array(
