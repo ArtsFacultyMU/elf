@@ -69,6 +69,13 @@ $PAGE->set_title($course->shortname.': '.$folder->name);
 $PAGE->set_heading($course->fullname);
 $PAGE->set_activity_record($folder);
 
+//$PAGE->requires->css(new moodle_url('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'),true);
+//$PAGE->requires->css(new moodle_url('https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/4.0.1/ekko-lightbox.min.css'),true);
+
+$PAGE->requires->js(new moodle_url('https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/4.0.1/ekko-lightbox.min.js'),true);
+
+
+$PAGE->requires->js("/mod/folder/js/fce.js");
 
 $output = $PAGE->get_renderer('mod_folder');
 

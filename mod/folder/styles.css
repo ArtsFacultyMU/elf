@@ -1,3 +1,210 @@
 div.course-content div.generalbox.folderbuttons {
     padding-left: 35px;
 }
+.mod-folder-group {
+	border: 1px solid #ddd;
+	height: 400px;
+	width: 99%;
+	margin-bottom: 2em;
+/*	resize: horizontal;*/
+}
+
+.mod-folder-group:after {
+    content:"";
+    display: table;
+    clear: both;
+}
+
+.mod-folder-left {
+    float: left;
+	width: 200px;
+	height: 400px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	resize: horizontal;
+}
+
+.mod-folder-right { /*todo: preview for all file types*/
+	text-align: center;
+	margin-left: 200px;
+	height: 400px;
+	overflow: hidden;
+}
+
+.mod-folder-filename {
+    top: -10px;
+    left: 13px;
+}
+
+.mod-folder-filename-icon {
+	padding-top: 0px;
+}
+
+.mod-folder-image-view {
+	max-width: 100%;
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
+	max-height: 100%;
+}
+
+.mod-folder-download-icon {
+	background-image:url([[pix:core|a/download_all]]);
+    /*background-image: url("https://maxst.icons8.com/images/icons/download-128.png");*/
+    background-size: 18px 18px;
+    background-repeat: no-repeat;
+    height: 24px;
+	width: 24px;
+/*    display: inline-block;
+    position: relative;
+    left: 15px;
+	*/
+}
+
+.folder-mod-a-hidden {
+	display: none;
+}
+
+.folder-mod-a-visible {
+	display: initial;
+}
+
+@media screen and (max-width: 480px) {
+    .mod-folder-left {
+        float: none;
+        width: auto;
+/*		margin-left: 0;*/
+	    clear: both;
+    }
+	.mod-folder-right {
+		display: none;
+	}
+}
+
+
+.ygtvspacer {
+	height: 0;
+	width: 0;
+}
+
+.ygtvcontent {
+	cursor: pointer;
+}
+
+/*!
+ * Lightbox for Bootstrap 3 by @ashleydw
+ * https://github.com/ashleydw/lightbox
+ *
+ * License: https://github.com/ashleydw/lightbox/blob/master/LICENSE
+ */
+
+
+.ekko-lightbox-container {
+  position: relative;
+}
+
+.ekko-lightbox-nav-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+}
+
+.ekko-lightbox-nav-overlay a {
+  z-index: 100;
+  display: block;
+  width: 49%;
+  height: 100%;
+  font-size: 30px;
+  color: #fff;
+  text-shadow: 2px 2px 4px #000;
+  opacity: 0;
+  filter: dropshadow(color=#000000, offx=2, offy=2);
+  -webkit-transition: opacity 0.5s;
+     -moz-transition: opacity 0.5s;
+       -o-transition: opacity 0.5s;
+          transition: opacity 0.5s;
+}
+
+.ekko-lightbox-nav-overlay a:empty {
+  width: 39%;
+}
+
+.ekko-lightbox a:hover {
+  text-decoration: none;
+  opacity: 1;
+}
+
+.ekko-lightbox .modal-body {
+    position: relative;
+    overflow-y: auto;
+    max-height: 100%;
+    padding: 5px;
+}
+
+/*.glyphicon {
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+*/
+.ekko-lightbox .glyphicon-chevron-left{
+	left:0;float:left;padding-left:15px;text-align:left;
+	background: url(https://cdn0.iconfinder.com/data/icons/command-buttons/512/Left-512.png) no-repeat;
+    background-size: 3em;
+    background-position-x: left;
+    background-position-y: 48%;
+}
+
+.ekko-lightbox .glyphicon-chevron-right{
+	right:0;float:right;padding-right:15px;text-align:right;
+	background: url(https://cdn0.iconfinder.com/data/icons/command-buttons/512/Right-512.png) no-repeat;
+ background-size: 3em;
+    background-position-x: right;
+    background-position-y: 48%;
+}
+.ekko-lightbox .modal-footer {
+  text-align: left;
+}
+
+.ekko-lightbox .modal-header {
+/*  padding: 1px 3px;*/
+display: none;
+}
+
+body .ekko-lightbox.modal {
+	width: auto; 
+	margin: 0; 
+	transform: translateX(-50%);
+} 
+
+body .ekko-lightbox.modal.fade.in {
+	top: 40px;
+}
+
+body .ekko-lightbox .modal-content {
+	width: inherit;
+}
+
+.modal-backdrop.fade.in {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1040;
+    background-color: #000;
+}
+
+/*try to remove fixed header for lightbox full window display
+header .navbar-fixed-top {
+	display: none !important;
+}*/
