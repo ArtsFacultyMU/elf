@@ -40,7 +40,7 @@ require(['core/yui'], function (Y) {
                     setCookie('cookiepolicy', true, 356);
                     Y.one('#allow-cookies').hide();
                     Y.one('#page-footer').removeClass('allow-cookies');
-                    Y.one('#scroll-up').removeClass('allow-cookies');
+                    if (Y.one('#scroll-up')) {Y.one('#scroll-up').removeClass('allow-cookies');}
                 });
             }
 
@@ -113,16 +113,18 @@ require(['core/yui'], function (Y) {
                 }
             }
 
-            Y.one('#scroll-up').on('click', function (e) {
-                e.preventDefault();
-                a = new Y.Anim({
-                    node: Y.UA.gecko ? 'html' : 'body',
-                    to: {scrollTop: 0},
-                    duration: 0.8,
-                    easing: Y.Easing.easeBoth
+	    if (Y.one('#scroll-up')) {
+                Y.one('#scroll-up').on('click', function (e) {
+                    e.preventDefault();
+                    a = new Y.Anim({
+                        node: Y.UA.gecko ? 'html' : 'body',
+                        to: {scrollTop: 0},
+                        duration: 0.8,
+                        easing: Y.Easing.easeBoth
+                    });
+                    a.run();
                 });
-                a.run();
-            });
+	    }
 
             if (Y.one('#login-help')) {
                 Y.one('#login-help').on('click', function (e) {
@@ -175,14 +177,13 @@ function refreshFullDockPos(Y) {
             Y.one('.navbar-inner').removeClass('navbar-inner-docked');
             Y.one('#header').setStyle('height', '100px');
         }
-        Y.one('#scroll-up').hide();
+        if (Y.one('#scroll-up')) {Y.one('#scroll-up').hide();}
     } else {
         if (Y.one('.navbar-inner')) {
             Y.one('.navbar-inner').addClass('navbar-inner-docked');
             Y.one('#header').setStyle('height', '144px');
         }
-        ;
-        Y.one('#scroll-up').show();
+        if (Y.one('#scroll-up')) {Y.one('#scroll-up').show();}
     }
 }
 
@@ -193,9 +194,9 @@ function refreshCompactDockPos(Y) {
     if (Y.one('#dock .dockeditem_container'))
         Y.one('#dock .dockeditem_container').setStyle('marginTop', topMargin);
     if (get_scroll_y() < 101) {
-        Y.one('#scroll-up').hide();
+        if (Y.one('#scroll-up')) {Y.one('#scroll-up').hide();}
     } else {
-        Y.one('#scroll-up').show();
+        if (Y.one('#scroll-up')) {Y.one('#scroll-up').show();}
     }
 }
 
