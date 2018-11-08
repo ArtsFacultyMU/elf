@@ -20,10 +20,16 @@ class sync_users_from_archive extends \core\task\adhoc_task
         //cleanup current course from enroled users and groups
         $instance = \enrol_ismu\moodle_enroler::get_instance_by_id($data->enrolid);
         $enrolPlugin->clean_instance($instance);
-        
+
         //restore archived data for selected period
+        /// Adding a role if applicable
+        if($data->roleId !== null) {
+            $context = context_course::instance($data->courseid, MUST_EXIST);
+        }
+
         foreach($archivedUsers as $user) {
             $enrolPlugin->enrol_user($instance, $user);
+            if($data->roleId !== null) {role_assign($data->roleId, $user, $context->id);}
         }
         $archivedGroups = $archiver->get_archived_groups($data->courseid, $data->period);
         foreach($archivedGroups as $archivedGroup) {

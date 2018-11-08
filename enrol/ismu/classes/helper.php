@@ -163,9 +163,9 @@ class helper
         \core\task\manager::queue_adhoc_task($task);
     }
     
-    public function task_sync_users_from_archive($courseId, $enrolId, $period) {
+    public function task_sync_users_from_archive($courseId, $enrolId, $period, $roleId = null) {
         $task = new \enrol_ismu\tasks\adhoc\sync_users_from_archive;
-        $task->set_custom_data(['courseid' => $courseId, 'enrolid' => $enrolId, 'period' => $period]);
+        $task->set_custom_data(['courseid' => $courseId, 'enrolid' => $enrolId, 'period' => $period, 'roleId' => $roleId]);
         \core\task\manager::queue_adhoc_task($task);
     }
     

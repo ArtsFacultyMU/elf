@@ -206,7 +206,7 @@ class enrol_ismu_plugin extends enrol_plugin {
                 
                 if($data->enrol_ismu_period != $currentIsmuActivePeriod) {
                     //restore enrolments from archive
-                    $this->helper->task_sync_users_from_archive($instance->courseid, $instance->id, $data->enrol_ismu_period);
+                    $this->helper->task_sync_users_from_archive($instance->courseid, $instance->id, $data->enrol_ismu_period, STUDENT_ROLE);
                 } 
             }
         }
@@ -268,7 +268,7 @@ class enrol_ismu_plugin extends enrol_plugin {
                 
                 if($data->enrol_ismu_period != $currentIsmuActivePeriod) {
                     //restore enrolments from archive
-                    $this->helper->task_sync_users_from_archive($course->id, $instance->id, $data->enrol_ismu_period);
+                    $this->helper->task_sync_users_from_archive($course->id, $instance->id, $data->enrol_ismu_period, STUDENT_ROLE);
                 } 
             }
         }
