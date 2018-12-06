@@ -32,15 +32,15 @@ echo $OUTPUT->doctype() ?>
 				<?php echo $OUTPUT->user_menu(); ?>
 				<?php echo $OUTPUT->language_menu(); ?>
 				<div class="hideblocks">
-					<a href="#" class="hide-blocks-btn" title="<?= get_string('show-hide-blocks-text', 'theme_elf_bs'); ?>"><img src="<?php echo $OUTPUT->pix_url('blocks_hide', 'theme_elf_bs'); ?>" 
-						data-show="<?php echo $OUTPUT->pix_url('blocks_hide', 'theme_elf_bs'); ?>"
-						data-hidden="<?php echo $OUTPUT->pix_url('blocks_show', 'theme_elf_bs'); ?>"
+					<a href="#" class="hide-blocks-btn" title="<?= get_string('show-hide-blocks-text', 'theme_elf_bs'); ?>"><img src="<?php echo $OUTPUT->image_url('blocks_hide', 'theme_elf_bs'); ?>" 
+						data-show="<?php echo $OUTPUT->image_url('blocks_hide', 'theme_elf_bs'); ?>"
+						data-hidden="<?php echo $OUTPUT->image_url('blocks_show', 'theme_elf_bs'); ?>"
 						alt=""/></a>
 				</div>
 			</div>
 
 			<div class="clearfix page-title-container">
-				<a class="logo-mini brand" href="<?php echo $CFG->wwwroot;?>"><img src="<?php echo $OUTPUT->pix_url('logo_mini', 'theme_elf_bs'); ?>" alt="" /></a>
+				<a class="logo-mini brand" href="<?php echo $CFG->wwwroot;?>"><img src="<?php echo $OUTPUT->image_url('logo_mini', 'theme_elf_bs'); ?>" alt="" /></a>
 				<div class="h1container brand">
 					<?php if($PAGE->course->id > 1) : ?>
 					<a href="<?php echo $CFG->wwwroot;?>/course/view.php?id=<?= $PAGE->course->id;?>" title="<?= $PAGE->course->fullname;?>">

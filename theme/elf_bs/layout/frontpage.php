@@ -61,7 +61,7 @@ echo $OUTPUT->doctype()
         <header role="banner">
             <div id="header">
                 <a class="logo" href="<?php echo $CFG->wwwroot; ?>">
-                    <img src="<?php echo $OUTPUT->pix_url('logo', 'theme_elf_bs'); ?>" alt="" />
+                    <img src="<?php echo $OUTPUT->image_url('logo', 'theme_elf_bs'); ?>" alt="" />
                     <div class="content">
                         <?php echo format_string($SITE->fullname, true, array('context' => context_course::instance(SITEID))); ?>
                     </div>
@@ -69,9 +69,9 @@ echo $OUTPUT->doctype()
                 <?php echo $OUTPUT->user_menu(); ?>
                 <?php echo $OUTPUT->language_menu(); ?>
 				<div class="hideblocks">
-					<a href="#" class="hide-blocks-btn" title="<?= get_string('show-hide-blocks-text', 'theme_elf_bs'); ?>"><img src="<?php echo $OUTPUT->pix_url('blocks_hide', 'theme_elf_bs'); ?>" 
-						data-show="<?php echo $OUTPUT->pix_url('blocks_hide', 'theme_elf_bs'); ?>"
-						data-hidden="<?php echo $OUTPUT->pix_url('blocks_show', 'theme_elf_bs'); ?>"
+					<a href="#" class="hide-blocks-btn" title="<?= get_string('show-hide-blocks-text', 'theme_elf_bs'); ?>"><img src="<?php echo $OUTPUT->image_url('blocks_hide', 'theme_elf_bs'); ?>" 
+						data-show="<?php echo $OUTPUT->image_url('blocks_hide', 'theme_elf_bs'); ?>"
+						data-hidden="<?php echo $OUTPUT->image_url('blocks_show', 'theme_elf_bs'); ?>"
 						alt=""/></a>
 				</div>
             </div>
@@ -82,7 +82,7 @@ echo $OUTPUT->doctype()
                         <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
                         </a>
                         <a class="logo-mini brand" href="<?php echo $CFG->wwwroot; ?>">
-                            <img src="<?php echo $OUTPUT->pix_url('logo_mini', 'theme_elf_bs'); ?>" alt="" />
+                            <img src="<?php echo $OUTPUT->image_url('logo_mini', 'theme_elf_bs'); ?>" alt="" />
                             <?php echo format_string($SITE->fullname, true, array('context' => context_course::instance(SITEID))); ?>
                         </a>
                         <div class="nav-hide"> 
@@ -94,9 +94,9 @@ echo $OUTPUT->doctype()
                                 <?php echo $OUTPUT->user_menu(); ?>
                                 <?php echo $OUTPUT->language_menu(); ?>
 								<div class="hideblocks">
-									<a href="#" class="hide-blocks-btn"><img src="<?php echo $OUTPUT->pix_url('blocks_hide', 'theme_elf_bs'); ?>" 
-										data-show="<?php echo $OUTPUT->pix_url('blocks_hide', 'theme_elf_bs'); ?>"
-										data-hidden="<?php echo $OUTPUT->pix_url('blocks_show', 'theme_elf_bs'); ?>"
+									<a href="#" class="hide-blocks-btn"><img src="<?php echo $OUTPUT->image_url('blocks_hide', 'theme_elf_bs'); ?>" 
+										data-show="<?php echo $OUTPUT->image_url('blocks_hide', 'theme_elf_bs'); ?>"
+										data-hidden="<?php echo $OUTPUT->image_url('blocks_show', 'theme_elf_bs'); ?>"
 										alt=""/></a>
 								</div>
                             </div>
@@ -151,7 +151,7 @@ echo $OUTPUT->doctype()
                             </div>
                             <div class="login-content">
                                 <div id="login-content-shibboleth">
-                                    <img src="<?php echo $OUTPUT->pix_url('mu_logo', 'theme_elf_bs'); ?>" alt="" /><br />
+                                    <img src="<?php echo $OUTPUT->image_url('mu_logo', 'theme_elf_bs'); ?>" alt="" /><br />
                                     <a href="<?php echo $CFG->httpswwwroot; ?>/auth/shibboleth/index.php" title="<?php echo get_string('login', 'moodle'); ?>" class="button"><?php echo get_string('login', 'moodle'); ?></a><br />
                                     <a href="#" id="login-help" title="<?php echo get_string('cannot-login', 'theme_elf_bs'); ?>"><?php echo get_string('cannot-login', 'theme_elf_bs'); ?></a>
 									<div class="signuppanel"><?= format_text($CFG->auth_instructions);?></div>
@@ -161,10 +161,10 @@ echo $OUTPUT->doctype()
                                     <form action="<?php echo $CFG->httpswwwroot; ?>/login/index.php" method="post" id="login">
                                         <div class="loginform">
                                             <div>
-                                                <span><label for="username"><img src="<?php echo $OUTPUT->pix_url('login_username', 'theme_elf_bs'); ?>" alt="" /></label><input type="text" name="username" id="username" size="15" value="<?php p($username) ?>" /></span>
+                                                <span><label for="username"><img src="<?php echo $OUTPUT->image_url('login_username', 'theme_elf_bs'); ?>" alt="" /></label><input type="text" name="username" id="username" size="15" value="<?php p($username) ?>" /></span>
                                             </div>
                                             <div>
-                                                <span><label for="password"><img src="<?php echo $OUTPUT->pix_url('login_password', 'theme_elf_bs'); ?>" alt="" /></label><input type="password" name="password" id="password" size="15" value="" /></span>
+                                                <span><label for="password"><img src="<?php echo $OUTPUT->image_url('login_password', 'theme_elf_bs'); ?>" alt="" /></label><input type="password" name="password" id="password" size="15" value="" /></span>
                                                 <input type="submit" id="loginbtn" value="<?php print_string("login") ?>" />
                                             </div>
                                         </div>

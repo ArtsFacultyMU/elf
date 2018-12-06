@@ -155,7 +155,7 @@ class theme_elf_bs_core_renderer extends theme_bootstrapbase_core_renderer {
         $r .= '<div class="span6">';
         $r .= '<div class="social-links">';
         foreach($footer_data->social as $social => $url)
-          $r .= '<div><a href="'.$url.'" target="_blank"><img src="'.$OUTPUT->pix_url('social_'.$social, 'theme_elf_bs').'" /></a></div>';
+          $r .= '<div><a href="'.$url.'" target="_blank"><img src="'.$OUTPUT->image_url('social_'.$social, 'theme_elf_bs').'" /></a></div>';
         $r .= '</div>';
         $r .= '</div>';
         $r .= '<div class="clearfix"></div>';

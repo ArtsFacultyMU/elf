@@ -123,7 +123,7 @@ class theme_elf_bs_core_course_renderer extends core_course_renderer {
         }
         if(!$hasImage) {
             $contentimages .= html_writer::link(new moodle_url('/course/view.php', array('id' => $course->id)),
-									html_writer::empty_tag('img', array('src' => $OUTPUT->pix_url('course_no_image','theme_elf_bs'))), 
+									html_writer::empty_tag('img', array('src' => $OUTPUT->image_url('course_no_image','theme_elf_bs'))), 
 									array('class' => 'courseimage'));
         }
         $content .= $contentimages. $contentfiles;
@@ -165,7 +165,7 @@ class theme_elf_bs_core_course_renderer extends core_course_renderer {
         if ($chelper->get_show_courses() < self::COURSECAT_SHOW_COURSES_EXPANDED) {
             if ($course->has_summary() || $course->has_course_contacts() || $course->has_course_overviewfiles()) {
                 $url = new moodle_url('/course/info.php', array('id' => $course->id));
-                $image = html_writer::empty_tag('img', array('src' => $this->output->pix_url('i/info'),
+                $image = html_writer::empty_tag('img', array('src' => $this->output->image_url('i/info'),
                     'alt' => $this->strings->summary));
                 $content .= html_writer::link($url, $image, array('title' => $this->strings->summary));
                 // Make sure JS file to expand course content is included.

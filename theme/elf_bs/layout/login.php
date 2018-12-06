@@ -51,7 +51,7 @@ echo $OUTPUT->doctype(); ?>
 			</div>
 
 			<div class="clearfix page-title-container">
-				<a class="logo-mini brand" href="<?php echo $CFG->wwwroot;?>"><img src="<?php echo $OUTPUT->pix_url('logo_mini', 'theme_elf_bs'); ?>" alt="" /></a>
+				<a class="logo-mini brand" href="<?php echo $CFG->wwwroot;?>"><img src="<?php echo $OUTPUT->image_url('logo_mini', 'theme_elf_bs'); ?>" alt="" /></a>
 				<div class="h1container brand">
 					<?php if($PAGE->course->id > 1) : ?>
 					<a href="<?php echo $CFG->wwwroot;?>/course/view.php?id=<?= $PAGE->course->id;?>" title="<?= $PAGE->course->fullname;?>">
@@ -83,7 +83,7 @@ echo $OUTPUT->doctype(); ?>
                 </div>
                 <div class="login-content">
                     <div id="login-content-shibboleth">
-                        <img src="<?php echo $OUTPUT->pix_url('mu_logo', 'theme_elf_bs'); ?>" alt="" /><br />
+                        <img src="<?php echo $OUTPUT->image_url('mu_logo', 'theme_elf_bs'); ?>" alt="" /><br />
                         <a href="<?php echo $CFG->httpswwwroot; ?>/auth/shibboleth/index.php" title="<?php echo get_string('login', 'moodle'); ?>" class="button"><?php echo get_string('login', 'moodle'); ?></a><br />
                         <a href="#" id="login-help" title="<?php echo get_string('cannot-login', 'theme_elf_bs'); ?>"><?php echo get_string('cannot-login', 'theme_elf_bs'); ?></a>
                     </div>
