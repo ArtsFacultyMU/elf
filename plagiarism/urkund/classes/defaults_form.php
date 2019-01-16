@@ -38,12 +38,13 @@ class plagiarism_urkund_defaults_form extends moodleform {
     public function definition () {
         $mform =& $this->_form;
 
-        $supportedmodules = array('assign', 'forum', 'workshop');
+        $supportedmodules = urkund_supported_modules();
 
         foreach ($supportedmodules as $sm) {
             $ynoptions = array( 0 => get_string('no'), 1 => get_string('yes'));
             $tiioptions = array(0 => get_string("never"), 1 => get_string("always"),
-                2 => get_string("showwhenclosed", "plagiarism_urkund"));
+                2 => get_string("showwhendue", "plagiarism_urkund"),
+                3 => get_string("showwhencutoff", "plagiarism_urkund"));
             $urkunddraftoptions = array(
                 PLAGIARISM_URKUND_DRAFTSUBMIT_IMMEDIATE => get_string("submitondraft", "plagiarism_urkund"),
                 PLAGIARISM_URKUND_DRAFTSUBMIT_FINAL => get_string("submitonfinal", "plagiarism_urkund")

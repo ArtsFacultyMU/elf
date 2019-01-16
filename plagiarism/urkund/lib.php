@@ -57,7 +57,8 @@ define('URKUND_FILETYPE_URL_UPDATE', '168'); // How often to check for updated f
 
 define('PLAGIARISM_URKUND_SHOW_NEVER', 0);
 define('PLAGIARISM_URKUND_SHOW_ALWAYS', 1);
-define('PLAGIARISM_URKUND_SHOW_CLOSED', 2);
+define('PLAGIARISM_URKUND_SHOW_WHENDUE', 2);
+define('PLAGIARISM_URKUND_SHOW_WHENCUTOFF', 3);
 
 define('PLAGIARISM_URKUND_DRAFTSUBMIT_IMMEDIATE', 0);
 define('PLAGIARISM_URKUND_DRAFTSUBMIT_FINAL', 1);
@@ -312,14 +313,42 @@ class plagiarism_plugin_urkund extends plagiarism_plugin {
         // If the user has permission to see result of all items in this course module.
         $viewscore = $viewreport = has_capability('plagiarism/urkund:viewreport', $modulecontext);
 
-        // Determine if the activity is closed.
+        // Determine if the activity is past due date.
         // If report is closed, this can make the report available to more users.
-        $assignclosed = false;
-        $time = time();
-        if (!empty($module->preventlate) && !empty($module->timedue)) {
-            $assignclosed = ($module->timeavailable <= $time && $time <= $module->timedue);
-        } else if (!empty($module->timeavailable)) {
-            $assignclosed = ($module->timeavailable <= $time);
+        $assignpastdue = false;
+        $assignpastcutoff = false;
+        if ($moduledetail->name == 'assign') {
+            $time = time();
+
+            if ($USER->id == $userid) {
+                list($course, $cm) = get_course_and_cm_from_cmid($cmid, 'assign');
+                $assignment = new assign($modulecontext, $cm, $course);
+                $flags = $assignment->get_user_flags($userid, false);
+            }
+            // Check assignment due date.
+            if (!empty($module->duedate)) {
+                $assignpastdue = ($module->duedate <= $time);
+
+                if ($assignpastdue && $USER->id == $userid) {
+                    // Check to make sure this user doesn't have an extension to the duedate.
+                    if (!empty($flags->extensionduedate) && $flags->extensionduedate > $time) {
+                        $assignpastdue = false;
+                    }
+                }
+            }
+
+            // Check assignment cutoffdate.
+            if (!empty($module->cutoffdate)) {
+                $assignpastcutoff = ($module->cutoffdate <= $time);
+
+                if ($assignpastcutoff && $USER->id == $userid) {
+                    // Check to make sure this user doesn't have an extension to the duedate.
+                    if (!empty($flags->extensionduedate) && $flags->extensionduedate > $time) {
+                        $assignpastcutoff = false;
+                    }
+                }
+            }
+
         }
 
         // Under certain circumstances, users are allowed to see plagiarism info
@@ -327,16 +356,20 @@ class plagiarism_plugin_urkund extends plagiarism_plugin {
         if ($USER->id == $userid || // If this is a user viewing their own report, check if settings allow it.
             // In workshop and assign if the user can see the submission they might be allowed to see the urkund report.
             // If they are in the forum activity they should not see other users reports.
-            (!$viewscore && $moduledetail->name <> 'forum')) { // Teamsubmisson or teacher submitted may be from different user.
+            (!$viewscore &&
+                $moduledetail->name <> 'forum' &&
+                $moduledetail->name <> 'hsuform')) { // Teamsubmisson or teacher submitted may be from different user.
             $selfreport = true;
             if (isset($plagiarismvalues['urkund_show_student_report']) &&
-                    ($plagiarismvalues['urkund_show_student_report'] == PLAGIARISM_URKUND_SHOW_ALWAYS ||
-                     $plagiarismvalues['urkund_show_student_report'] == PLAGIARISM_URKUND_SHOW_CLOSED && $assignclosed)) {
+                    ($plagiarismvalues['urkund_show_student_report'] == PLAGIARISM_URKUND_SHOW_ALWAYS) ||
+                    ($plagiarismvalues['urkund_show_student_report'] == PLAGIARISM_URKUND_SHOW_WHENDUE && $assignpastdue) ||
+                    ($plagiarismvalues['urkund_show_student_report'] == PLAGIARISM_URKUND_SHOW_WHENCUTOFF && $assignpastcutoff)) {
                 $viewreport = true;
             }
             if (isset($plagiarismvalues['urkund_show_student_score']) &&
                     ($plagiarismvalues['urkund_show_student_score'] == PLAGIARISM_URKUND_SHOW_ALWAYS) ||
-                    ($plagiarismvalues['urkund_show_student_score'] == PLAGIARISM_URKUND_SHOW_CLOSED && $assignclosed)) {
+                    ($plagiarismvalues['urkund_show_student_score'] == PLAGIARISM_URKUND_SHOW_WHENDUE && $assignpastdue) ||
+                    ($plagiarismvalues['urkund_show_student_score'] == PLAGIARISM_URKUND_SHOW_WHENCUTOFF && $assignpastcutoff)) {
                 $viewscore = true;
             }
         } else {
@@ -493,8 +526,8 @@ class plagiarism_plugin_urkund extends plagiarism_plugin {
                 }
             }
             // Check if files have been submitted and we need to disable the receiver address.
-            if ($DB->record_exists('plagiarism_urkund_files', array('cm' => $cmid, 'statuscode' => 'pending'))) {
-                $mform->hideif('urkund_receiver', 'use_urkund');
+            if ($DB->record_exists('plagiarism_urkund_files', array('cm' => $cmid, 'statuscode' => URKUND_STATUSCODE_ACCEPTED))) {
+                $mform->disabledIf('urkund_receiver', 'use_urkund');
             }
             $mform->hideif('urkund_selectfiletypes', 'urkund_allowallfile', 'eq', 1);
         } else { // Add plagiarism settings as hidden vars.
@@ -565,7 +598,7 @@ class plagiarism_plugin_urkund extends plagiarism_plugin {
             // I can't see a way to check if a particular checkbox exists
             // elementExists on the checkbox name doesn't work.
             $mform->hideif('urkund_restrictcontent', 'assignsubmission_onlinetext_enabled');
-        } else if ($modulename != 'mod_forum') {
+        } else if ($modulename != 'mod_forum' && $modulename != 'mod_hsuforum') {
             // Forum doesn't need any changes but all other modules should disable this.
             $mform->setDefault('urkund_restrictcontent', 0);
             $mform->hardFreeze('urkund_restrictcontent');
@@ -630,7 +663,7 @@ class plagiarism_plugin_urkund extends plagiarism_plugin {
         // Check to see if restrictcontent is in use.
         $showcontent = true;
         $showfiles = true;
-        if (!empty($plagiarismvalues[$cmid]['urkund_restrictcontent'])) {
+        if (!empty($plagiarismvalues['urkund_restrictcontent'])) {
             if ($plagiarismvalues['urkund_restrictcontent'] == PLAGIARISM_URKUND_RESTRICTCONTENTFILES) {
                 $showcontent = false;
             } else if ($plagiarismvalues['urkund_restrictcontent'] == PLAGIARISM_URKUND_RESTRICTCONTENTTEXT) {
@@ -704,7 +737,6 @@ class plagiarism_plugin_urkund extends plagiarism_plugin {
                 $efile = $fs->get_file_by_hash($hash);
 
                 if (empty($efile)) {
-                    mtrace("nofilefound!");
                     continue;
                 } else if ($efile->get_filename() === '.') {
                     // This 'file' is actually a directory - nothing to submit.
@@ -808,7 +840,7 @@ class plagiarism_plugin_urkund extends plagiarism_plugin {
             // Check to see if urkund enabled.
             $useurkund = $DB->get_field('plagiarism_urkund_config', 'value',
                 array('cm' => $cm->id, 'name' => 'use_urkund'));
-            if (!empty($useurkund)) {
+            if (!empty($useurkund) && has_capability('plagiarism/urkund:resubmitallfiles', $modulecontext)) {
                 $url = new moodle_url('/plagiarism/urkund/reset.php', array('cmid' => $cm->id, 'resetall' => 1));
                 return '<div class="urkundresubmit">'.
                     $OUTPUT->single_button($url, get_string('resubmittourkund', 'plagiarism_urkund'))
@@ -876,8 +908,12 @@ function plagiarism_urkund_format_temp_content($content, $strippretag = false) {
  */
 function urkund_get_form_elements($mform) {
     $ynoptions = array( 0 => get_string('no'), 1 => get_string('yes'));
-    $tiioptions = array(0 => get_string("never"), 1 => get_string("always"),
-                        2 => get_string("showwhenclosed", "plagiarism_urkund"));
+    $tiioptions = array(0 => get_string("never"), 1 => get_string("always"));
+    if ($mform->elementExists('submissiondrafts')) { // Just show this on assignment submission page for now.
+        $tiioptions[2] = get_string("showwhendue", "plagiarism_urkund");
+        $tiioptions[3] = get_string("showwhencutoff", "plagiarism_urkund");
+
+    }
     $urkunddraftoptions = array(
             PLAGIARISM_URKUND_DRAFTSUBMIT_IMMEDIATE => get_string("submitondraft", "plagiarism_urkund"),
             PLAGIARISM_URKUND_DRAFTSUBMIT_FINAL => get_string("submitonfinal", "plagiarism_urkund")
@@ -885,7 +921,6 @@ function urkund_get_form_elements($mform) {
 
     $mform->addElement('header', 'plagiarismdesc', get_string('urkund', 'plagiarism_urkund'));
     $mform->addElement('select', 'use_urkund', get_string("useurkund", "plagiarism_urkund"), $ynoptions);
-    $mform->setType('urkund_receiver', PARAM_TEXT);
     $mform->addElement('select', 'urkund_show_student_score',
                        get_string("urkund_show_student_score", "plagiarism_urkund"), $tiioptions);
     $mform->addHelpButton('urkund_show_student_score', 'urkund_show_student_score', 'plagiarism_urkund');
@@ -900,7 +935,8 @@ function urkund_get_form_elements($mform) {
         $resubmitoptions = array(PLAGIARISM_URKUND_RESUBMITNO => get_string('no'),
             PLAGIARISM_URKUND_RESUBMITDUEDATE => get_string('resubmitdue', 'plagiarism_urkund'),
             PLAGIARISM_URKUND_RESUBMITCLOSEDATE => get_string('resubmitclose', 'plagiarism_urkund'));
-        $mform->addElement('select', 'urkund_resubmit_on_close', get_string("urkund_resubmit_on_close", "plagiarism_urkund"), $resubmitoptions);
+        $mform->addElement('select', 'urkund_resubmit_on_close', get_string("urkund_resubmit_on_close", "plagiarism_urkund"),
+            $resubmitoptions);
         $mform->addHelpButton('urkund_resubmit_on_close', 'urkund_resubmit_on_close', 'plagiarism_urkund');
         $mform->setType('urkund_resubmit_on_close', PARAM_INT);
     }
@@ -1737,6 +1773,27 @@ function plagiarism_urkund_get_file_object($plagiarismfile) {
                     }
                 }
             }
+        } else if ($cm->modname == 'hsuforum') {
+            if (debugging()) {
+                mtrace("URKUND fileid:" . $plagiarismfile->id . " hsuforum found");
+            }
+            require_once($CFG->dirroot . '/mod/hsuforum/lib.php');
+            $cm = get_coursemodule_from_id('hsuforum', $plagiarismfile->cm, 0, false, MUST_EXIST);
+            $posts = hsuforum_get_user_posts($cm->instance, $userid);
+            foreach ($posts as $post) {
+                $files = $fs->get_area_files($modulecontext->id, 'mod_hsuforum', 'attachment', $post->id, "timemodified", false);
+                foreach ($files as $file) {
+                    if (debugging()) {
+                        mtrace("URKUND fileid:" . $plagiarismfile->id . " check fileid:" . $file->get_id());
+                    }
+                    if ($file->get_contenthash() == $plagiarismfile->identifier) {
+                        if (debugging()) {
+                            mtrace("URKUND fileid:" . $plagiarismfile->id . " found fileid:" . $file->get_id());
+                        }
+                        return $file;
+                    }
+                }
+            }
         }
     }
 }
@@ -1781,7 +1838,7 @@ function plagiarism_urkund_send_files() {
                           ORDER BY a.id DESC";
                     $moodletextsubmissions = $DB->get_records_sql($sql, array($pf->userid, $cm->instance), 0, 1);
                     $moodletextsubmission = end($moodletextsubmissions);
-                    $tempfile = urkund_create_temp_file($cm->id, $cm->course, $pf->userid, $moodletextsubmission);
+                    $tempfile = urkund_create_temp_file($cm->id, $cm->course, $pf->userid, $moodletextsubmission->onlinetext);
 
                     $pf->identifier = $tempfile;
                     $DB->update_record('plagiarism_urkund_files', $pf);
@@ -1939,7 +1996,8 @@ function plagiarism_urkund_resubmit_on_close() {
               JOIN {course_modules} cm ON cm.instance = a.id
               JOIN {modules} m ON m.id = cm.module
               JOIN {plagiarism_urkund_config} uc ON uc.cm = cm.id AND uc.name = 'use_urkund' AND uc.value = '1'
-              JOIN {plagiarism_urkund_config} uc1 ON uc1.cm = cm.id AND uc1.name = 'urkund_resubmit_on_close' AND uc1.value = :resubmit
+              JOIN {plagiarism_urkund_config} uc1 ON uc1.cm = cm.id AND uc1.name = 'urkund_resubmit_on_close'
+                                                  AND uc1.value = :resubmit
          LEFT JOIN {plagiarism_urkund_config} uc2 ON uc2.cm = cm.id AND uc2.name = 'timeresubmitted'
              WHERE m.name = 'assign' AND a.duedate > 1 AND a.duedate < :now
                    AND uc2.value IS NULL OR ". $DB->sql_cast_char2int('uc2.value'). " < a.duedate";
@@ -1968,7 +2026,11 @@ function plagiarism_urkund_resubmit_on_close() {
     }
 }
 
-
+/**
+ * Function used to trigger resubmission for all files in a cm.
+ *
+ * @param int $cmid
+ */
 function plagiarism_urkund_resubmit_cm($cmid) {
     global $DB;
 
@@ -2006,4 +2068,18 @@ function plagiarism_urkund_resubmit_cm($cmid) {
         'other' => array()
     ));
     $event->trigger();
+}
+
+/**
+ * Function to list plugins that urkund supports.
+ * @return array
+ *
+ */
+function urkund_supported_modules() {
+    global $CFG;
+    $supportedmodules = array('assign', 'forum', 'workshop');
+    if (file_exists($CFG->dirroot.'/mod/hsuforum/version.php')) {
+        $supportedmodules[] = 'hsuforum';
+    }
+    return $supportedmodules;
 }
