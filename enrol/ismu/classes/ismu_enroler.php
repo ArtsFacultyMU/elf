@@ -122,46 +122,6 @@ class ismu_enroler
         );
     }
     
-    public function create_student($uco, $username, $surname, $firstname, $studyid)
-    {
-        global $DB;
-        $DB->insert_record(
-                'ismu_students',
-                (object) compact('uco', 'username', 'surname', 'firstname', 'studyid'),
-                false
-        );
-    }
-    
-    public function create_teacher($uco, $username, $surname, $firstname)
-    {
-        global $DB;
-        $DB->insert_record('ismu_teachers',(object) compact('uco', 'username', 'surname', 'firstname'), false);
-    }
-    
-    public function create_study($coursecode, $studyid, $enroldate, $groupcode)
-    {
-        global $DB;
-        $DB->insert_record('ismu_studies',(object) compact('coursecode', 'studyid', 'enroldate', 'groupcode'), false);
-    }
-    
-    public function delete_students() 
-    {
-        global $DB;
-        $DB->delete_records('ismu_students');
-    }
-    
-    public function delete_teachers()
-    {
-        global $DB;
-        $DB->delete_records('ismu_teachers');
-    }
-    
-    public function delete_studies()
-    {
-        global $DB;
-        $DB->delete_records('ismu_studies');
-    }
-    
     protected function sanitize_code($code)
     {
         return str_replace('_', '\_', $code);
