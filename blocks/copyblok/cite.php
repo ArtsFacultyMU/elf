@@ -41,11 +41,11 @@ $PAGE->set_title(get_string('cite_title','block_copyblok'));
 $PAGE->set_heading(get_string('howcitate','block_copyblok'));
 $PAGE->set_pagelayout('course');
 //Reformát autors
-$a_authors = array_filter(split(",", $block_content->authors));
+$a_authors = array_filter(explode(",", $block_content->authors));
 $a_authors_lenght = count($a_authors);
 $authors = "";
 for($i=0;$i<$a_authors_lenght;$i++) {
-    $part_of_name = split(" ", trim($a_authors[$i]));
+    $part_of_name = explode(" ", trim($a_authors[$i]));
     $part_of_name_lenght = count($part_of_name);
     $part_of_name_lenght--;
     if( $i == 0 ) $authors .= mb_strtoupper($part_of_name[$part_of_name_lenght], 'UTF-8') . ', ';
