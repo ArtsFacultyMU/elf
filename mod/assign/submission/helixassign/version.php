@@ -25,10 +25,10 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2018090704;
+$plugin->version   = 2019052102;
 $plugin->requires  = 2016052300;
 $plugin->component = 'assignsubmission_helixassign';
 $plugin->maturity = MATURITY_STABLE;
 $plugin->dependencies = array(
-    'mod_helixmedia' => '2018090704'
+    'mod_helixmedia' => '2019052102'
 );
