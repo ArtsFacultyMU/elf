@@ -1,0 +1,435 @@
+#header {
+    height: 100px;
+    background-color: #F0F1F1;
+
+    a.logo {
+        display: block;
+        height: 75px;
+        margin: 15px 0 0 20px;
+        width:421px;
+        color:#000;
+        font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+        text-transform: uppercase;
+        font-size: 25px;
+        font-weight: bold;
+        position: relative;
+
+        &:hover {
+            text-decoration: none;
+        }
+    }
+    .content {
+        position: absolute;
+        bottom: 2px;
+        left: 115px;
+    }
+}
+
+#page-navbar {
+    position: relative;
+}
+
+.moodle-actionmenu[data-enhanced].show .menu a:hover {
+    background-color: #004762;
+    text-decoration: none;
+}
+
+.page-title-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.languagemenu,
+.hideblocks {
+    float: right;
+}
+
+.hideblocks {
+    margin: 7px 0;
+    a {
+        display: block;
+        img {
+            height: 26px;
+        }
+    }
+}
+
+.usermenu {
+    margin-right: 20px;
+    
+    .login {
+        padding: 0 20px;
+    }
+    .moodle-actionmenu {
+        &.show {
+            background-color: transparent !important;
+        }
+
+        .toggle-display { 
+            color: #58595B;
+
+            &.textmenu {
+                margin: 0;
+                padding: 0 8px 0 20px;
+            }
+
+            .userbutton .avatars {
+                position: relative;
+
+                img {
+                    display: block;
+                    height: 35px;
+                    width: 35px;
+                    margin-top: 2.5px;
+                }
+
+                .avatar {
+                    display: block;
+                    height: 40px;
+                    width: 40px;
+                    top: -3px;
+                    position: relative;
+
+                    &.realuser {
+                        top: 10px;
+                        right: -12px;
+                        position: absolute;
+                        height: 25px;
+                        width: 25px;
+                        z-index: 12;
+                        left: initial;
+                        border: 1px solid #fff;
+                        border-radius: 50%;
+                        box-shadow: -2px -2px 16px rgba(0,0,0,0.25);
+
+                        img {
+                            height: 25px;
+                            width: 25px;
+                        }
+                    }
+
+                    &.current {
+                        top: -3px;
+                        left: 0px;
+                        position: absolute;
+                        z-index: 10;
+                        border: none;
+                        border-radius: 0;
+                        box-shadow: none;
+                        margin-bottom: 0;
+                        margin-top: 0;
+                    }
+                }
+            }
+        }
+        &.show .menu:before,
+            &.show .menu:after {
+            content: none !important;
+        }
+    } 
+
+    .moodle-actionmenu>.menu .filler {
+        margin: 4px 1px !important;
+    }
+
+}
+
+.languagemenu, 
+.usermenu {
+    ul li {
+        font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+        text-transform: uppercase;
+        font-size: 14px;
+        padding: 0;
+    }
+
+}
+
+.navbar .languagemenu ul.nav li a, 
+.navbar .usermenu ul li, 
+.languagemenu ul.nav li a {
+    font-weight:normal;
+    color: #58595B;
+    font-size: 14px;
+}
+
+.jsenabled .usermenu .moodle-actionmenu>.menubar {
+    margin: 0;
+}
+
+.dropdown-backdrop {
+    display: none;
+}
+
+.docked-upper-menu {
+    .usermenu {
+        margin-right: 0;
+    }
+    .languagemenu ul li, 
+    .usermenu ul li {
+        padding: 0;
+    }
+}
+
+.docked-upper-menu .languagemenu ul>li>a, 
+.docked-upper-menu .usermenu ul>li>a,
+.languagemenu ul>li>a, 
+.usermenu ul>li>a {
+    line-height: 40px;
+    display: inline-block;
+    height: 40px;
+    padding: 0 20px;
+}
+
+.languagemenu ul>li>a:HOVER {
+    background-color: transparent;
+}
+
+.docked-upper-menu .languagemenu ul>li>a:HOVER, 
+.docked-upper-menu .usermenu ul>li>a:HOVER, 
+.docked-upper-menu .usermenu .moodle-actionmenu.show .menu a:HOVER,
+.languagemenu ul>li>ul>li>a:HOVER, 
+.usermenu .moodle-actionmenu.show .menu a.icon.menu-action:HOVER  {
+    color: #FFF;
+    background: #024660;
+    text-decoration: none;
+}
+
+.docked-upper-menu .usermenu ul>li>a:HOVER .userbutton .usertext {
+    color: #FFF;
+}
+
+.languagemenu ul.nav li.dropdown>.dropdown-toggle  .caret, .usermenu .moodle-actionmenu[data-enhance] .toggle-display.textmenu .caret {
+    border-top: 8px solid #4F5252;
+    border-right: 8px solid transparent;
+    border-left: 8px solid transparent;
+    margin-left: 8px;
+}
+
+.docked-upper-menu .languagemenu ul.nav li.dropdown>.dropdown-toggle  .caret {
+    position: relative;
+    top: -2px;
+}
+
+.languagemenu ul.nav li.dropdown>.dropdown-toggle  .caret {
+    position: relative;
+    top: 11px;
+}
+
+.docked-upper-menu .languagemenu ul.nav li.dropdown  a:HOVER .caret,
+.docked-upper-menu .usermenu .moodle-actionmenu[data-enhance] a.toggle-display.textmenu:HOVER .caret {
+    border-top: 8px solid #FFF;
+}
+
+ul.upper-nav li a {
+    color: #4F5252;
+}
+
+ul.dropdown-menu,
+.usermenu .moodle-actionmenu.show ul.menu {
+    min-width: 0px;
+    padding: 0px !important;
+    margin-top: 3px !important;
+}
+
+.docked-upper-menu ul.dropdown-menu {
+    margin-left: 0;
+    margin-top: 3px;
+}
+
+.languagemenu .dropdown-menu>li,
+.usermenu .moodle-actionmenu.show>ul.menu>li {
+    padding: 0;
+    line-height: 26px;
+    color: #4E585A;
+    text-transform: none;
+    margin: 0;
+    height: auto;
+}
+
+.languagemenu ul.nav li ul.dropdown-menu>li>a,
+.usermenu .moodle-actionmenu.show>ul.menu>li a {
+    display: block;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-radius: 4px !important;
+    line-height: 26px;
+    height: auto;
+}
+
+.nav {
+    margin-bottom: 0px; 
+}
+
+.navbar .nav {
+    margin: 0;
+    .dropdown-toggle .caret {
+        margin-top: 19px;
+    }
+}
+
+.navbar-static-top {
+    margin-top: -42px;
+
+    .navbar-inner {
+        box-shadow: none;
+        border-bottom: 2px solid #024660;
+        z-index: 12001;
+    }
+}
+
+.navbar-fixed-top {
+    position: relative;
+    height: 54px;
+}
+
+.navbar-static-top .navbar-inner.navbar-inner-docked, 
+.navbar-fixed-top .navbar-inner-fixed {
+    box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.2);
+    border-bottom: 2px solid #024660;
+    z-index: 12001;
+}
+
+
+.navbar-inner, 
+.navbar-inner-fixed {
+    background-color: #F0F1F1;
+    background-image: none;
+    min-height:40px;
+    display: block;
+    left: 0;
+    right: 0;
+    top: 0;
+    border-radius: 0;
+    border-left: 0;
+    border-top: 0;
+    border-right: 0;
+    padding: 0;
+
+    a.logo-mini {
+        display: none;
+        float: left;
+    }
+
+    .docked-upper-menu {
+        display: none;
+        float: right;
+    }
+}
+
+.navbar-inner-docked {
+    position: fixed;
+    z-index: 1000;
+
+    a.logo-mini {
+        color: #000;
+        font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+        text-transform: uppercase;
+        font-size: 22px;
+        font-weight: bold;
+        text-shadow: none;
+        line-height: 28px;
+
+        img {
+            margin-right: 6px;
+        }
+    }
+
+    a.logo-mini, 
+    div.docked-upper-menu {
+        display: block;
+    }    
+        
+    div.site-search {
+        display: none;
+    }
+}	
+
+.navbar-inner .site-search {
+    float: right;
+    margin-top: 2px;
+    width: 40%;
+    text-align: right;
+
+    label {
+        font-size: 14px;
+        font-weight: bold;
+        font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+        color: #00425F;
+        display: inline;
+    }
+
+    input.text {
+        border-radius: 0;
+        line-height: 27px;
+        height: 27px;
+        padding: 0 8px;
+        margin: 0;
+        width: 34%;
+    }
+
+    input.submit {
+        top: 5px;
+        position: relative;
+    }
+}
+
+.navbar .nav > li {
+    line-height: 40px;
+}
+
+.navbar .nav > li > a {
+    padding: 0 40px 0 0;
+    line-height: 40px;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+    color: #00425F;
+    text-shadow: none;
+}
+
+.navbar .brand {
+    padding: 5px 20px 4px;
+}
+
+.navbar .btn-navbar {
+    width: 40px;
+    height: 30px;
+    background: url([[pix:theme|hamburger]]) no-repeat top left;
+    padding: 0;
+    border: 0;
+}
+.navbar .btn-navbar:hover, 
+.navbar .btn-navbar:focus, 
+.navbar .btn-navbar:active, 
+.navbar .btn-navbar.active, 
+.navbar .btn-navbar.disabled, 
+.navbar .btn-navbar[disabled] {
+    background-image: url([[pix:theme|hamburger_hover]]);
+}
+
+.navbar-inner-fixed div.h1container {
+    position: absolute;
+    height: 30px;
+    left: 53px;
+    right: 0px;
+    padding-bottom: 4px;
+    padding-top: 6px;
+}
+
+.navbar-inner-fixed h1 {
+    overflow: hidden;
+    white-space: nowrap; 
+    font-size: 14px;
+    font-weight: bold;
+    color: #004762;
+    font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+    padding-left: 0;
+    display: block;
+    text-transform: uppercase;
+    line-height: 30px;
+    margin: 0;
+    text-overflow: ellipsis;
+    width: 100%;
+    height:30px;
+}

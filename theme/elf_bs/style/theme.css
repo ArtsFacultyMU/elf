@@ -1,0 +1,2610 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+body {
+  background: #E7E7E6;
+  padding-top: 0;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+}
+h1 {
+  font-size: 24px;
+}
+h2 {
+  font-size: 20px;
+  color: #00425F;
+}
+h3 {
+  font-size: 20px;
+  font-weight: bold;
+  color: #004863;
+}
+h4 {
+  font-size: 18px;
+  font-weight: normal;
+  color: #004863;
+}
+h5 {
+  font-size: 16px;
+  font-weight: normal;
+  font-style: italic;
+  color: #353838;
+}
+a {
+  color: #2687C9;
+  cursor: pointer;
+}
+.container-fluid {
+  max-width: initial;
+}
+#page.container-fluid {
+  max-width: 95vw;
+  padding-left:0;s
+  padding-right: 0;
+}
+.atto_form.atto_media > .tab-content {
+  margin-right: 0;
+}
+.content-wrapper {
+  display: table-row;
+  height: 100%;
+}
+.main-wrapper {
+  display: table;
+  height: 100%;
+  width: 100%;
+}
+.footer-wrapper {
+  display: table-row;
+}
+#site-news-forum h2,
+#frontpage-course-list h2,
+#frontpage-category-names h2,
+#frontpage-category-combo h2 {
+  margin-bottom: 22px;
+  margin-top: 0px;
+}
+#fgroup_id_buttonar {
+  background-color: transparent;
+}
+body.path-course section,
+body.path-course.path-course-view.format-grid section,
+body.path-admin section,
+body.path-my section,
+body.path-site section,
+body.path-enrol section,
+body.path-user section,
+body.path-question section,
+body.path-group section,
+body.path-grade section,
+body.path-backup section,
+body.path-report section,
+body.path-calendar section,
+body.path-filter section,
+body.path-badges section,
+body.path-message section,
+body.path-user.path-course.path-course-view section,
+body.path-files section,
+body body.path-blog section,
+body.path-notes section,
+body.path-cohort section,
+body.path-repository section,
+body.path-theme-elf_bs section,
+body.path-login section {
+  border: 1px solid #A7A9AB;
+  background: #FFF;
+  border-radius: 3px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+@font-face {
+  font-family: "Open Sans";
+  src: url([[font:theme|OpenSans-Regular.ttf]]) format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Open Sans";
+  src: url([[font:theme|OpenSans-Italic.ttf]]) format("truetype");
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: "Open Sans";
+  src: url([[font:theme|OpenSans-Bold.ttf]]) format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Open Sans";
+  src: url([[font:theme|OpenSans-BoldItalic.ttf]]) format("truetype");
+  font-weight: bold;
+  font-style: italic;
+}
+@font-face {
+  font-family: "Open Sans";
+  src: url([[font:theme|OpenSans-Semibold.ttf]]) format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Open Sans";
+  src: url([[font:theme|OpenSans-SemiboldItalic.ttf]]) format("truetype");
+  font-weight: 600;
+  font-style: italic;
+}
+#header {
+  height: 100px;
+  background-color: #F0F1F1;
+}
+#header a.logo {
+  display: block;
+  height: 75px;
+  margin: 15px 0 0 20px;
+  width: 421px;
+  color: #000;
+  font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+  text-transform: uppercase;
+  font-size: 25px;
+  font-weight: bold;
+  position: relative;
+}
+#header a.logo:hover {
+  text-decoration: none;
+}
+#header .content {
+  position: absolute;
+  bottom: 2px;
+  left: 115px;
+}
+#page-navbar {
+  position: relative;
+}
+.moodle-actionmenu[data-enhanced].show .menu a:hover {
+  background-color: #004762;
+  text-decoration: none;
+}
+.page-title-container {
+  position: relative;
+  overflow: hidden;
+}
+.languagemenu,
+.hideblocks {
+  float: right;
+}
+.hideblocks {
+  margin: 7px 0;
+}
+.hideblocks a {
+  display: block;
+}
+.hideblocks a img {
+  height: 26px;
+}
+.usermenu {
+  margin-right: 20px;
+}
+.usermenu .login {
+  padding: 0 20px;
+}
+.usermenu .moodle-actionmenu.show {
+  background-color: transparent !important;
+}
+
+.modal.modal-in-page {
+  position: static;
+  z-index: 0;
+  margin: 30px auto 30px auto;
+}
+
+.moodle-actionmenu[data-enhanced].show .menu a {
+  padding: 2px 1em 2px 28px;
+}
+
+.moodle-actionmenu[data-enhanced].show .menu img.icon {
+  margin: 4px 4px 4px -24px;
+  padding: 4px;
+}
+.menu-action:not(.block-control-actions) img.icon, .action-list:not(.block-control-actions) img.icon, .commands:not(.block-control-actions) img.icon {
+  height: 12px;
+  margin-right: 3px;
+  vertical-align: middle;
+  width: 12px;
+}
+
+.moodle-actionmenu.block-control-actions img.icon {
+  height: 12px;
+  margin-right: 0;
+  vertical-align: middle;
+  width: auto;
+}
+.gradereport-grader-table img.icon:not(.itemicon) {
+  height: 12px;
+  vertical-align: middle;
+  width: 12px;
+}
+
+img.iconhelp {
+    margin-left: 10px;
+}
+
+.unassignrolelink img.icon,
+.unenrollink img.icon,
+.editenrollink img.icon,
+.editaction img.icon,
+.copyaction img.icon,
+.previewaction img.icon,
+.deleteaction img.icon,
+.path-mod-data #single tr:last-of-type img.icon,
+table.picture tr:last-of-type img.icon,
+.path-mod-data table.generaltable .lastcol img.icon,
+#page-mod-data-preset .fitem_fradio .fradio label img.icon,
+.path-mod-feedback div[role="main"] > h2 img.icon,
+.field.col_group .groups .group img.icon {
+  width: 12px;
+  height: 12px;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.requirednote img.icon, .feedback_form .feedback_hasvalue .fitemtitle img.icon {
+  width: 8px;
+  height: 12px;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.itemname img.icon {
+  width: 8px;
+  height: 12px;
+  vertical-align: middle;
+  cursor: pointer;
+}
+.usermenu .moodle-actionmenu .toggle-display {
+  color: #58595B;
+}
+.usermenu .moodle-actionmenu .toggle-display.textmenu {
+  margin: 0;
+  padding: 0 8px 0 20px;
+}
+.usermenu .moodle-actionmenu .toggle-display .userbutton .avatars {
+  position: relative;
+}
+.usermenu .moodle-actionmenu .toggle-display .userbutton .avatars img {
+  display: block;
+  height: 35px;
+  width: 35px;
+  margin-top: 2.5px;
+}
+.usermenu .moodle-actionmenu .toggle-display .userbutton .avatars .avatar {
+  display: block;
+  height: 40px;
+  width: 40px;
+  top: -3px;
+  position: relative;
+}
+.usermenu .moodle-actionmenu .toggle-display .userbutton .avatars .avatar.realuser {
+  top: 10px;
+  right: -12px;
+  position: absolute;
+  height: 25px;
+  width: 25px;
+  z-index: 12;
+  left: initial;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  box-shadow: -2px -2px 16px rgba(0, 0, 0, 0.25);
+}
+.usermenu .moodle-actionmenu .toggle-display .userbutton .avatars .avatar.realuser img {
+  height: 25px;
+  width: 25px;
+}
+.usermenu .moodle-actionmenu .toggle-display .userbutton .avatars .avatar.current {
+  top: -3px;
+  left: 0px;
+  position: absolute;
+  z-index: 10;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+.usermenu .moodle-actionmenu.show .menu:before,
+.usermenu .moodle-actionmenu.show .menu:after {
+  content: none !important;
+}
+.usermenu .moodle-actionmenu > .menu .filler {
+  margin: 4px 1px !important;
+}
+.languagemenu ul li,
+.usermenu ul li {
+  font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+  text-transform: uppercase;
+  font-size: 14px;
+  padding: 0;
+}
+.navbar .languagemenu ul.nav li a,
+.navbar .usermenu ul li,
+.languagemenu ul.nav li a {
+  font-weight: normal;
+  color: #58595B;
+  font-size: 14px;
+}
+.jsenabled .usermenu .moodle-actionmenu > .menubar {
+  margin: 0;
+}
+.dropdown-backdrop {
+  display: none;
+}
+.docked-upper-menu .usermenu {
+  margin-right: 0;
+}
+.docked-upper-menu .languagemenu ul li,
+.docked-upper-menu .usermenu ul li {
+  padding: 0;
+}
+.docked-upper-menu .languagemenu ul > li > a,
+.docked-upper-menu .usermenu ul > li > a,
+.languagemenu ul > li > a,
+.usermenu ul > li > a {
+  line-height: 40px;
+  display: inline-block;
+  height: 40px;
+  padding: 0 20px;
+}
+.languagemenu ul > li > a:HOVER {
+  background-color: transparent;
+}
+.docked-upper-menu .languagemenu ul > li > a:HOVER,
+.docked-upper-menu .usermenu ul > li > a:HOVER,
+.docked-upper-menu .usermenu .moodle-actionmenu.show .menu a:HOVER,
+.languagemenu ul > li > ul > li > a:HOVER,
+.usermenu .moodle-actionmenu.show .menu a.icon.menu-action:HOVER {
+  color: #FFF;
+  background: #024660;
+  text-decoration: none;
+}
+.docked-upper-menu .usermenu ul > li > a:HOVER .userbutton .usertext {
+  color: #FFF;
+}
+.languagemenu ul.nav li.dropdown > .dropdown-toggle .caret,
+.usermenu .moodle-actionmenu[data-enhance] .toggle-display.textmenu .caret {
+  border-top: 8px solid #4F5252;
+  border-right: 8px solid transparent;
+  border-left: 8px solid transparent;
+  margin-left: 8px;
+}
+.docked-upper-menu .languagemenu ul.nav li.dropdown > .dropdown-toggle .caret {
+  position: relative;
+  top: -2px;
+}
+.languagemenu ul.nav li.dropdown > .dropdown-toggle .caret {
+  position: relative;
+  top: 11px;
+}
+.docked-upper-menu .languagemenu ul.nav li.dropdown a:HOVER .caret,
+.docked-upper-menu .usermenu .moodle-actionmenu[data-enhance] a.toggle-display.textmenu:HOVER .caret {
+  border-top: 8px solid #FFF;
+}
+ul.upper-nav li a {
+  color: #4F5252;
+}
+ul.dropdown-menu,
+.usermenu .moodle-actionmenu.show ul.menu {
+  min-width: 0px;
+  padding: 0px !important;
+  margin-top: 3px !important;
+}
+.docked-upper-menu ul.dropdown-menu {
+  margin-left: 0;
+  margin-top: 3px;
+}
+.languagemenu .dropdown-menu > li,
+.usermenu .moodle-actionmenu.show > ul.menu > li {
+  padding: 0;
+  line-height: 26px;
+  color: #4E585A;
+  text-transform: none;
+  margin: 0;
+  height: auto;
+}
+.languagemenu ul.nav li ul.dropdown-menu > li > a,
+.usermenu .moodle-actionmenu.show > ul.menu > li a {
+  display: block;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-radius: 4px !important;
+  line-height: 26px;
+  height: auto;
+}
+.nav {
+  margin-bottom: 0px;
+}
+.navbar .nav {
+  margin: 0;
+}
+.navbar .nav .dropdown-toggle .caret {
+  margin-top: 19px;
+}
+.navbar-static-top {
+  margin-top: -42px;
+}
+.navbar-static-top .navbar-inner {
+  box-shadow: none;
+  border-bottom: 2px solid #024660;
+  z-index: 12001;
+}
+.navbar-fixed-top {
+  position: relative;
+  height: 54px;
+}
+.navbar-static-top .navbar-inner.navbar-inner-docked,
+.navbar-fixed-top .navbar-inner-fixed {
+  box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.2);
+  border-bottom: 2px solid #024660;
+  z-index: 12001;
+}
+.navbar-inner,
+.navbar-inner-fixed {
+  background-color: #F0F1F1;
+  background-image: none;
+  min-height: 40px;
+  display: block;
+  left: 0;
+  right: 0;
+  top: 0;
+  border-radius: 0;
+  border-left: 0;
+  border-top: 0;
+  border-right: 0;
+  padding: 0;
+}
+.navbar-inner a.logo-mini,
+.navbar-inner-fixed a.logo-mini {
+  display: none;
+  float: left;
+}
+.navbar-inner .docked-upper-menu,
+.navbar-inner-fixed .docked-upper-menu {
+  display: none;
+  float: right;
+}
+.navbar-inner-docked {
+  position: fixed;
+  z-index: 1000;
+}
+.navbar-inner-docked a.logo-mini {
+  color: #000;
+  font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+  text-transform: uppercase;
+  font-size: 22px;
+  font-weight: bold;
+  text-shadow: none;
+  line-height: 28px;
+}
+.navbar-inner-docked a.logo-mini img {
+  margin-right: 6px;
+}
+.navbar-inner-docked a.logo-mini,
+.navbar-inner-docked div.docked-upper-menu {
+  display: block;
+}
+.navbar-inner-docked div.site-search {
+  display: none;
+}
+.navbar-inner .site-search {
+  float: right;
+  margin-top: 2px;
+  width: 40%;
+  text-align: right;
+}
+.navbar-inner .site-search label {
+  font-size: 14px;
+  font-weight: bold;
+  font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+  color: #00425F;
+  display: inline;
+}
+.navbar-inner .site-search input.text {
+  border-radius: 0;
+  line-height: 27px;
+  height: 27px;
+  padding: 0 8px;
+  margin: 0;
+  width: 34%;
+}
+.navbar-inner .site-search input.submit {
+  top: 5px;
+  position: relative;
+}
+.navbar .nav > li {
+  line-height: 40px;
+}
+.navbar .nav > li > a {
+  padding: 0 40px 0 0;
+  line-height: 40px;
+  font-size: 16px;
+  font-weight: bold;
+  font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+  color: #00425F;
+  text-shadow: none;
+}
+.navbar .brand {
+  padding: 5px 20px 4px;
+}
+.navbar .btn-navbar {
+  width: 40px;
+  height: 30px;
+  background: url([[pix:theme|hamburger]]) no-repeat top left;
+  padding: 0;
+  border: 0;
+}
+.navbar .btn-navbar:hover,
+.navbar .btn-navbar:focus,
+.navbar .btn-navbar:active,
+.navbar .btn-navbar.active,
+.navbar .btn-navbar.disabled,
+.navbar .btn-navbar[disabled] {
+  background-image: url([[pix:theme|hamburger_hover]]);
+}
+.navbar-inner-fixed div.h1container {
+  position: absolute;
+  height: 30px;
+  left: 53px;
+  right: 0px;
+  padding-bottom: 4px;
+  padding-top: 6px;
+}
+.navbar-inner-fixed h1 {
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: bold;
+  color: #004762;
+  font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+  padding-left: 0;
+  display: block;
+  text-transform: uppercase;
+  line-height: 30px;
+  margin: 0;
+  text-overflow: ellipsis;
+  width: 100%;
+  height: 30px;
+}
+#page-footer {
+  background: #F0F1F1;
+  border-top: 2px solid #024660;
+  text-align: left;
+}
+#page-footer h3 {
+  font-size: 15px;
+  color: #024660;
+  margin-bottom: 0;
+  line-height: 30px;
+}
+#page-footer .span2-5 {
+  width: 20.56625%;
+}
+#page-footer .span4-5 {
+  width: 33.6%;
+}
+#contact-form {
+  text-align: right;
+  position: relative;
+}
+#contact-form .input-text {
+  font-family: 'Open Sans', sans-serif;
+  border-radius: 0;
+  border: 1px solid #A7A9AB;
+  padding: 0 6px;
+  line-height: 20px;
+  height: 18px;
+  font-size: 12px;
+  font-style: italic;
+  color: #929494;
+  width: 43%;
+}
+#contact-form .input-text.email {
+  float: right;
+}
+#contact-form .input-text.subject {
+  float: left;
+}
+#contact-form textarea {
+  width: 95.5%;
+  padding: 5px 2%;
+}
+#contact-form .contact-message-error,
+#contact-form .contact-email-error {
+  font-size: 12px;
+  margin-bottom: 14px;
+  color: red;
+  line-height: 4px;
+}
+#scroll-up {
+  display: block;
+  background: url([[pix:theme|up_arrow]]) no-repeat 0 0;
+  width: 53px;
+  height: 54px;
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  z-index: 9999;
+}
+#scroll-up.allow-cookies {
+  bottom: 42px;
+}
+#scroll-up:HOVER {
+  background: url([[pix:theme|up_arrow_hover]]) no-repeat 0 0;
+}
+#copyright-note {
+  color: #344243;
+  font-style: italic;
+  text-align: right;
+  margin-top: 12px;
+}
+#notice {
+  padding-top: 15px;
+  text-align: center;
+}
+/**
+* GRAY BUTTONS
+*/
+.confirmation-buttons input[type="button"]:last-child,
+.moodle-dialogue button.btn:last-child,
+.btn-cancel,
+#id_cancel,
+button.btn,
+input[type="submit"].btn,
+input[type="submit"].addcancel,
+#notice .singlebutton + .singlebutton input,
+.submit.buttons input[name="cancel"],
+input[type="submit"].btn-cancel,
+#removeselect_clearbutton,
+#addselect_clearbutton,
+.editbuttons td:last-child .singlebutton input[type="submit"],
+.yui3-widget-buttons button.yui3-button:last-child,
+input[type="button"]#checknone,
+.close-button input[type="button"],
+#id_resetbutton,
+input[type="submit"]#remove,
+input[type="submit"]#cancel,
+input[type="submit"][name="cancel"],
+input[type="submit"]#deleteattemptsbutton,
+input[type="submit"]#id_clearsearch,
+input[type="button"]#existingsubscribers_clearbutton,
+input[type="button"]#potentialsubscribers_clearbutton,
+input[type="submit"][name="unsubscribe"],
+body.path-mod-quiz input[type="button"],
+body.path-mod-quiz .quizattempt .continuebutton input[type="submit"],
+body.path-question div#previewcontrols input[type="button"],
+body.path-question input[type="submit"][name="deleteselected"],
+#course-category-listings .listing-pagination .yui3-button {
+  background-color: #6C6D6F;
+  color: #FFF;
+  text-shadow: none;
+  background-image: none;
+  border: none;
+  box-shadow: none;
+}
+.confirmation-buttons input[type="button"]:last-child:hover,
+.moodle-dialogue button.btn:last-child:hover,
+.btn-cancel:hover,
+#id_cancel:hover,
+button.btn:hover,
+input[type="submit"].btn:hover,
+input[type="submit"].addcancel:hover,
+#notice .singlebutton + .singlebutton input:hover,
+.submit.buttons input[name="cancel"]:hover,
+input[type="submit"].btn-cancel:hover,
+#removeselect_clearbutton:hover,
+#addselect_clearbutton:hover,
+.editbuttons td:last-child .singlebutton input[type="submit"]:hover,
+.yui3-widget-buttons button.yui3-button:last-child:hover,
+input[type="button"]#checknone:hover,
+.close-button input[type="button"]:hover,
+#id_resetbutton:hover,
+input[type="submit"]#remove:hover,
+input[type="submit"]#cancel:hover,
+input[type="submit"][name="cancel"]:hover,
+input[type="submit"]#deleteattemptsbutton:hover,
+input[type="submit"]#id_clearsearch:hover,
+input[type="button"]#existingsubscribers_clearbutton:hover,
+input[type="button"]#potentialsubscribers_clearbutton:hover,
+input[type="submit"][name="unsubscribe"]:hover,
+body.path-mod-quiz input[type="button"]:hover,
+body.path-mod-quiz .quizattempt .continuebutton input[type="submit"]:hover,
+body.path-question div#previewcontrols input[type="button"]:hover,
+body.path-question input[type="submit"][name="deleteselected"]:hover,
+#course-category-listings .listing-pagination .yui3-button:hover {
+  background-color: #6C6D6F;
+  color: white;
+  text-decoration: none;
+}
+.confirmation-buttons input[type="button"]:last-child:active,
+.moodle-dialogue button.btn:last-child:active,
+.btn-cancel:active,
+#id_cancel:active,
+button.btn:active,
+input[type="submit"].btn:active,
+input[type="submit"].addcancel:active,
+#notice .singlebutton + .singlebutton input:active,
+.submit.buttons input[name="cancel"]:active,
+input[type="submit"].btn-cancel:active,
+#removeselect_clearbutton:active,
+#addselect_clearbutton:active,
+.editbuttons td:last-child .singlebutton input[type="submit"]:active,
+.yui3-widget-buttons button.yui3-button:last-child:active,
+input[type="button"]#checknone:active,
+.close-button input[type="button"]:active,
+#id_resetbutton:active,
+input[type="submit"]#remove:active,
+input[type="submit"]#cancel:active,
+input[type="submit"][name="cancel"]:active,
+input[type="submit"]#deleteattemptsbutton:active,
+input[type="submit"]#id_clearsearch:active,
+input[type="button"]#existingsubscribers_clearbutton:active,
+input[type="button"]#potentialsubscribers_clearbutton:active,
+input[type="submit"][name="unsubscribe"]:active,
+body.path-mod-quiz input[type="button"]:active,
+body.path-mod-quiz .quizattempt .continuebutton input[type="submit"]:active,
+body.path-question div#previewcontrols input[type="button"]:active,
+body.path-question input[type="submit"][name="deleteselected"]:active,
+#course-category-listings .listing-pagination .yui3-button:active {
+  background-color: #6C6D6F;
+  color: white;
+  text-decoration: none;
+}
+.confirmation-buttons input[type="button"]:last-child:focus,
+.moodle-dialogue button.btn:last-child:focus,
+.btn-cancel:focus,
+#id_cancel:focus,
+button.btn:focus,
+input[type="submit"].btn:focus,
+input[type="submit"].addcancel:focus,
+#notice .singlebutton + .singlebutton input:focus,
+.submit.buttons input[name="cancel"]:focus,
+input[type="submit"].btn-cancel:focus,
+#removeselect_clearbutton:focus,
+#addselect_clearbutton:focus,
+.editbuttons td:last-child .singlebutton input[type="submit"]:focus,
+.yui3-widget-buttons button.yui3-button:last-child:focus,
+input[type="button"]#checknone:focus,
+.close-button input[type="button"]:focus,
+#id_resetbutton:focus,
+input[type="submit"]#remove:focus,
+input[type="submit"]#cancel:focus,
+input[type="submit"][name="cancel"]:focus,
+input[type="submit"]#deleteattemptsbutton:focus,
+input[type="submit"]#id_clearsearch:focus,
+input[type="button"]#existingsubscribers_clearbutton:focus,
+input[type="button"]#potentialsubscribers_clearbutton:focus,
+input[type="submit"][name="unsubscribe"]:focus,
+body.path-mod-quiz input[type="button"]:focus,
+body.path-mod-quiz .quizattempt .continuebutton input[type="submit"]:focus,
+body.path-question div#previewcontrols input[type="button"]:focus,
+body.path-question input[type="submit"][name="deleteselected"]:focus,
+#course-category-listings .listing-pagination .yui3-button:focus {
+  background-color: #6C6D6F;
+  color: white;
+  text-decoration: none;
+}
+/**
+* BUTTONS ON WHITE BACKGROUND
+*/
+.moodle-dialogue button.btn,
+button,
+input.form-submit,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+a.button,
+input#id_submitbutton,
+input#id_submitbutton2,
+form input.button,
+.availability-button button.btn,
+#notice .singlebutton:first-child input[type="submit"],
+.createnewquestion .singlebutton input[type="submit"],
+.singlebutton.assignuserrole input[type="submit"],
+.singlebutton.glossaryaddentry input[type="submit"],
+.singlebutton.enrolusersbutton input[type="submit"],
+.singlebutton.quizstartbuttondiv input[type="submit"],
+.glossarydisplay .singlebutton input[type="submit"],
+body.path-group section .singlebutton input[type="submit"],
+body.path-badges section .singlebutton input[type="submit"],
+body.path-calendar section .singlebutton input[type="submit"],
+body.path-backup section .singlebutton input[type="submit"],
+a.btn.btn-primary,
+.editbuttons td:first-child .singlebutton input[type="submit"],
+.submissionaction .singlebutton input[type="submit"],
+.controls .singlebutton input[type="submit"],
+.block .singlebutton input[type="submit"],
+button.btn-primary.btn,
+button.fp-dlg-butoverwrite.btn,
+.im-controls input[type="submit"].btn,
+.yui3-widget-buttons button.yui3-button:first-child,
+.confirmation-dialogue .confirmation-buttons input[type="button"]:first-child,
+.path-mod-workshop .assessment-summary.notgraded .singlebutton input[type="submit"],
+.path-mod-workshop .example-summary.notgraded .singlebutton input[type="submit"],
+.submissionlinks a.btn,
+.btn.btn-secondary,
+input[type="submit"].btn.btn-secondary,
+.btn.btn-secondary:hover,
+input[type="submit"].btn.btn-secondary:hover,
+.btn-group.header-button-group > .btn {
+  background: #2687C9;
+  color: white;
+  border: none;
+  text-shadow: none;
+  box-shadow: none;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.btn-group.header-button-group > .btn {
+    border-right: 2px white solid;
+}
+
+.btn {
+  text-shadow: none;
+}
+
+.modal-footer .btn.btn-secondary, .modal-footer .btn.btn-secondary:hover{
+  background: #6C6D6F;
+}
+
+.btn-group.header-button-group > .btn:last-child {
+  border-bottom-right-radius: 4px;
+  border-top-right-radius: 4px;
+  border-right: none;
+}
+
+.btn-group.header-button-group > .btn:first-child {
+  border-bottom-left-radius: 4px;
+  border-top-left-radius: 4px;
+}
+
+.togglecompletion button.btn.btn-link {
+    background-color: transparent;
+}
+
+.path-my .btn, .path-my .btn.active, .path-my a.btn:focus {
+    background-color: #2687C9;
+    background-image: none;
+    color: white;
+}
+
+input[size] {
+    max-width: 60vw;
+   /* width: 80%;*/
+}
+.btn-group > input[type="submit"].btn.btn-secondary, .btn-group > button.btn.btn-secondary {
+  position: relative;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+}
+
+.btn-group > input[type="submit"].btn.btn-secondary:first-child, button.btn.btn-secondary:first-child {
+  margin-left: 0;
+  -webkit-border-top-left-radius: 4px;
+  -moz-border-radius-topleft: 4px;
+  border-top-left-radius: 4px;
+  -webkit-border-bottom-left-radius: 4px;
+  -moz-border-radius-bottomleft: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.btn-group > input[type="submit"].btn.btn-secondary:last-child, button.btn.btn-secondary:last-child {
+  margin-left: 0;
+  -webkit-border-top-right-radius: 4px;
+  -moz-border-radius-topright: 4px;
+  border-top-right-radius: 4px;
+  -webkit-border-bottom-right-radius: 4px;
+  -moz-border-radius-bottomright: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.messaging-area-container .messaging-area .messages-area .messages-header .btn-link {
+  padding: 0px;
+  line-height: inherit;
+  color: #2687C9;
+  background: transparent;
+}
+
+.messaging-area-container .btn.btn-link {
+  background: #2687C9;
+  color: white;
+  border-radius: 4px;
+  border: none;
+  text-shadow: none;
+  box-shadow: none;
+  font-family: 'Open Sans', sans-serif;
+}
+.moodle-dialogue button.btn:hover,
+button:hover,
+input.form-submit:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover,
+input[type="reset"]:hover,
+a.button:hover,
+input#id_submitbutton:hover,
+input#id_submitbutton2:hover,
+form input.button:hover,
+.availability-button button.btn:hover,
+#notice .singlebutton:first-child input[type="submit"]:hover,
+.createnewquestion .singlebutton input[type="submit"]:hover,
+.singlebutton.assignuserrole input[type="submit"]:hover,
+.singlebutton.glossaryaddentry input[type="submit"]:hover,
+.singlebutton.enrolusersbutton input[type="submit"]:hover,
+.singlebutton.quizstartbuttondiv input[type="submit"]:hover,
+.glossarydisplay .singlebutton input[type="submit"]:hover,
+body.path-group section .singlebutton input[type="submit"]:hover,
+body.path-badges section .singlebutton input[type="submit"]:hover,
+body.path-calendar section .singlebutton input[type="submit"]:hover,
+body.path-backup section .singlebutton input[type="submit"]:hover,
+a.btn.btn-primary:hover,
+.editbuttons td:first-child .singlebutton input[type="submit"]:hover,
+.submissionaction .singlebutton input[type="submit"]:hover,
+.controls .singlebutton input[type="submit"]:hover,
+.block .singlebutton input[type="submit"]:hover,
+button.btn-primary.btn:hover,
+button.fp-dlg-butoverwrite.btn:hover,
+.im-controls input[type="submit"].btn:hover,
+.yui3-widget-buttons button.yui3-button:first-child:hover,
+.confirmation-dialogue .confirmation-buttons input[type="button"]:first-child:hover,
+.path-mod-workshop .assessment-summary.notgraded .singlebutton input[type="submit"]:hover,
+.path-mod-workshop .example-summary.notgraded .singlebutton input[type="submit"]:hover,
+.submissionlinks a.btn:hover,
+.btn-group.header-button-group > .btn:last-child:hover {
+  background: #2687C9;
+  color: white;
+  text-decoration: none;
+}
+.moodle-dialogue button.btn:active,
+button:active,
+input.form-submit:active,
+input[type="button"]:active,
+input[type="submit"]:active,
+input[type="reset"]:active,
+a.button:active,
+input#id_submitbutton:active,
+input#id_submitbutton2:active,
+form input.button:active,
+.availability-button button.btn:active,
+#notice .singlebutton:first-child input[type="submit"]:active,
+.createnewquestion .singlebutton input[type="submit"]:active,
+.singlebutton.assignuserrole input[type="submit"]:active,
+.singlebutton.glossaryaddentry input[type="submit"]:active,
+.singlebutton.enrolusersbutton input[type="submit"]:active,
+.singlebutton.quizstartbuttondiv input[type="submit"]:active,
+.glossarydisplay .singlebutton input[type="submit"]:active,
+body.path-group section .singlebutton input[type="submit"]:active,
+body.path-badges section .singlebutton input[type="submit"]:active,
+body.path-calendar section .singlebutton input[type="submit"]:active,
+body.path-backup section .singlebutton input[type="submit"]:active,
+a.btn.btn-primary:active,
+.editbuttons td:first-child .singlebutton input[type="submit"]:active,
+.submissionaction .singlebutton input[type="submit"]:active,
+.controls .singlebutton input[type="submit"]:active,
+.block .singlebutton input[type="submit"]:active,
+button.btn-primary.btn:active,
+button.fp-dlg-butoverwrite.btn:active,
+.im-controls input[type="submit"].btn:active,
+.yui3-widget-buttons button.yui3-button:first-child:active,
+.confirmation-dialogue .confirmation-buttons input[type="button"]:first-child:active,
+.path-mod-workshop .assessment-summary.notgraded .singlebutton input[type="submit"]:active,
+.path-mod-workshop .example-summary.notgraded .singlebutton input[type="submit"]:active,
+.submissionlinks a.btn:active,
+.btn-group.header-button-group > .btn:last-child:active {
+  background: #2687C9;
+  color: white;
+  text-decoration: none;
+}
+.moodle-dialogue button.btn:focus,
+button:focus,
+input.form-submit:focus,
+input[type="button"]:focus,
+input[type="submit"]:focus,
+input[type="reset"]:focus,
+a.button:focus,
+input#id_submitbutton:focus,
+input#id_submitbutton2:focus,
+form input.button:focus,
+.availability-button button.btn:focus,
+#notice .singlebutton:first-child input[type="submit"]:focus,
+.createnewquestion .singlebutton input[type="submit"]:focus,
+.singlebutton.assignuserrole input[type="submit"]:focus,
+.singlebutton.glossaryaddentry input[type="submit"]:focus,
+.singlebutton.enrolusersbutton input[type="submit"]:focus,
+.singlebutton.quizstartbuttondiv input[type="submit"]:focus,
+.glossarydisplay .singlebutton input[type="submit"]:focus,
+body.path-group section .singlebutton input[type="submit"]:focus,
+body.path-badges section .singlebutton input[type="submit"]:focus,
+body.path-calendar section .singlebutton input[type="submit"]:focus,
+body.path-backup section .singlebutton input[type="submit"]:focus,
+a.btn.btn-primary:focus,
+.editbuttons td:first-child .singlebutton input[type="submit"]:focus,
+.submissionaction .singlebutton input[type="submit"]:focus,
+.controls .singlebutton input[type="submit"]:focus,
+.block .singlebutton input[type="submit"]:focus,
+button.btn-primary.btn:focus,
+button.fp-dlg-butoverwrite.btn:focus,
+.im-controls input[type="submit"].btn:focus,
+.yui3-widget-buttons button.yui3-button:first-child:focus,
+.confirmation-dialogue .confirmation-buttons input[type="button"]:first-child:focus,
+.path-mod-workshop .assessment-summary.notgraded .singlebutton input[type="submit"]:focus,
+.path-mod-workshop .example-summary.notgraded .singlebutton input[type="submit"]:focus,
+.submissionlinks a.btn:focus,
+input[type="submit"].btn.btn-primary,
+.btn-group.header-button-group > .btn:last-child:focus {
+  background: #2687C9;
+  color: white;
+  text-decoration: none;
+}
+
+.row {
+  background-color: transparent;
+}
+
+.user-enroller-panel .uep-search-results .user {
+  background-color: #ffffff;
+  border-bottom: 1px solid #ddd;
+  border-top: 1px solid #eee;
+}
+
+input[type="text"] + input[type="button"].uep-search-btn {
+  margin-bottom: 0;
+}
+
+#mod_quiz_preflight_form.mform .fitem .felement.fgroup {
+  margin-left: 200px;
+}
+.filemanager.fm-noitems .fm-empty-container {
+  padding-top: 75px;
+}
+.user-enroller-panel .totalusers {
+  border-bottom: 1px solid #ddd;
+  border-top: 1px solid #eee;
+}
+
+
+.qnbutton.btn.btn-secondary {
+  color: #2687C9;
+  cursor: pointer;
+}
+#course-category-listings .listing-pagination .yui3-button.active-page {
+  background: #2687C9;
+}
+#course-category-listings .listing-pagination .yui3-button.active-page:hover {
+  background: #2687C9;
+}
+#course-category-listings .listing-pagination .yui3-button.active-page:active {
+  background: #2687C9;
+}
+#course-category-listings .listing-pagination .yui3-button.active-page:focus {
+  background: #2687C9;
+}
+/**
+* DISABLED BUTTONS
+*/
+button.disabled,
+input.form-submit.disabled,
+input[type="button"].disabled,
+input[type="submit"].disabled,
+input[type="reset"].disabled,
+button[disabled],
+input.form-submit[disabled],
+input[type="button"][disabled],
+input[type="submit"][disabled],
+input[type="reset"][disabled] {
+  color: #333;
+  background-color: #e6e6e6;
+}
+
+input[type="submit"]:first-child {
+  margin-left: 0;
+}
+.block_navigation .block_tree p.hasicon {
+   text-indent: 0;
+   padding-left: 0;
+}
+
+.btn-group.m-b-1 {
+  margin-top: 5px;
+}
+
+/*button.disabled:hover,
+input.form-submit.disabled:hover,
+input[type="button"].disabled:hover,
+input[type="submit"].disabled:hover,
+input[type="reset"].disabled:hover,
+button[disabled]:hover,
+input.form-submit[disabled]:hover,
+input[type="button"][disabled]:hover,
+input[type="submit"][disabled]:hover,
+input[type="reset"][disabled]:hover {
+  color: #333;
+  background-color: #e6e6e6;
+}*/
+/*button.disabled:active,
+input.form-submit.disabled:active,
+input[type="button"].disabled:active,
+input[type="submit"].disabled:active,
+input[type="reset"].disabled:active,
+button[disabled]:active,
+input.form-submit[disabled]:active,
+input[type="button"][disabled]:active,
+input[type="submit"][disabled]:active,
+input[type="reset"][disabled]:active {
+  color: #333;
+  background-color: #e6e6e6;
+}
+button.disabled:focus,
+input.form-submit.disabled:focus,
+input[type="button"].disabled:focus,
+input[type="submit"].disabled:focus,
+input[type="reset"].disabled:focus,
+button[disabled]:focus,
+input.form-submit[disabled]:focus,
+input[type="button"][disabled]:focus,
+input[type="submit"][disabled]:focus,
+input[type="reset"][disabled]:focus {
+  color: #333;
+  background-color: #e6e6e6;
+}*/
+/**
+* BUTTONS ON GRAY BACKGROUND
+*/
+.site-search input[type="submit"],
+.site-search .submit,
+.login-content a.button,
+#loginbtn,
+.guestform input[type="submit"],
+#contact-form input.button,
+.breadcrumb-button input[type="submit"],
+#coursesearch input[type="submit"],
+#searchforums,
+#allow-cookies .button {
+  background: #004762;
+}
+.site-search input[type="submit"]:hover,
+.site-search .submit:hover,
+.login-content a.button:hover,
+#loginbtn:hover,
+.guestform input[type="submit"]:hover,
+#contact-form input.button:hover,
+.breadcrumb-button input[type="submit"]:hover,
+#coursesearch input[type="submit"]:hover,
+#searchforums:hover,
+#allow-cookies .button:hover {
+  background: #004762;
+}
+.site-search input[type="submit"]:active,
+.site-search .submit:active,
+.login-content a.button:active,
+#loginbtn:active,
+.guestform input[type="submit"]:active,
+#contact-form input.button:active,
+.breadcrumb-button input[type="submit"]:active,
+#coursesearch input[type="submit"]:active,
+#searchforums:active,
+#allow-cookies .button:active {
+  background: #004762;
+}
+.site-search input[type="submit"]:focus,
+.site-search .submit:focus,
+.login-content a.button:focus,
+#loginbtn:focus,
+.guestform input[type="submit"]:focus,
+#contact-form input.button:focus,
+.breadcrumb-button input[type="submit"]:focus,
+#coursesearch input[type="submit"]:focus,
+#searchforums:focus,
+#allow-cookies .button:focus {
+  background: #004762;
+}
+textarea,
+#contact-form textarea {
+  font-family: 'Open Sans', sans-serif;
+  border-radius: 0;
+  border: 1px solid #A7A9AB;
+  color: #929494;
+}
+input[disabled],
+select[disabled],
+textarea[disabled],
+input[readonly],
+select[readonly],
+textarea[readonly] {
+  cursor: not-allowed;
+  background-color: #eeeeee;
+  color: #BBB;
+}
+table#form td.submit,
+.form-buttons,
+.path-admin .buttons,
+#fitem_id_submitbutton,
+.fp-content-center form + div,
+div.backup-section + form,
+#fgroup_id_buttonar {
+  padding: 19px 20px 20px;
+  padding-left: 0;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  background-color: #FFF;
+  border-top: 1px solid #FFF;
+}
+#dock {
+  top: 50px;
+}
+#dock .dockeditem_container {
+  margin-top: 51px;
+}
+#dock .dockedtitle {
+  background-image: none;
+  background-color: white;
+  text-shadow: none;
+  box-shadow: none;
+  border: 1px solid #A7A9AB;
+  border-radius: 3px;
+}
+#dock .dockedtitle h2 {
+  font-size: 14px;
+  font-weight: normal;
+  color: #2687C9;
+  margin-left: 4px;
+  border: none;
+  border-radius: 4px;
+}
+#dock .dockedtitle:hover,
+#dock .dockedtitle.activeitem {
+  border-color: #024660;
+  background: #024660;
+}
+#dock .dockedtitle:hover h2,
+#dock .dockedtitle.activeitem h2 {
+  color: white;
+}
+#dock .dockedtitle > div {
+  padding-bottom: 9px;
+}
+#dock .controls {
+  position: relative;
+  bottom: 0;
+  top: 1em;
+}
+#dockeditempanel {
+  padding-left: 3px;
+}
+#dockeditempanel .dockeditempanel_content {
+  background-color: white;
+  border: 1px solid #A7A9AB;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+#dockeditempanel .dockeditempanel_hd {
+  padding: 0px;
+  border-bottom: none;
+}
+#dockeditempanel .dockeditempanel_hd .commands {
+  float: right;
+  padding: 3px 15px;
+}
+#dockeditempanel .dockeditempanel_bd > * {
+  margin: 0;
+}
+#page-navbar .breadcrumb-button {
+  display: block;
+  float: right;
+}
+.breadcrumb {
+  background: none;
+}
+.breadcrumb > li {
+  text-shadow: none;
+}
+.breadcrumb > li > .divider {
+  color: #2687C9;
+}
+.breadcrumb-button {
+  float: right;
+  line-height: 40px;
+  margin-top: -2px;
+}
+.breadcrumb-button .singlebutton div,
+.breadcrumb-button .singlebutton div input {
+  margin: 0;
+}
+.courses .coursebox.even {
+  background-color: #FFF;
+}
+.courses .coursebox.odd {
+  background-color: #FFF;
+}
+.course-content {
+  position: relative;
+}
+.course-content h3.sectionname {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+.path-course-view .completionprogress {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+}
+.coursebox,
+.coursebox.collapsed {
+  padding: 5px;
+  margin-bottom: 15px;
+  overflow: hidden;
+}
+.coursebox > .info {
+  position: relative;
+}
+.coursebox > .info .moreinfo {
+  position: absolute;
+  bottom: 10px;
+  right: 20px;
+}
+.coursebox .enrolmenticons {
+  position: absolute;
+  bottom: 10px;
+  right: 50px;
+}
+.coursebox .content .teachers {
+  float: left;
+  width: 171px;
+  clear: left;
+  margin: 15px 10px 10px 9px;
+}
+.coursebox .content .summary {
+  float: none;
+  width: auto;
+  padding-top: 15px;
+  border-top: 1px solid #58585B;
+  margin: 0 20px 10px 190px;
+}
+.coursebox > .info > a.courseimage {
+  display: block;
+  float: left;
+  margin: 5px 25px 5px 5px;
+  width: 160px;
+}
+.coursebox > .info > a.courseimage img {
+  object-fit: cover;
+  height: 100px;
+  width: 160px;
+}
+.coursebox > .info > div.course-info-container {
+  margin-left: 190px;
+  position: relative;
+  padding-top: 50px;
+}
+.coursebox > .info > div.course-info-container > h3.coursename {
+  padding: 10px 0 0px 0;
+  margin: 0;
+  position: absolute;
+  right: 10px;
+  left: 0;
+  top: 0;
+}
+.coursebox > .info > div.course-info-container > .categorylink:last-child {
+  margin-bottom: 10px;
+}
+.coursebox > .info .coursename span {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.coursebox > .info .coursename span a {
+  background-image: none;
+  color: #00425F;
+  font-size: 22px;
+  padding: 0;
+}
+.coursebox > .info .coursename a:HOVER {
+  text-decoration: none;
+}
+.block,
+.course-content ul li.section.main,
+.coursebox,
+.course-content .single-section,
+.courses .coursebox.collapsed,
+body.path-course section .coursebox.loaded {
+  border: 1px solid #A7A9AB;
+  background: #FFF;
+  box-shadow: none;
+  border-radius: 3px;
+  padding: 0px;
+  /**pozor, prida to medzeru do zoznamu kurzov**/
+}
+.coursebox > .info .coursename span a.dimmed {
+  color: #999;
+}
+.section .activity .contentafterlink {
+  margin-right: 30px;
+}
+.course-content .single-section ul.topics li.section .summary,
+.course-content .single-section ul.weeks li.section .summary {
+  border-bottom: 1px solid #A7A9AB;
+}
+.course-content .single-section .section-navigation {
+  font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+  padding: 0 30px;
+  margin: 0;
+}
+.single-section h3.sectionname {
+  font-size: 20px;
+  color: #004762;
+  border-bottom: 1px solid #A7ABAE;
+  padding-bottom: 12px;
+}
+.course-content .single-section ul li.section.main {
+  border: none;
+  border-radius: 0px;
+  margin: 0;
+  padding: 0;
+}
+.course-content ul.topics li.section.main,
+.course-content ul.weeks li.section.main {
+  margin-bottom: 20px;
+}
+.course-content ul.topics li.section .content,
+.course-content ul.weeks li.section .content {
+  margin: 0;
+}
+.course-content h3 {
+  font-size: 20px;
+  font-weight: bold;
+  color: #004863;
+}
+.course-content h4 {
+  font-size: 18px;
+  font-weight: normal;
+  color: #004863;
+}
+.course-content h5 {
+  font-size: 16px;
+  font-weight: normal;
+  font-style: italic;
+  color: #353838;
+}
+.course-content .single-section {
+  padding: 20px 0 30px 0;
+}
+.course-content ul.weeks li.section .left,
+.course-content ul.topics li.section .left {
+  padding-top: 13px;
+}
+.course-content ul.weeks li.section.main.current,
+.course-content ul.topics li.section.main.current {
+  border-color: #024660;
+}
+.course-content ul.weeks li.section.main.current h3.section-title,
+.course-content ul.topics li.section.main.current h3.section-title,
+.course-content ul.weeks li.section.main.current h3.sectionname,
+.course-content ul.topics li.section.main.current h3.sectionname {
+  background: #024660;
+  color: #fff;
+  margin: 0 0 25px 0;
+}
+.course-content ul.weeks li.section.main.current h3.section-title a,
+.course-content ul.topics li.section.main.current h3.section-title a,
+.course-content ul.weeks li.section.main.current h3.sectionname a,
+.course-content ul.topics li.section.main.current h3.sectionname a {
+  color: #fff;
+}
+.course-content ul.weeks li.section.main.current .moodle-actionmenu.section-actions a.textmenu,
+.course-content ul.topics li.section.main.current .moodle-actionmenu.section-actions a.textmenu,
+.course-content ul.weeks li.section.main.current .moodle-actionmenu.section-actions a.textmenu:hover,
+.course-content ul.topics li.section.main.current .moodle-actionmenu.section-actions a.textmenu:hover {
+  color: #fff;
+}
+.course-content ul.weeks li.section.main h3.section-title,
+.course-content ul.topics li.section.main h3.section-title,
+.course-content ul.weeks li.section.main h3.sectionname,
+.course-content ul.topics li.section.main h3.sectionname {
+  font-size: 20px;
+  margin: 0 0 10px 0;
+  padding: 0 30px;
+  line-height: 40px;
+  color: #004762;
+}
+.course-content ul.weeks li.section .availabilityinfo,
+.course-content ul.topics li.section .availabilityinfo {
+  margin: 0 30px;
+}
+.course-content ul.weeks li.section .left,
+.course-content ul.topics li.section .left,
+.course-content ul.weeks li.section .right,
+.course-content ul.topics li.section .right {
+  width: 30px;
+}
+.course-content ul.weeks li.section ul.section,
+.course-content ul.topics li.section ul.section {
+  margin: 0 1em 0 0;
+}
+.course-content .section-summary .section-summary-activities .activity-count {
+  margin: 0px 3px;
+}
+.course-content ul li.section.hidden .sectionname > span,
+.course-content ul li.section.hidden .activity .activityinstance {
+  margin: 0px;
+}
+.editing .course-content ul.weeks li.section.main h3.sectionname,
+.editing .course-content ul.topics li.section.main h3.sectionname {
+  padding: 0 70px 0 30px;
+}
+.section .side.right {
+  right: 0px;
+}
+.course-content ul.topics li.section .summary,
+.course-content ul.weeks li.section .summary,
+.course-content ul.topics li.section.hidden .summary,
+.course-content ul.weeks li.section.hidden .content > div.summary {
+  margin: 20px 30px 0 30px;
+}
+.course-content ul.section.hidden {
+  margin: 1em;
+}
+.course-content .section-summary .summarytext {
+  margin: 0;
+  padding: 0 30px;
+  border-bottom: 1px solid #A7ABAE;
+}
+.course-content .section-summary .summarytext:last-child {
+  border-bottom: none;
+}
+.course-content ul.weeks li.section.main.current.hidden h3.sectionname,
+.course-content ul.topics li.section.main.current.hidden h3.sectionname {
+  background: #81A3B0;
+}
+.course-content ul.weeks li.section.hidden h3.sectionname,
+.course-content ul.topics li.section.hidden h3.sectionname {
+  margin-right: 60px;
+  margin-left: 30px;
+  padding-left: 0;
+  padding-right: 0;
+}
+.editing .course-content ul li.section .activity .activityinstance {
+  padding-right: 200px;
+}
+.course-content ul li.section.hidden .activity .activityinstance,
+.course-content ul li.section.hidden .content > div {
+  margin-right: 0;
+  margin-left: 0;
+  opacity: .5;
+}
+.course-content .section-modchooser {
+  padding: 0 10px;
+}
+.course-content ul li.section .activity .activityinstance {
+  padding-right: 40px;
+}
+#course-category-listings .detail-pair > .pair-value {
+  margin-left: 0px;
+}
+.section .activity .mod-indent-outer,
+.path-course-view .section .label .mod-indent-outer {
+  padding-left: 30px;
+}
+.userinfobox {
+  border-top: 0px;
+  border-right: 0px;
+  border-left: 0px;
+  border-bottom: 1px solid #A7A9AB;
+}
+.userinfobox .left,
+.userinfobox .side {
+  width: 110px;
+}
+.pagelayout-report .no-overflow {
+  overflow: auto;
+}
+.block .header h2,
+#dockeditempanel .dockeditempanel_hd h2 {
+  font-size: 14px;
+  font-weight: normal;
+  text-shadow: none;
+  color: #4E585A;
+  border-bottom: 2px solid #024660;
+  padding: 18px 0 0px 0;
+  margin: 0 12px;
+    float: none;
+    max-width: none;
+}
+.path-mod-assign [data-region="grading-navigation"] {
+  width: auto;
+}
+.path-mod-assign [data-region="grade-actions-panel"],
+.path-mod-assign [data-region="grading-navigation-panel"] {
+  background: white;
+}
+.path-mod-assign [data-region="grade-panel"].collapsed {
+  display: none;
+}
+.path-mod-assign div.earlysubmission {
+  margin: 0;
+  padding: 0;
+}
+.path-mod-assign .btn-group > .btn:hover,
+.path-mod-assign .btn-group > .btn:focus,
+.path-mod-assign .btn-group > .btn:active,
+.path-mod-assign .btn-group > .btn.active {
+  background: #2687C9;
+  color: white;
+  border: none;
+  text-shadow: none;
+  box-shadow: none;
+  font-family: 'Open Sans', sans-serif;
+}
+.section .activity.modtype_label.label {
+  padding: 0;
+}
+.section .label .mod-indent-outer {
+  padding-left: 0;
+}
+legend {
+  font-size: 16px;
+  color: #333;
+  font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+}
+.enrolpanel {
+  background-color: transparent;
+}
+.enrolpanel .container {
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+.moodle-dialogue h3 {
+  color: #FFF;
+  font-weight: normal;
+}
+#filesskin .yui3-panel-content {
+  background-color: #FFF;
+}
+.moodle-dialogue-base .moodle-dialogue-wrap .moodle-dialogue-hd,
+.moodle-dialogue-base .moodle-dialogue-wrap .moodle-dialogue-hd.yui3-widget-hd,
+.enrolpanel .container .header,
+#filesskin .yui3-widget-hd {
+  background-color: #6C6D6F;
+  color: #FFF;
+  text-shadow: none;
+  background-image: none;
+  border: none;
+}
+.moodle-dialogue-base .moodle-dialogue-wrap .moodle-dialogue-hd h1,
+.moodle-dialogue-base .moodle-dialogue-wrap .moodle-dialogue-hd.yui3-widget-hd h1,
+.enrolpanel .container .header h2 {
+  line-height: 20px;
+  margin: 0px;
+  padding: 5px;
+  color: white;
+  font-size: 12px;
+  font-weight: normal;
+}
+.yui3-widget-buttons button.yui3-button.closebutton,
+.yui3-widget-buttons button.yui3-button.closebutton:hover,
+.yui3-widget-buttons button.yui3-button.closebutton:focus,
+.yui3-widget-buttons button.yui3-button.closebutton:active {
+  background: url([[pix:theme|sprite]]);
+}
+#upper-banner {
+  border: 1px solid #A7A9AB;
+  background: #FFF;
+  border-radius: 3px;
+  margin: 40px 0 30px 0;
+  position: relative;
+}
+#upper-banner .banner-menu-item {
+  height: 59px;
+  padding: 0 0 0 75px;
+  font-size: 18px;
+  font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+  color: #3A85C5;
+  text-transform: uppercase;
+  line-height: 59px;
+  display: block;
+}
+#upper-banner .banner-menu-item:hover,
+#upper-banner .banner-menu-item:focus,
+#upper-banner .banner-menu-item:active,
+#upper-banner .banner-menu-item-selected {
+  text-decoration: none;
+  background-color: #D1D2D4 !important;
+}
+#upper-banner #banner-menu {
+  width: 280px;
+}
+#upper-banner #banner-menu {
+  border-right: 1px solid #A7A9AB;
+  position: relative;
+}
+#upper-banner.has-login #banner-menu {
+  width: 360px;
+}
+#upper-banner.has-login #banner-content {
+  left: 360px;
+}
+#upper-banner #banner-content {
+  position: absolute;
+  left: 280px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  width: auto;
+  padding: 1px;
+  margin: -1px;
+  overflow: auto;
+}
+#upper-banner #banner-content > div {
+  width: 100%;
+  padding: 1px;
+  margin: -1px;
+}
+#upper-banner .banner-menu-news {
+  background: url([[pix:theme|banner_news]]) no-repeat 0 2px #fff;
+  border-radius: 2px 0 0 0;
+}
+#upper-banner .banner-menu-teachers {
+  background: url([[pix:theme|banner_teachers]]) no-repeat 0 2px #fff;
+}
+#upper-banner .banner-menu-students {
+  background: url([[pix:theme|banner_students]]) no-repeat 0 2px #fff;
+}
+#upper-banner .banner-menu-sos {
+  background: url([[pix:theme|banner_sos]]) no-repeat 0 2px #fff;
+  border-radius: 0 0 0 2px;
+}
+#upper-banner .login-menu,
+.login-menu {
+  font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+  font-size: 14px;
+}
+#upper-banner .login-menu .login-menu-item,
+.login-menu .login-menu-item {
+  float: left;
+  width: 50%;
+  height: 22px;
+  padding-top: 8px;
+  padding-bottom: 6px;
+  background-color: #A7A9AB;
+  color: #fff;
+  text-align: center;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+#upper-banner .login-menu .login-menu-selected,
+.login-menu .login-menu-selected {
+  background-color: #fff;
+  color: #6D6E70;
+  cursor: default;
+}
+#upper-banner .login-menu #login-menu-shibboleth,
+.login-menu #login-menu-shibboleth {
+  border-radius: 1px 0 0 0;
+}
+.login-menu #login-menu-manual {
+  border-radius: 0 1px 0 0;
+}
+#upper-banner .login-content {
+  height: 200px;
+}
+#upper-banner .login-content #login-content-shibboleth img,
+.login-content #login-content-shibboleth img {
+  margin-bottom: 8px;
+}
+#upper-banner .login-content a.button,
+.login-content a.button {
+  line-height: 36px;
+}
+#upper-banner .login-content #guestloginbtn,
+.login-content #guestloginbtn {
+  margin: 0 0 1px 0;
+}
+#login-content-shibboleth {
+  text-align: center;
+  padding: 12px 0 0 0;
+}
+#login-content-manual {
+  text-align: left;
+  padding: 22px 1em 0 1em;
+}
+div.login #login-content-manual {
+  padding-top: 10px;
+}
+div.login {
+  background: white;
+  border: 1px solid #A7A9AB;
+  border-radius: 2px;
+}
+.login .loginbox {
+  margin: 0;
+}
+.login .loginbox h2 {
+  display: none;
+}
+.loginbox .loginsub.subcontent,
+.loginbox .guestsub.subcontent {
+  padding: 0;
+  margin: 0;
+}
+.loginbox .loginform .form-input input {
+  width: 92%;
+}
+.loginbox .loginform .form-input {
+  border: 1px solid #A7A9AB;
+}
+.login-content .loginbox .loginform div.form-label label {
+  border: none;
+}
+.login #login-content-shibboleth {
+  padding-top: 50px;
+}
+.login-content .loginform > div {
+  margin: 0 0 6px 0;
+}
+.login-content .loginform > div > span {
+  border: 1px solid #A7A9AB;
+  margin: 0 10px 0 0;
+  display: inline-block;
+}
+.login-content .loginform #username,
+.login-content .loginform #password {
+  border-radius: 0;
+  border: 0;
+  padding: 0 6px;
+  line-height: 20px;
+  height: 18px;
+  font-size: 12px;
+  font-style: italic;
+  margin: -1px 0 0 1px;
+  color: #929494;
+  box-shadow: none;
+  transition: none;
+  font-family: 'Open Sans', sans-serif;
+  position: relative;
+  top: -1px;
+}
+.login-content .loginform label {
+  display: inline;
+  border-right: 1px solid #A7A9AB;
+  height: 20px;
+  line-height: 20px;
+}
+.login-content .loginform label > img {
+  margin: -2px 0 0 0;
+}
+.login-content #loginbtn {
+  margin: -1px 0 0 0 0;
+}
+.login-content .rememberpass label {
+  font-size: 12px;
+  color: #4E585A;
+}
+.login-manual-desc {
+  text-align: center;
+  color: #4E585A;
+  line-height: 28px;
+  margin-top: 6px;
+}
+.login-content #loginbtn,
+.login-content #guestloginbtn,
+a.button {
+  padding: 3px 14px;
+  margin: 0;
+  font-size: 14px;
+  height: 26px;
+}
+.loginbox.twocolumns .signuppanel,
+.signuppanel {
+  display: none;
+}
+.moodle-dialogue-wrap .signuppanel {
+  display: block;
+}
+.loginbox.twocolumns .loginpanel,
+.loginbox.twocolumns .signuppanel {
+  width: auto;
+  float: none;
+}
+.block_navigation .block_tree .tree_item.hasicon .item-content-wrap {
+  padding-right: 16px;
+  display: inline;
+}
+.container {
+  border: 1px solid #A7A9AB;
+  background-color: #FFF;
+  margin-bottom: 20px;
+  border-radius: 3px;
+  display: block;
+}
+a.banner-links {
+  color: #3A85C5;
+  font-size: 20px;
+  font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+  padding-top: 155px;
+  height: 190px;
+  text-transform: uppercase;
+  text-align: center;
+  cursor: pointer;
+}
+a.banner-links:HOVER {
+  text-decoration: none;
+}
+.banner-links-teachers {
+  background: url([[pix:theme|banner_teachers_large]]) no-repeat center 20px #fff;
+}
+.banner-links-students {
+  background: url([[pix:theme|banner_students_large]]) no-repeat center 20px #fff;
+}
+.banner-links-sos {
+  background: url([[pix:theme|banner_sos_large]]) no-repeat center 20px #fff;
+}
+.mod-indent-outer {
+  width: 97%;
+}
+body.path-mod section,
+body.path-blog section,
+body.path-blocks section {
+  border: 1px solid #A7A9AB;
+  background: #FFF;
+  border-radius: 3px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+body.path-blocks section {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+body.path-course.path-course-view section,
+body.path-course.path-course-index section,
+body.path-site.pagelayout-frontpage section,
+body#page-course-index section,
+body.path-my section .block {
+  border: 0;
+  padding: 0;
+  background: none;
+  border-radius: 0;
+}
+body.path-my section .block {
+  margin: 0px;
+}
+body.path-group .generaltable tbody > tr > td {
+  background: white;
+  border: none;
+}
+body.path-user section,
+body.path-user.path-course.path-course-view section {
+  padding: 20px;
+}
+body.path-user section div.profile_tree section.node_category {
+  margin: 5px 0;
+  padding: 0 3%;
+  width: 93%;
+}
+.userprofile .profile_tree {
+  -webkit-column-gap: 10px;
+  -moz-column-gap: 10px;
+  column-gap: 10px;
+}
+#page-mod-quiz-report table#attempts .cell,
+#page-mod-quiz-report table#attempts td {
+  border-color: #dddddd;
+}
+#page-mod-quiz-report table#attempts {
+  border-bottom: 1px solid #dddddd;
+}
+body.path-course section .coursebox {
+  border: 0;
+  border-radius: 0;
+}
+body #region-main .mform:not(.unresponsive) .fitem .fitemtitle {
+  margin-top: 1px;
+}
+/*
+#region-main .mform:not(.unresponsive) .fitem .fitemtitle label {
+        position: relative;
+}
+*/
+.fselect select {
+  max-width: 600px;
+}
+.mform fieldset.collapsible legend a.fheader {
+  margin-left: 0;
+}
+body.path-message .singleselect select {
+  width: 100%;
+}
+.message .messagearea .messagesend .messagesendbox {
+  width: 90%;
+}
+.fitemtitle .fgrouplabel {
+  position: relative;
+}
+.mform .fitem .fitemtitle div {
+  display: inline-block;
+  width: 100%;
+}
+.singleselect select,
+select#id_category,
+.course-content .single-section .section-navigation select {
+  width: 100%;
+}
+.feedback_itemlist .fitemtitle .fgrouplabel label {
+  position: static;
+  right: 28px;
+  margin-bottom: 0px;
+}
+/*.fitemtitle .fgrouplabel label {
+  position: absolute;
+  right: 28px;
+  margin-bottom: 0px;
+}*/
+.fitemtitle .fgrouplabel .helptooltip {
+  margin-left: 6px;
+  display: inline-block;
+}
+/** HIDDEN BLOCKS FUNCTIONALITY **/
+@media (min-width: 1px) {
+  body.hiddenblocks .block-region {
+    display: none;
+  }
+  body.hiddenblocks #region-bs-main-and-pre,
+  body.hiddenblocks #region-main,
+  body.hiddenblocks.empty-region-side-post.used-region-side-pre #region-main.span8,
+  body.hiddenblocks.jsenabled.docked-region-side-post.used-region-side-pre #region-main.span8,
+  body.hiddenblocks #page-content.row-fluid .span9 {
+    width: 100%;
+    float: none;
+  }
+}
+/*** SEARCH OPTIMALIZATION ***/
+body#page-course-search section {
+  border: 0;
+  background-color: transparent ;
+}
+body#page-course-search section .coursebox {
+  border: 1px solid #A7A9AB;
+  border-radius: 3px;
+}
+body#page-course-search section .coursebox .content .coursecat {
+  display: none;
+}
+.coursebox > .info .coursename span.highlight {
+  display: inline;
+}
+/*** TABLE OPTIMALIZATION ***/
+.path-user .no-overflow {
+  overflow: initial;
+}
+table.flexible,
+.generaltable {
+  margin-left: 0;
+  margin-right: 0;
+  width: 99%;
+}
+/*** MOD TAB **/
+ul.menutable {
+  border: 0 !important;
+}
+ul.menutable li {
+  margin-left: 0;
+}
+ul.menutable li.menutitle {
+  background-color: transparent !important;
+  color: #555 !important;
+  height: 38px;
+  line-height: 38px;
+}
+.TabbedPanelsTabGroup {
+  border-bottom: 1px solid #ddd !important;
+  height: 38px;
+}
+.TabbedPanelsContentGroup {
+  border: 0 !important;
+}
+.TabbedPanelsTab {
+  background-color: transparent !important;
+  color: #2687C9 !important;
+  font-weight: normal !important;
+  padding: 8px 12px !important;
+  margin-right: 2px !important;
+  line-height: 20px !important;
+  border: 1px solid transparent !important;
+  -webkit-border-radius: 4px 4px 0 0 !important;
+  -moz-border-radius: 4px 4px 0 0 !important;
+  border-radius: 4px 4px 0 0 !important;
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 14px !important;
+}
+.TabbedPanelsTab:hover {
+  background-color: #eee !important;
+}
+.TabbedPanelsTabSelected {
+  border: 1px solid #ddd !important;
+  border-bottom-color: transparent !important;
+  background-color: #fff !important;
+  color: #555 !important;
+}
+.TabbedPanelsTabSelected:hover {
+  cursor: default;
+}
+/*** MOD FORUM ***/
+.forumpost {
+  box-shadow: none;
+  background-color: transparent;
+}
+.forumpost .row {
+  background-color: transparent;
+}
+.forumpost .row.maincontent {
+  border-top: 1px solid #e3e3e3;
+}
+/** MOD QUIZ OPTIMALIZATION **/
+#page-mod-quiz-edit ul.slots li.section li.activity .activityinstance {
+  width: 88%;
+  max-height: 20px;
+  overflow: hidden;
+}
+#page-mod-quiz-edit ul.slots .activityinstance span.instancename {
+  width: 80%;
+}
+#page-mod-quiz-edit .editing .section .activity .activityinstance {
+  padding-right: 150px;
+}
+#page-mod-quiz-mod #id_reviewoptionshdr .fitemtitle {
+  height: auto;
+}
+#page-mod-quiz-edit .questionbankformforpopup .paging {
+  background-color: transparent;
+}
+/** COURSE OPTIMALIZATION **/
+.course-bulk-actions.bulk-actions .row,
+.category-bulk-actions.bulk-actions .row {
+  background-color: transparent;
+}
+/** QUESTION OPTIMALIZATION **/
+.boxwidthwide {
+  width: auto;
+}
+#categoryquestions thead {
+  border-bottom: 1px solid #e3e3e3;
+}
+/** QUIZ MODULE OPTIMALIZATION **/
+#id_reviewoptionshdr .fitemtitle .fgrouplabel label {
+  right: 0;
+  left: 0;
+  position: relative;
+  text-align: left;
+}
+/** WEEKLY COURSE TOPICS **/
+ul.weeks h3.sectionname {
+  white-space: normal;
+}
+/* Custom CSS
+-------------------------*/
+a.logo {
+  background: url([[setting:logo]]) no-repeat 0 0;
+  display: block;
+  float: left;
+  height: 75px;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+.dir-rtl a.logo {
+  background: url([[setting:logo]]) no-repeat 100% 0;
+  display: block;
+  float: right;
+}
+.social-links {
+  margin-top: 20px;
+}
+.social-links div {
+  float: left;
+  width: 33%;
+  text-align: left;
+  margin: 0 0 14px 0;
+}
+/** UNISLIDER **/
+.unslider {
+  overflow: auto;
+  margin: 0;
+  padding: 0;
+}
+.unslider-wrap {
+  position: relative;
+}
+.unslider-wrap.unslider-carousel > li {
+  float: left;
+  height: 236px;
+}
+.unslider-vertical > ul {
+  height: 100%;
+}
+.unslider-vertical li {
+  float: none;
+  width: 100%;
+}
+.unslider-fade {
+  position: relative;
+}
+.unslider-fade .unslider-wrap li {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  z-index: 8;
+}
+.unslider-fade .unslider-wrap li.unslider-active {
+  z-index: 10;
+}
+.unslider li img {
+  float: right;
+  margin: 10px 70px 10px 5%;
+  width: 27%;
+  max-width: 250px;
+}
+.unslider li h1 {
+  font-size: 25px;
+  margin-left: 70px;
+  margin-top: 30px;
+  line-height: 30px;
+}
+.unslider li p {
+  margin-left: 70px;
+  margin-top: 10px;
+}
+.unslider li a.btn {
+  background-image: none;
+  margin-left: 70px;
+  margin-top: 10px;
+  border: none;
+}
+.unslider li,
+.unslider ol,
+.unslider ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+.unslider-arrow {
+  position: absolute;
+  display: block;
+  width: 32px;
+  height: 32px;
+  top: 100px;
+  left: 10px;
+  right: auto;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.2) no-repeat 50% 50%;
+  background-image: url([[pix:theme|banner_arrow]]);
+  background-size: 7px 11px;
+  border-radius: 32px;
+  text-indent: -999em;
+  opacity: .6;
+  transition: opacity .2s;
+  -ms-transform: rotate(-180deg);
+  transform: rotate(-180deg);
+}
+.unslider-arrow:hover {
+  opacity: .8;
+}
+.unslider-arrow.next {
+  left: auto;
+  right: 10px;
+  -ms-transform: rotate(0deg);
+  transform: rotate(0deg);
+}
+.unslider-nav {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 4px;
+}
+.unslider-nav ol {
+  list-style: none;
+  text-align: center;
+}
+.unslider-nav ol li {
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  margin: 0 4px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  overflow: hidden;
+  text-indent: -999em;
+  border: 2px solid rgba(0, 0, 0, 0);
+  cursor: pointer;
+  box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, 0.2);
+}
+.unslider-nav ol li.unslider-active {
+  background: #eee;
+  cursor: default;
+  box-shadow: 1px 1px 2px #ffffff inset, 0px 0px 0px 3px rgba(0, 0, 0, 0.2);
+}
+@media (max-width: 1199px) {
+  body #region-main .mform:not(.unresponsive) .femptylabel .felement {
+    width: 100%;
+  }
+}
+@media (min-width: 768px) {
+  .navbar .btn-navbar,
+  .nav-collapse.collapse {
+    display: none;
+  }
+}
+@media (max-width: 1098px) {
+  .unslider li img {
+    display: none;
+  }
+  .unslider li h1 {
+    margin-right: 70px;
+  }
+  .unslider li p {
+    margin-right: 70px;
+  }
+}
+@media (min-width: 768px) and (max-width: 979px) {
+  #upper-banner .span3 {
+    width: 31.4917%;
+  }
+  #upper-banner .span9 {
+    width: 65.7459%;
+  }
+  #page-footer .span4-5 {
+    width: 100%;
+    margin-left: 0;
+  }
+  #page-footer .span5 {
+    width: 60.05524862%;
+  }
+  #page-footer .span2-5 {
+    width: 31.4917%;
+  }
+  .navbar-fixed-top {
+    margin-bottom: 0px;
+  }
+  .navbar .brand {
+    margin: 0 0 0 -20px;
+  }
+}
+@media (max-width: 767px) {
+  #page-mod-quiz-mod #id_reviewoptionshdr .fitem {
+    width: 90%;
+  }
+  .usermenu,
+  .languagemenu,
+  .nav-hide .site-search,
+  .hideblocks {
+    display: none;
+  }
+  .navbar .nav-collapse .nav.pull-right {
+    margin-left: 20px;
+  }
+  .navbar-fixed-top {
+    margin-bottom: 0px;
+  }
+  .navbar .nav-collapse.in {
+    border-top: 0;
+  }
+  .navbar .brand {
+    margin: 0;
+  }
+  #upper-banner #banner-menu {
+    border-right: 0px;
+    width: 100%;
+  }
+  #upper-banner.has-login {
+    min-width: 360px;
+  }
+  #upper-banner.has-login #banner-menu {
+    width: 100%;
+  }
+  #upper-banner #banner-content {
+    display: none;
+  }
+  #page-footer {
+    margin-left: -20px;
+    margin-right: -20px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  #header {
+    margin-left: -20px;
+    margin-right: -20px;
+  }
+  #page-footer .span2-5 {
+    width: 100%;
+  }
+  #page-footer .span4-5 {
+    width: 100%;
+  }
+  .coursebox > .info > .courseimage {
+    display: none;
+  }
+  .navbar-static-top .navbar-inner {
+    padding-right: 20px;
+  }
+  .breadcrumb-nav {
+    margin-right: 0px;
+  }
+  .breadcrumb-button .singlebutton {
+    position: relative;
+    float: right;
+  }
+  .coursebox > .info > div.course-info-container {
+    padding-left: 20px;
+    margin-left: 0;
+  }
+  .coursebox > .info > a.courseimage {
+    display: none;
+  }
+  .coursebox > .info > div.course-info-container > h3.coursename {
+    left: 20px;
+  }
+  .coursebox > .info {
+    padding-bottom: 10px;
+  }
+  .coursebox .content .teachers {
+    float: none;
+    width: 92%;
+    margin: 0 20px 10px 20px;
+    border-top: 1px solid #58585B;
+    padding-top: 10px;
+  }
+  .coursebox .content .summary {
+    width: 92%;
+    padding-top: 10px;
+    border-top: 1px solid #58585B;
+    margin: 0 20px 10px 20px;
+  }
+}
+@media (max-width: 528px) {
+  #header a.logo {
+    height: 75px;
+    margin: 15px 0 0 20px;
+    width: 290px;
+    font-size: 18px;
+  }
+  #header .content {
+    left: 85px;
+  }
+  #header a.logo img {
+    width: 100px;
+    position: relative;
+    top: 19px;
+  }
+  .navbar-inner-docked a.logo-mini {
+    font-size: 20px;
+  }
+}
+#allow-cookies {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 99999;
+  background: #F0F1F1;
+  border-top: 2px solid #024660;
+  padding: 7px;
+  line-height: 20px;
+}
+#allow-cookies .button {
+  float: right;
+  height: 20px;
+  line-height: 20px;
+  margin: -3px;
+}
+#page-footer.allow-cookies {
+  padding: 38px;
+}
+.gradeparent {
+  overflow-x: scroll;
+  max-width: 90vw;
+  margin-bottom: 2em;
+}
+
+.path-grade-report-grader .gradeparent table {
+  margin-bottom: 0px;
+}
+
+#completion-progress-wrapper {
+  overflow-x: scroll;
+  max-width: 90vw;
+}
+div#tablecontainer {
+  overflow-x: scroll;
+  max-width: 90vw;
+}
+
+#combinedfeedbackhdr div.fadvcheckbox {
+  margin-bottom: 1em;
+}
+
+.mform .fadvcheckbox input{
+  margin-left: 0;
+}
+
+.mform .fadvcheckbox > span {
+  display: inline-block;
+  margin-top: 5px;
+}
+
+body #region-main .mform:not(.unresponsive) .fitem .fadvcheckbox > span {
+  margin-top: 4px;
+}
+
+.used-region-side-pre.used-region-side-post #region-main .mform:not(.unresponsive) .fitem .fadvcheckbox > span {
+  margin-top: 4px;
+}
+
+.path-mod-feedback .mform.feedback_form .fitem .fadvcheckbox > span {
+  margin-top: 4px;
+}
+
+.path-mod-lesson .answeroption .fadvcheckbox > span{
+  position: relative;
+  float: left;
+}
+
+.path-mod-lesson .answeroption .fadvcheckbox input {
+  position: absolute;
+  top: 2px;
+  margin-top: 0;
+  left: 0;
+}
+
+.path-mod-lesson .answeroption .fadvcheckbox label {
+  padding-left: 20px;
+  float: left;
+}
+
+.moodle-dialogue-bd .row {
+  margin-left: -20px;
+}
+
+.right.side .section_action_menu {
+  margin-top: -10px;
+}
+
+.modal-container .modal .modal-footer {
+  background-color: transparent;
+  border-top: none;
+}
+
+#notice .modal-footer {
+  text-align: center;
+}
+
+.modal-container .modal .modal-header {
+  background-color: #6C6D6F;
+  text-shadow: none;
+  border-bottom: 1px solid #bbb;
+  background-image: none;
+  color: #FFFFFF;
+}
+
+.modal-container .modal .modal-header h3 {
+  color: #FFFFFF;
+}
+
+.userlist table#participants {
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+}
