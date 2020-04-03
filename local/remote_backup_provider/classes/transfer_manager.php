@@ -17,6 +17,7 @@
 namespace local_remote_backup_provider;
 
 defined('MOODLE_INTERNAL') || die();
+require_once('transfer_manager_exception.php');
 
 /**
  * Manages course lookup and transfer.
@@ -122,7 +123,9 @@ class transfer_manager {
      * Restores file from an archive.
      * 
      * @param stored_file $file File instance to be restored.
-     * @return string|bool True on success, error code on failure.
+     * @return int Output course ID.
+     * 
+     * @throws transfer_manager_exception on failure
      */
     public function restore(\stored_file $file) {
         global $DB, $CFG, $SITE, $USER;
@@ -133,7 +136,7 @@ class transfer_manager {
         $backupid = \restore_controller::get_tempdir_name($SITE->id, $USER->id);
         $path = "$CFG->tempdir/backup/$backupid/";
         if (!$packer->extract_to_pathname($file, $path)) {
-            return 'restore_error_invalid_backup_file';
+            throw new transfer_manager_exception(transfer_manager_exception::CODE_RESTORE_INVALID_BACKUP_FILE);
         }
 
         // Transaction.
@@ -159,7 +162,7 @@ class transfer_manager {
                 unset($transaction);
                 $controller->destroy();
                 unset($controller);
-                return 'restore_error_precheck_failed';
+                throw new transfer_manager_exception(transfer_manager_exception::CODE_RESTORE_PRECHECK_FAILED);
             }
         }
 
@@ -168,7 +171,7 @@ class transfer_manager {
         unset($transaction);
         $controller->destroy();
         unset($controller);
-        return true;
+        return (int)$courseid;
     }
 
     /**

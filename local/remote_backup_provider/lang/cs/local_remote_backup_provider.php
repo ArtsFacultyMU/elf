@@ -45,6 +45,6 @@ $string['restore_error_invalid_extension'] = 'Obnova nebyla úspěšná: Neplatn
 $string['restore_error_invalid_backup_file'] = 'Obnova nebyla úspěšná: Neplatný soubor zálohy.';
 $string['restore_error_precheck_failed'] = 'Obnova nebyla úspěšná: Selhala předběžná kontrola.';
 
-$string['import_success'] = 'Kurz s ID %s byl úspěšně nahrán.';
+$string['import_success'] = 'Kurz s ID %s byl úspěšně nahrán do nového kurzu <i><a href="%s" target="_blank">%s</a></i>.';
 $string['import_failure'] = 'Při nahrávání kurzu s ID %s nastal následující problém:';
 

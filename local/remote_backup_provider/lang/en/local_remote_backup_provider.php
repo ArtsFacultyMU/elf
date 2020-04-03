@@ -45,6 +45,6 @@ $string['restore_error_invalid_extension'] = 'Restore failed: Invalid file exten
 $string['restore_error_invalid_backup_file'] = 'Restore failed: Invalid backup file.';
 $string['restore_error_precheck_failed'] = 'Restore failed: Precheck failed.';
 
-$string['import_success'] = 'Importing remote course with ID %s was successful.';
-$string['import_failure'] = 'Importing remote course with ID %s failed with following error:';
+$string['import_success'] = 'Remote course with ID %s was successfully imported into the course <i><a href="%s" target="_blank">%s</a></i>.';
+$string['import_failure'] = 'Remote course with ID %s was not succesfully imported. The following error might be helpful:';
 
