@@ -22,7 +22,9 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once(dirname(__FILE__) . '/../../config.php');
+use local_remote_backup_provider\transfer_manager_exception;
+
+require_once(__DIR__ . '/../../config.php');
 require_once('classes/transfer_manager.php');
 require_once('output/search_form/renderable.php');
 require_once('output/search_form/renderer.php');
@@ -59,19 +61,20 @@ foreach ($remote as $remote_id) {
     // Generate the backup file.
     try {
         $storedfile = $transfer_manager->backup_from_remote($remote_id, $context);
-
-        $restore_return_value = $transfer_manager->restore($storedfile);
-
-        if ($restore_return_value!==true) {
-            print_error($restore_return_value, 'local_remote_backup_provider');
-        }
+        $local_id = $transfer_manager->restore($storedfile);
+    } catch (transfer_manager_exception $ex) {
+        \core\notification::error(sprintf(get_string('import_failure', 'local_remote_backup_provider'), $remote_id) . '<br />' .
+                get_string($ex->getMessage(), 'local_remote_backup_provider'));
+        continue;
     } catch (moodle_exception $ex) {
         \core\notification::error(sprintf(get_string('import_failure', 'local_remote_backup_provider'), $remote_id) . '<br />' .
                 $ex->getMessage());
         continue;
     }
 
-    \core\notification::success(sprintf(get_string('import_success', 'local_remote_backup_provider'), $remote_id));
+    $new_course = $DB->get_record('course',['id' => $local_id]);
+    $url = $CFG->wwwroot . '/course/view.php?id=' . $local_id;
+    \core\notification::success(sprintf(get_string('import_success', 'local_remote_backup_provider'), $remote_id, $url, $new_course->fullname));
 }
 
 echo $OUTPUT->container(

@@ -247,6 +247,36 @@ class local_remote_backup_provider_external extends external_api {
         $bc = new backup_controller(
             \backup::TYPE_1COURSE, $id, backup::FORMAT_MOODLE, backup::INTERACTIVE_NO, backup::MODE_GENERAL, $userid);
 
+        // Alter the initial backup settings.
+        $backupsettings = array (
+            'users' => 0,               // Include enrolled users (default = 1)
+            'anonymize' => 0,           // Anonymize user information (default = 0)
+            'role_assignments' => 1,    // Include user role assignments (default = 1)
+            'activities' => 1,          // Include activities (default = 1)
+            'blocks' => 1,              // Include blocks (default = 1)
+            'filters' => 1,             // Include filters (default = 1)
+            'comments' => 1,            // Include comments (default = 1)
+            'userscompletion' => 0,     // Include user completion details (default = 1)
+            'logs' => 0,                // Include course logs (default = 0)
+            'grade_histories' => 0      // Include grade history (default = 0)
+        );
+
+        foreach ($bc->get_plan()->get_tasks() as $taskindex => $task) {
+            $settings = $task->get_settings();
+            foreach ($settings as $settingindex => $setting) {
+                $setting->set_status(backup_setting::NOT_LOCKED);
+
+                // Modify the values of the intial backup settings
+                if ($taskindex == 0) {
+                    foreach ($backupsettings as $key => $value) {
+                        if ($setting->get_name() == $key) {
+                            $setting->set_value($value);
+                        }
+                    }
+                }
+            }
+        }        
+
         // Run the backup.
         $bc->set_status(backup::STATUS_AWAITING);
         $bc->execute_plan();
