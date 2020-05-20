@@ -14,10 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace local_remote_backup_provider;
+namespace local_remote_backup_provider\helper;
 
 defined('MOODLE_INTERNAL') || die();
-require_once('transfer_manager_exception.php');
+
+use local_remote_backup_provider\exception\transfer_manager_exception;
+use local_remote_backup_provider\exception\configuration_exception;
+
 
 /**
  * Manages course lookup and transfer.
@@ -46,29 +49,20 @@ class transfer_manager {
     const URL_PARAMS_BACKUP = '&wsfunction=local_remote_backup_provider_get_course_backup_by_id';
 
     /**
-     * Address of the remote.
+     * Remote data.
      * 
-     * @var string
+     * @var stdClass
      */
     private $remote;
 
-    /**
-     * Access token to the remote.
-     * 
-     * @var string
-     */
-    private $token;
+    public function __construct($remote) {
+        $this->remote = $remote;
+        if (empty($this->remote->address)) {
+            throw new configuration_exception(configuration_exception::CODE_NO_ADDRESS);
+        }
 
-    public function __construct() {
-        global $CFG;
-
-        require_once($CFG->dirroot . '/config.php');
-
-        $this->token = get_config('local_remote_backup_provider', 'wstoken');
-        $this->remote = get_config('local_remote_backup_provider', 'remotesite');
-
-        if (empty($this->token) || empty($this->remote)) {
-            throw new \Exception();
+        if (empty($this->remote->token)) {
+            throw new configuration_exception(configuration_exception::CODE_NO_TOKEN);
         }
     }
 
@@ -80,7 +74,7 @@ class transfer_manager {
     public function search($search) {
         global $USER;
         
-        $url = sprintf(self::URL_BASE_FORMAT, $this->remote, $this->token) . self::URL_PARAMS_SEARCH;
+        $url = sprintf(self::URL_BASE_FORMAT, $this->remote->address, $this->remote->token) . self::URL_PARAMS_SEARCH;
         $params = array('search' => $search, 'username' => $USER->username, 'auth' => $USER->auth);
         $curl = new \curl;
         $results = json_decode($curl->post($url, $params));
@@ -99,7 +93,7 @@ class transfer_manager {
         global $USER;
 
         $fs = get_file_storage();
-        $url = sprintf(self::URL_BASE_FORMAT, $this->remote, $this->token) . self::URL_PARAMS_BACKUP;
+        $url = sprintf(self::URL_BASE_FORMAT, $this->remote->address, $this->remote->token) . self::URL_PARAMS_BACKUP;
         $params = array('id' => $remote_course_id, 'username' => $USER->username);
         $curl = new \curl;
         $resp = json_decode($curl->post($url, $params));
@@ -116,7 +110,7 @@ class transfer_manager {
             'timecreated' => $timestamp,
             'timemodified' => $timestamp,
         );
-        return $fs->create_file_from_url($filerecord, $resp->url . '?token=' . $this->token, null, true);
+        return $fs->create_file_from_url($filerecord, $resp->url . '?token=' . $this->remote->token, null, true);
     }
 
     /**
@@ -180,6 +174,6 @@ class transfer_manager {
      * @return string
      */
     public function get_remote_url() {
-        return $this->remote;
+        return $this->remote->address;
     }
 }

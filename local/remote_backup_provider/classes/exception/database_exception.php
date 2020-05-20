@@ -14,23 +14,20 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace local_remote_backup_provider;
-
-use moodle_exception;
+namespace local_remote_backup_provider\exception;
 
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Manages exceptions linked to transfer manager
+ * Manages exceptions linked to getting some data from database.
  *
  * @package    local_remote_backup_provider
  * @copyright  2019 Masaryk University
  * @author     Vojtěch Mrkývka <vojtech.mrkyvka@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class transfer_manager_exception extends \moodle_exception {
-    const CODE_RESTORE_INVALID_BACKUP_FILE = 'restore_error_invalid_backup_file';
-    const CODE_RESTORE_PRECHECK_FAILED = 'restore_error_precheck_failed';
+class database_exception extends \dml_exception {
+    const CODE_DATA_NOT_FOUND = 'data_not_found';
 
     /**
      * {@inheritdoc}
