@@ -14,32 +14,39 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace local_remote_backup_provider\output\search_form;
+namespace local_remote_backup_provider\output\forms;
 
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/formslib.php');
-require_once($CFG->libdir . '/outputcomponents.php');
 
 
 /**
- * Search form for finding courses on the remote site.
+ * Form to add or edit access to remote.
  *
  * @package   local_remote_backup_provider
- * @copyright 2015 Lafayette College ITS
+ * @copyright 2020 Masaryk University
+ * @author    Vojtěch Mrkývka <vojtech.mrkyvka@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class renderable extends \moodleform implements \renderable {
+class admin_remote_edit_form extends \moodleform {
     /**
      * Defines the search form.
      */
     public function definition() {
-        global $CFG;
-
         $mform = $this->_form;
-        $mform->addElement('text', 'search', get_string('search'));
-        $mform->setType('search', PARAM_NOTAGS);
-        $mform->addRule('search', '', 'minlength', 4);
-        $this->add_action_buttons(false, get_string('search'));
+        
+        $mform->addElement('hidden', 'id', 0);
+
+        $mform->addElement('text', 'name', get_string('remote_name', 'local_remote_backup_provider'));
+        $mform->setType('name', PARAM_NOTAGS);
+        
+        $mform->addElement('text', 'address', get_string('remote_url', 'local_remote_backup_provider'));
+        $mform->setType('address', PARAM_URL);
+
+        $mform->addElement('text', 'token', get_string('remote_token', 'local_remote_backup_provider'));
+        $mform->setType('token', PARAM_NOTAGS);
+        
+        $this->add_action_buttons(false, get_string('edit'));
     }
 }

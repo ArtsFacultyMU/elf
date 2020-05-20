@@ -14,20 +14,26 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace local_remote_backup_provider\output\search_form;
+namespace local_remote_backup_provider\exception;
 
 defined('MOODLE_INTERNAL') || die();
 
-class renderer extends \plugin_renderer_base {
+/**
+ * Manages exceptions linked to transfer manager
+ *
+ * @package    local_remote_backup_provider
+ * @copyright  2019 Masaryk University
+ * @author     Vojtěch Mrkývka <vojtech.mrkyvka@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class transfer_manager_exception extends \moodle_exception {
+    const CODE_RESTORE_INVALID_BACKUP_FILE = 'restore_error_invalid_backup_file';
+    const CODE_RESTORE_PRECHECK_FAILED = 'restore_error_precheck_failed';
+
     /**
-     * Renders the search form.
-     * 
-     * @return string Container with form or empty string.
+     * {@inheritdoc}
      */
-    public function render_form(renderable $form) {
-        if (!$form->is_cancelled()) {
-            return $this->output->container($form->render(), 'search_form');
-        }
-        return '';
+    public function __construct($errorcode, $link='', $a=NULL, $debuginfo=null) {
+        return parent::__construct($errorcode, 'local_remote_backup_provider', $link, $a, $debuginfo);
     }
 }

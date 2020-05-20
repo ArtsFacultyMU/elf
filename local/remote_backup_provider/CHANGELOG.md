@@ -1,6 +1,11 @@
 # Changelog
 
-## Unreleased
+## 4.0.0
+
+- Added multiple remote support
+- Huge refactorization
+
+## 3.4.1
 
 - Dropped Moodle 3.4 support
 
