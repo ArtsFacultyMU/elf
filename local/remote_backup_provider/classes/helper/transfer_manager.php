@@ -17,6 +17,7 @@
 namespace local_remote_backup_provider\helper;
 
 defined('MOODLE_INTERNAL') || die();
+require_once($CFG->libdir . '/filelib.php');
 
 use local_remote_backup_provider\exception\transfer_manager_exception;
 use local_remote_backup_provider\exception\configuration_exception;
@@ -31,6 +32,9 @@ use local_remote_backup_provider\exception\configuration_exception;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class transfer_manager {
+
+    // Constants.
+
     /**
      * Base of the URL for reaching files on the remote.
      */
@@ -49,32 +53,66 @@ class transfer_manager {
     const URL_PARAMS_BACKUP = '&wsfunction=local_remote_backup_provider_get_course_backup_by_id';
 
     /**
+     * URL parameters to get course backup.
+     */
+    const URL_PARAMS_NAME = '&wsfunction=local_remote_backup_provider_get_course_name_by_id';
+
+    const STATUS_ADDED = 'added';
+    const STATUS_PROCESSING = 'processing';
+    const STATUS_ERROR = 'error';
+    const STATUS_FINISHED = 'finished';
+
+    const LABEL_FOR_STATUS = [
+        self::STATUS_ADDED => 'secondary',
+        self::STATUS_PROCESSING => 'secondary',
+        self::STATUS_ERROR => 'warning',
+        self::STATUS_FINISHED => 'success',
+    ];
+
+
+
+
+
+    // Variables.
+
+    /**
      * Remote data.
      * 
      * @var stdClass
      */
     private $remote;
 
-    public function __construct($remote) {
-        $this->remote = $remote;
-        if (empty($this->remote->address)) {
-            throw new configuration_exception(configuration_exception::CODE_NO_ADDRESS);
-        }
+    /**
+     * Transfer data.
+     * 
+     * @var stdClass
+     */
+    private $transfer;
 
-        if (empty($this->remote->token)) {
-            throw new configuration_exception(configuration_exception::CODE_NO_TOKEN);
-        }
-    }
+
+
+
+
+    // Static classes.
 
     /**
      * Looks for the courses containing given string in their name or short name on the remote.
      * 
+     * @param stdClass $remote Information about remote.
      * @param string $search String to be searched for.
      */
-    public function search($search) {
+    public static function search($remote, $search) {
         global $USER;
         
-        $url = sprintf(self::URL_BASE_FORMAT, $this->remote->address, $this->remote->token) . self::URL_PARAMS_SEARCH;
+        if (empty($remote->address)) {
+            throw new configuration_exception(configuration_exception::CODE_NO_ADDRESS);
+        }
+
+        if (empty($remote->token)) {
+            throw new configuration_exception(configuration_exception::CODE_NO_TOKEN);
+        }
+
+        $url = sprintf(self::URL_BASE_FORMAT, $remote->address, $remote->token) . self::URL_PARAMS_SEARCH;
         $params = array('search' => $search, 'username' => $USER->username, 'auth' => $USER->auth);
         $curl = new \curl;
         $results = json_decode($curl->post($url, $params));
@@ -82,54 +120,237 @@ class transfer_manager {
     }
 
     /**
-     * Downloads a backup file from the remote and stores it.
+     * Returns name of the remote course.
      * 
-     * @param int $remote_course_id ID of the course on the remote server.
-     * @param \context_system $context Context instance.
-     * 
-     * @return \stored_file
+     * @param stdClass $remote Information about remote.
+     * @param string $course_id Remote course ID.
      */
-    public function backup_from_remote($remote_course_id, \context_system $context) {
-        global $USER;
+    public static function get_remote_course_name($remote, $course_id) {
+        if (empty($remote->address)) {
+            throw new configuration_exception(configuration_exception::CODE_NO_ADDRESS);
+        }
 
-        $fs = get_file_storage();
-        $url = sprintf(self::URL_BASE_FORMAT, $this->remote->address, $this->remote->token) . self::URL_PARAMS_BACKUP;
-        $params = array('id' => $remote_course_id, 'username' => $USER->username);
+        if (empty($remote->token)) {
+            throw new configuration_exception(configuration_exception::CODE_NO_TOKEN);
+        }
+        $url = sprintf(self::URL_BASE_FORMAT, $remote->address, $remote->token) . self::URL_PARAMS_NAME;
+        $params = array('id' => $course_id);
         $curl = new \curl;
-        $resp = json_decode($curl->post($url, $params));
-
-        // Import the backup file.
-        $timestamp = time();
-        $filerecord = array(
-            'contextid' => $context->id,
-            'component' => 'local_remote_backup_provider',
-            'filearea' => 'backup',
-            'itemid' => $timestamp,
-            'filepath' => '/',
-            'filename' => 'foo',
-            'timecreated' => $timestamp,
-            'timemodified' => $timestamp,
-        );
-        return $fs->create_file_from_url($filerecord, $resp->url . '?token=' . $this->remote->token, null, true);
+        $results = json_decode($curl->post($url, $params));
+        return $results->name;
     }
 
     /**
-     * Restores file from an archive.
+     * Adds new transfer to be used by this manager.
      * 
-     * @param stored_file $file File instance to be restored.
-     * @return int Output course ID.
+     * @param stdClass $remote Information about remote.
+     * @param string $course_id Remote course ID.
+     */
+    public static function add_new($remote, $course_id) {
+        global $DB, $USER;
+        $remote_course_name = self::get_remote_course_name($remote, $course_id);
+
+        // Get current time (to have the same in log & main database table).
+        $datetime = new \DateTime();
+        
+        // Insert information into (main) transfer database table.
+        $transfer_data = (object) [
+            'remoteid' => $remote->id,
+            'remotecourseid' =>$course_id,
+            'remotecoursename' => $remote_course_name,
+            'remotebackupurl' => null,
+            'courseid' => null,
+            'status' => 'added',
+            'userid' => $USER->id,
+            'timecreated' => $datetime->getTimestamp(),
+            'timemodified' => $datetime->getTimestamp(),
+        ];
+        $transfer_id = $DB->insert_record('local_remotebp_transfer', $transfer_data);
+        
+        // Insert complementary information into the (secondary) transfer log database table.
+        $log_data = (object) [
+            'transferid' => $transfer_id,
+            'timemodified' => $datetime->getTimestamp(),
+            'status' => 'Added.',
+            'notes' => null,
+        ];
+        $DB->insert_record('local_remotebp_transfer_log', $log_data);
+
+        // Return ID.
+        return (int)$transfer_id;
+    }
+
+
+
+
+
+    // Instance methods.
+    /**
+     * Creates instance of the transfer manager.
+     * 
+     * Use for existing transfers, for adding a new transfer,
+     * use static {@see add_new()} method beforehand.
+     * 
+     * @param int $transfer_id ID from the transfer table.
+     * @throws transfer_manager_exception If record with given ID does not exist.
+     * @throws configuration_exception If remote address and/or token is missing.
+     */
+    public function __construct(int $transfer_id) {
+        global $DB, $CFG;
+
+        if (!$DB->record_exists('local_remotebp_transfer', ['id' => $transfer_id])) {
+            throw new transfer_manager_exception(transfer_manager_exception::CODE_RECORD_DOES_NOT_EXIST);
+        }
+
+        $this->transfer = $DB->get_record('local_remotebp_transfer', ['id' => $transfer_id]);
+        $this->remote = $DB->get_record('local_remotebp_remotes', ['id' => $this->transfer->remoteid]);
+
+        if (empty($this->remote->address)) {
+            $this->change_status('Configuration error: No remote address.', null, self::STATUS_ERROR);
+            throw new configuration_exception(configuration_exception::CODE_NO_ADDRESS);
+        }
+
+        if (empty($this->remote->token)) {
+            $this->change_status('Configuration error: No remote token.', null, self::STATUS_ERROR);
+            throw new configuration_exception(configuration_exception::CODE_NO_TOKEN);
+        }
+    }
+
+    /**
+     * Creates a course backup on the remote instalation.
+     * 
+     * @return bool True on success, False on failure.
+     */
+    public function backup_on_remote() {
+        global $DB;
+
+        $this->change_status('Remote backup started.', null, self::STATUS_PROCESSING);
+
+        $url = sprintf(self::URL_BASE_FORMAT, $this->remote->address, $this->remote->token) . self::URL_PARAMS_BACKUP;
+
+        // Check user defined in transfer.
+        if (!$DB->record_exists('user', ['id' => $this->transfer->userid])) {
+            // Log error and return failure.
+            $this->change_status('Remote backup: User not found.', (string)$this->transfer->userid, self::STATUS_ERROR);
+            throw new \Exception();
+        }
+
+        // Finally get user defined in transfer.
+        $user = $DB->get_record('user', ['id' => $this->transfer->userid], 'username');
+
+        // Backup course on the remote.
+        $params = array('id' => $this->transfer->remotecourseid, 'username' => $user->username);
+        $curl = new \curl;
+        $post_data = $curl->post($url, $params);
+
+        // Process response.
+        // Check returned HTTP status code.
+        if ($curl->info['http_code'] != 200) {
+            // Log error and return failure.
+            $this->change_status('Remote backup wrong HTTP code.', (string)$curl->info['http_code'], self::STATUS_ERROR);
+            throw new \Exception();
+        }
+        // Get url of the backup file.
+        $resp = json_decode($post_data);
+        $backup_url = $resp->url;
+
+        // Check if url starts with remote's base url
+        if (0 !== strpos($backup_url, $this->remote->address)) {
+            // Log error and return failure.
+            $this->change_status('Remote backup URL not starting with remote address.', (string)$backup_url, self::STATUS_ERROR);
+            throw new \Exception();
+        }
+
+        // Remove hostname from the front to ease the database.
+        $backup_url = substr($backup_url, strlen($this->remote->address));
+
+        // Save data to the database.
+        $transfer_data = (object) [
+            'id' => $this->transfer->id,
+            'remotebackupurl' => $backup_url,
+        ];
+        $DB->update_record('local_remotebp_transfer', $transfer_data);
+        $this->transfer->remotebackupurl = $backup_url;
+
+        $this->change_status('Remote backup ended successfully.', null, self::STATUS_PROCESSING);
+
+        return true;
+    }
+
+    /**
+     * Transfers backup file from remote.
+     * Backup file is created using the {@see transfer_manager::backup_on_remote()} method
+     * 
+     * @return True on success, False on failure.
+     */
+    public function transfer_backup() {
+        $this->change_status('Transfering backup started.', null, self::STATUS_PROCESSING);
+
+        if ($this->transfer->remotebackupurl === null) {
+            $this->change_status('Transfering backup failed on missing remote backup URL.', null, self::STATUS_ERROR);
+            throw new \Exception();
+        }
+
+        $context = \context_system::instance();
+        $fs = get_file_storage();
+        
+        // Import the backup file.
+        $datetime = new \DateTime();
+        $filerecord = array(
+            'contextid' => $context->id,
+            'component' => 'local_remote_backup_provider',
+            'filearea' => 'transfer',
+            'itemid' => $this->transfer->id,
+            'filepath' => '/',
+            'filename' => 'transfer.mbz',
+            'timecreated' => $datetime->getTimestamp(),
+            'timemodified' => $datetime->getTimestamp(),
+        );
+        try {
+            $fs->create_file_from_url($filerecord,
+                    $this->remote->address . $this->transfer->remotebackupurl . '?token=' . $this->remote->token, null, true);
+        } catch (\Exception $e) {
+            $this->change_status('Transfering backup failed on creating file.', (string)$e, self::STATUS_PROCESSING);
+            throw $e;
+        }
+        
+        $this->change_status('Transfering backup ended successfully.', null, self::STATUS_PROCESSING);
+        return true;
+    }
+
+    /**
+     * Restores file to a new course.
      * 
      * @throws transfer_manager_exception on failure
      */
-    public function restore(\stored_file $file) {
+    public function restore() {
         global $DB, $CFG, $SITE, $USER;
         require_once($CFG->dirroot . '/backup/util/includes/restore_includes.php');
         
+        $this->change_status('Restoration started.', null, self::STATUS_PROCESSING);
+
+        $context = \context_system::instance();
+        $fs = get_file_storage();
+
+        $fileinfo = array(
+            'contextid' => $context->id,
+            'component' => 'local_remote_backup_provider',
+            'filearea' => 'transfer',
+            'itemid' => $this->transfer->id,
+            'filepath' => '/',
+            'filename' => 'transfer.mbz',
+        );
+
+        $file = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
+                $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
+
+
         // Extract the file.
         $packer = get_file_packer('application/vnd.moodle.backup');
         $backupid = \restore_controller::get_tempdir_name($SITE->id, $USER->id);
         $path = "$CFG->tempdir/backup/$backupid/";
         if (!$packer->extract_to_pathname($file, $path)) {
+            $this->change_status('Restoration file invalid.', null, self::STATUS_ERROR);
             throw new transfer_manager_exception(transfer_manager_exception::CODE_RESTORE_INVALID_BACKUP_FILE);
         }
 
@@ -153,9 +374,7 @@ class transfer_manager {
             try {
                 $transaction->rollback(new \Exception('Prechecked failed'));
             } catch (\Exception $e) {
-                unset($transaction);
-                $controller->destroy();
-                unset($controller);
+                $this->change_status('Restoration prechecks failed.', null, self::STATUS_ERROR);
                 throw new transfer_manager_exception(transfer_manager_exception::CODE_RESTORE_PRECHECK_FAILED);
             }
         }
@@ -165,8 +384,61 @@ class transfer_manager {
         unset($transaction);
         $controller->destroy();
         unset($controller);
-        return (int)$courseid;
+
+        // Save data to the database.
+        $transfer_data = (object) [
+            'id' => $this->transfer->id,
+            'courseid' => $courseid,
+        ];
+        $DB->update_record('local_remotebp_transfer', $transfer_data);
+        $this->transfer->courseid = $courseid;
+
+        $this->change_status('Restoration ended successfully.', (string)$courseid, self::STATUS_FINISHED);
+        return true;
     }
+
+    /**
+     * Changes status for the current transfer.
+     * 
+     * If the public_status is set, public status is also changed,
+     * otherwise only log (admin) status is updated.
+     * 
+     * @param string $status New status to be used in the log table.
+     * @param string|null $notes Additional information about the status.
+     * @param string|null $public_status Public status to be changed to (if not already that status).
+     */
+    public function change_status(string $status, ?string $notes = null, ?string $public_status = null) {
+        global $DB;
+        
+        // Get datetime once to prevent having public and private status out of sync.
+        $datetime = new \DateTime();
+
+        // Insert status information into the log table.
+        $log_data = (object) [
+            'transferid' => $this->transfer->id,
+            'timemodified' => $datetime->getTimestamp(),
+            'status' => $status,
+            'notes' => $notes,
+        ];
+        $DB->insert_record('local_remotebp_transfer_log', $log_data);
+
+        // If set, change also public status in the transfer table,
+        // but make change if and only if the transfer
+        // does not already have the given status.
+        if ($public_status !== null && $public_status != $this->transfer->status) {
+            $transfer_data = (object) [
+                'id' => $this->transfer->id,
+                'status' => $public_status,
+                'timemodified' => $datetime->getTimestamp(),
+            ];
+            $DB->update_record('local_remotebp_transfer', $transfer_data);
+
+            // Update information in this instance.
+            $this->transfer->status = $public_status;
+            $this->transfer->timemodified = $datetime->getTimestamp();
+        }
+    }
+
 
     /**
      * Returns URL of the remote.

@@ -43,47 +43,93 @@ class local_remote_backup_provider_renderer extends plugin_renderer_base {
     }
 
     public function render_admin_remote_list(array $remotes) {
+        global $CFG;
+
+        require_once($CFG->libdir . '/tablelib.php');
+
         $table = new \flexible_table('local_remote_backup_provider__remote_list');
-            $table->define_columns(['name', 'address', 'active', /*'position'*/]);
-            $table->define_headers([
-                get_string('remote_name', 'local_remote_backup_provider'),
-                get_string('remote_url', 'local_remote_backup_provider'),
-                get_string('remote_active', 'local_remote_backup_provider'),
-                // @todo Implement move action
-                //get_string('remote_position', 'local_remote_backup_provider'),
-            ]);
-            $table->set_attribute('class', 'admintable generaltable');
-            $table->setup();
-    
-            foreach ($remotes as $key => $remote) {    
-                $row = [];
-                $class = '';
-            
-                $row[] = $remote->name;
-                $row[] = \html_writer::link($remote->address, $remote->address);
-            
-                if ($remote->active) {
-                    $row[] = $this->pix_icon('i/hide', get_string('hide', 'local_remote_backup_provider'));
-                } else {
-                    $row[] = $this->pix_icon('i/show', get_string('show', 'local_remote_backup_provider'));
-                    $class = 'dimmed_text';
-                }
-            
-                /* @todo Implement move action
-                $position = '';
-                reset($remotes);
-                if ($key !== key($remotes)) {
-                    $position .= $this->pix_icon('i/up', get_string('move_up', 'local_remote_backup_provider'));
-                }
-                end($remotes);
-                if ($key !== key($remotes)) {
-                    $position .= $this->pix_icon('i/down', get_string('move_down', 'local_remote_backup_provider'));
-                }
-                $row[] = $position;
-                */
-    
-                $table->add_data($row, $class);
+        $table->define_columns(['name', 'address', 'active', /*'position'*/]);
+        $table->define_headers([
+            get_string('remote_name', 'local_remote_backup_provider'),
+            get_string('remote_url', 'local_remote_backup_provider'),
+            get_string('remote_active', 'local_remote_backup_provider'),
+            // @todo Implement move action
+            //get_string('remote_position', 'local_remote_backup_provider'),
+        ]);
+        $table->set_attribute('class', 'admintable generaltable');
+        $table->setup();
+
+        foreach ($remotes as $key => $remote) {    
+            $row = [];
+            $class = '';
+        
+            $row[] = $remote->name;
+            $row[] = \html_writer::link($remote->address, $remote->address);
+        
+            if ($remote->active) {
+                $row[] = $this->pix_icon('i/hide', get_string('hide', 'local_remote_backup_provider'));
+            } else {
+                $row[] = $this->pix_icon('i/show', get_string('show', 'local_remote_backup_provider'));
+                $class = 'dimmed_text';
             }
-            return $table->finish_output();
-      }
+        
+            /* @todo Implement move action
+            $position = '';
+            reset($remotes);
+            if ($key !== key($remotes)) {
+                $position .= $this->pix_icon('i/up', get_string('move_up', 'local_remote_backup_provider'));
+            }
+            end($remotes);
+            if ($key !== key($remotes)) {
+                $position .= $this->pix_icon('i/down', get_string('move_down', 'local_remote_backup_provider'));
+            }
+            $row[] = $position;
+            */
+
+            $table->add_data($row, $class);
+        }
+        return $table->finish_output();
+    }
+
+    public function render_front_transfer_list(array $transfers) {
+        global $CFG;
+
+        require_once($CFG->libdir . '/tablelib.php');
+        require_once($CFG->libdir . '/moodlelib.php');
+        
+        $table = new \flexible_table('local_remote_backup_provider__transfer_list');
+        $table->define_columns(['name', 'added', 'status', 'actions']);
+        $table->define_headers([
+            get_string('full_course_name', 'local_remote_backup_provider'),
+            get_string('time_created', 'local_remote_backup_provider'),
+            get_string('status', 'local_remote_backup_provider'),
+            get_string('actions', 'local_remote_backup_provider'),
+        ]);
+        $table->set_attribute('class', 'admintable generaltable');
+        $table->setup();
+
+        foreach ($transfers as $transfer) {    
+            $row = [];
+        
+            $row[] = $transfer->remotecoursename;
+            $row[] = userdate($transfer->timecreated);
+            $row[] = '<span class="badge badge-' . \local_remote_backup_provider\helper\transfer_manager::LABEL_FOR_STATUS[$transfer->status] . '">'
+                    . get_string('transfer_status_' . $transfer->status, 'local_remote_backup_provider')
+                    . '</span> ' 
+                    . $this->pix_icon('i/scheduled', userdate($transfer->timemodified));
+            
+            $actions = [];
+            if ($transfer->courseid !== null
+                    && $transfer->status === \local_remote_backup_provider\helper\transfer_manager::STATUS_FINISHED) {
+                $actions[] = \html_writer::link(
+                        new \moodle_url('/course/view.php', ['id' => $transfer->courseid]),
+                        $this->pix_icon('t/right', get_string('continue_to_course', 'local_remote_backup_provider'))
+                );
+            }
+                    $row[] = implode(' ', $actions);
+        
+            $table->add_data($row);
+        }
+        return $table->finish_output();
+    }
 }

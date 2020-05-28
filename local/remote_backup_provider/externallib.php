@@ -43,7 +43,7 @@ class local_remote_backup_provider_external extends external_api {
     public static function find_courses_parameters() {
         return new external_function_parameters(
             array(
-                'search' => new external_value(PARAM_CLEAN, 'search'),
+                'search' => new external_value(PARAM_TEXT, 'search'),
             )
         );
     }
@@ -240,6 +240,9 @@ class local_remote_backup_provider_external extends external_api {
             self::get_course_backup_by_id_parameters(), array('id' => $id, 'username' => $username)
         );
 
+        //ini_set('max_execution_time', 1);
+        //sleep(10);
+
         // Extract the userid from the username.
         $userid = $DB->get_field('user', 'id', array('username' => $username));
 
@@ -326,6 +329,51 @@ class local_remote_backup_provider_external extends external_api {
         return new external_single_structure(
             array(
                 'url' => new external_value(PARAM_RAW, 'url of the backup file'),
+            )
+        );
+    }
+
+    /**
+     * Parameter description for get_course_name_by_id().
+     *
+     * @return external_function_parameters
+     */
+    public static function get_course_name_by_id_parameters() {
+        return new external_function_parameters(
+            array(
+                'id' => new external_value(PARAM_INT, 'id'),
+            )
+        );
+    }
+
+    /**
+     * Get name of the course.
+     *
+     * @param int $id the course id
+     * @return array|bool An array containing the url or false on failure
+     */
+    public static function get_course_name_by_id($id) {
+        global $DB;
+        // Validate parameters passed from web service.
+        $params = self::validate_parameters(
+            self::get_course_name_by_id_parameters(), array('id' => $id)
+        );
+
+        $course = $DB->get_record('course', array('id' => $id));
+
+        if ($course === false) return ['name' => ''];
+        return ['name' => $course->fullname];
+    }
+
+    /**
+     * Parameter description for get_course_name_by_id().
+     *
+     * @return external_description
+     */
+    public static function get_course_name_by_id_returns() {
+        return new external_single_structure(
+            array(
+                'name' => new external_value(PARAM_TEXT, 'name of the course'),
             )
         );
     }

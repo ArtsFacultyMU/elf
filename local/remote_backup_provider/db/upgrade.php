@@ -70,4 +70,50 @@ function xmldb_local_remote_backup_provider_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2020051400, 'local', 'remote_backup_provider');
     }
       
+    if ($oldversion < 2020052800) {
+
+        // Define table local_remotebp_transfer to be created.
+        $table = new xmldb_table('local_remotebp_transfer');
+
+        // Adding fields to table local_remotebp_transfer.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('remoteid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('remotecourseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('remotecoursename', XMLDB_TYPE_CHAR, '254', null, null, null, null);
+        $table->add_field('remotebackupurl', XMLDB_TYPE_CHAR, '1024', null, null, null, null);
+        $table->add_field('courseid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+        $table->add_field('status', XMLDB_TYPE_CHAR, '20', null, XMLDB_NOTNULL, null, 'added');
+        $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+
+        // Adding keys to table local_remotebp_transfer.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+
+        // Conditionally launch create table for local_remotebp_transfer.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // Define table local_remotebp_transfer_log to be created.
+        $table = new xmldb_table('local_remotebp_transfer_log');
+
+        // Adding fields to table local_remotebp_transfer_log.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('transferid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('status', XMLDB_TYPE_CHAR, '1024', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('notes', XMLDB_TYPE_TEXT, null, null, null, null, null);
+
+        // Adding keys to table local_remotebp_transfer_log.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+
+        // Conditionally launch create table for local_remotebp_transfer_log.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // Remote_backup_provider savepoint reached.
+        upgrade_plugin_savepoint(true, 2020052800, 'local', 'remote_backup_provider');
+    }
 }

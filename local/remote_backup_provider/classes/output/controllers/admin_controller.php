@@ -35,7 +35,6 @@ class admin_controller {
     public function remoteListAction() {
         global $PAGE, $DB, $CFG;
         require_once($CFG->libdir . '/adminlib.php');
-        require_once($CFG->libdir . '/tablelib.php');
 
         admin_externalpage_setup('local-remote_backup_provider-remote_list');
 

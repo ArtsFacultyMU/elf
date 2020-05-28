@@ -49,4 +49,12 @@ $functions = array(
          'type' => 'read',
          'capabilities' => 'moodle/backup:backupcourse',
     ),
+    'local_remote_backup_provider_get_course_name_by_id' => array(
+          'classname' => 'local_remote_backup_provider_external',
+          'methodname' => 'get_course_name_by_id',
+          'classpath' => 'local/remote_backup_provider/externallib.php',
+          'description' => 'Return name of the course.',
+          'type' => 'read',
+          'capabilities' => 'moodle/course:viewhiddencourses',
+     ),
 );
