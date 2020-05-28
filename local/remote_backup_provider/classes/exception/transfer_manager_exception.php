@@ -27,8 +27,9 @@ defined('MOODLE_INTERNAL') || die();
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class transfer_manager_exception extends \moodle_exception {
-    const CODE_RESTORE_INVALID_BACKUP_FILE = 'restore_error_invalid_backup_file';
-    const CODE_RESTORE_PRECHECK_FAILED = 'restore_error_precheck_failed';
+    const CODE_RESTORE_INVALID_BACKUP_FILE = 'exception_tm_restore_error_invalid_backup_file';
+    const CODE_RESTORE_PRECHECK_FAILED = 'exception_tm_restore_error_precheck_failed';
+    const CODE_RECORD_DOES_NOT_EXIST = 'exception_tm_record_does_not_exist';
 
     /**
      * {@inheritdoc}

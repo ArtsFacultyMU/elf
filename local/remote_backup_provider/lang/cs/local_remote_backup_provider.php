@@ -23,6 +23,10 @@
  */
 
 $string['remove_old_task'] = 'Odstranit staré soubory zálohy';
+$string['create_backup_task'] = 'Vytvořit vzdálenou zálohu';
+$string['transfer_backup_task'] = 'Převést vzdálenou zálohu na lokální';
+$string['restore_backup_task'] = 'Obnovit kurz ze zálohy';
+
 $string['import'] = 'Nahrávání ze vzdálené instalace';
 $string['pluginname'] = 'Poskytovatel vzdálené zálohy';
 $string['privacy:metadata'] = 'Modul Poskytovatel vzdálené zálohy neuchovává žádné osobní údaje.';
@@ -33,14 +37,24 @@ $string['wstoken_desc'] = 'Doplňte token pro webové služby ze vzdálené inst
 
 $string['available_courses_search'] = 'Hledat kurzy ve vzdálené instalaci';
 $string['available_courses'] = 'Dostupné kurzy ve vzdálené instalaci';
+$string['issued_transfers'] = 'Zadané převody';
+
 $string['short_course_name'] = 'Zkrácený název';
 $string['full_course_name'] = 'Celý název';
+$string['time_created'] = 'Čas přidání';
+$string['status'] = 'Stav';
+$string['actions'] = 'Akce';
 $string['no_courses_found'] = 'Nebyly nalezeny žádné kurzy';
 $string['button_import'] = 'Nahrát';
 
+$string['back_to_selection'] = 'Zpět na výběr';
+$string['continue_to_course'] = 'Přejít do převedeného kurzu';
+$string['courses_issued_for_transfer'] = 'Kurzy jsou nachystány k převodu';
+
 $string['restore_error_invalid_extension'] = 'Obnova nebyla úspěšná: Neplatná přípona souboru.';
-$string['restore_error_invalid_backup_file'] = 'Obnova nebyla úspěšná: Neplatný soubor zálohy.';
-$string['restore_error_precheck_failed'] = 'Obnova nebyla úspěšná: Selhala předběžná kontrola.';
+$string['exception_tm_restore_error_invalid_backup_file'] = 'Obnova nebyla úspěšná: Neplatný soubor zálohy.';
+$string['exception_tm_restore_error_precheck_failed'] = 'Obnova nebyla úspěšná: Selhala předběžná kontrola.';
+$string['exception_tm_record_does_not_exist'] = 'Převod nebyl úspěšný: Neexistující záznam v databázi.';
 
 $string['import_success'] = 'Kurz s ID %s byl úspěšně nahrán do nového kurzu <i><a href="%s" target="_blank">%s</a></i>.';
 $string['import_failure'] = 'Při nahrávání kurzu s ID %s nastal následující problém:';
@@ -70,3 +84,8 @@ $string['move_down'] = 'Posunout dolů';
 $string['remote_not_found'] = 'Vzdálená instalace nebyla nalezena.';
 $string['remote_added'] = 'Vzdálená instalace byla úspěšně přidána.';
 $string['remote_updated'] = 'Vzdálená instalace byla úspěšně upravena.';
+
+$string['transfer_status_added'] = 'Kurz přidán';
+$string['transfer_status_error'] = 'Chyba převodu';
+$string['transfer_status_processing'] = 'Převod probíhá';
+$string['transfer_status_finished'] = 'Převod dokončen';

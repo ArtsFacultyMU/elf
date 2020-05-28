@@ -23,6 +23,10 @@
  */
 
 $string['remove_old_task'] = 'Remove old remote backup files';
+$string['create_backup_task'] = 'Create backup on remote';
+$string['transfer_backup_task'] = 'Move backup from remote to local instalation';
+$string['restore_backup_task'] = 'Restore course from backup';
+
 $string['import'] = 'Import from remote';
 $string['pluginname'] = 'Remote backup provider';
 $string['privacy:metadata'] = 'The Remote backup provider plugin does not store any personal data.';
@@ -33,14 +37,24 @@ $string['wstoken_desc'] = 'Add the web service token from the remote site.';
 
 $string['available_courses_search'] = 'Search available source courses';
 $string['available_courses'] = 'Available source courses';
+$string['issued_transfers'] = 'Issued transfers';
+
 $string['short_course_name'] = 'Short name';
 $string['full_course_name'] = 'Full name';
+$string['time_created'] = 'Issued';
+$string['status'] = 'Status';
+$string['actions'] = 'Actions';
 $string['no_courses_found'] = 'No courses found';
 $string['button_import'] = 'Import';
 
+$string['back_to_selection'] = 'Back to selection';
+$string['continue_to_course'] = 'Continue to transfered course';
+$string['courses_issued_for_transfer'] = 'Courses are issued to transfer';
+
 $string['restore_error_invalid_extension'] = 'Restore failed: Invalid file extension.';
-$string['restore_error_invalid_backup_file'] = 'Restore failed: Invalid backup file.';
-$string['restore_error_precheck_failed'] = 'Restore failed: Precheck failed.';
+$string['exception_tm_restore_error_invalid_backup_file'] = 'Restore failed: Invalid backup file.';
+$string['exception_tm_restore_error_precheck_failed'] = 'Restore failed: Precheck failed.';
+$string['exception_tm_record_does_not_exist'] = 'Transfer failed: Database record does not exist.';
 
 $string['import_success'] = 'Remote course with ID %s was successfully imported into the course <i><a href="%s" target="_blank">%s</a></i>.';
 $string['import_failure'] = 'Remote course with ID %s was not succesfully imported. The following error might be helpful:';
@@ -71,3 +85,8 @@ $string['move_down'] = 'Move down';
 $string['remote_not_found'] = 'Remote wasn\'t found.';
 $string['remote_added'] = 'Remote was successfully added.';
 $string['remote_updated'] = 'Remote was successfully updated.';
+
+$string['transfer_status_added'] = 'Issued';
+$string['transfer_status_error'] = 'Error';
+$string['transfer_status_processing'] = 'Processing';
+$string['transfer_status_finished'] = 'Finished';

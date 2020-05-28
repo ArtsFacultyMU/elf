@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.1.0
+
+- Changed transfer to the series of ad hoc tasks
+
 ## 4.0.0
 
 - Added multiple remote support

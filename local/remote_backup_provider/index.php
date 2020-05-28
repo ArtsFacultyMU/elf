@@ -37,6 +37,11 @@ switch ($section) {
         $controller->processAction();
         break;
 
+    case 'status':
+        $controller = new local_remote_backup_provider\output\controllers\front_controller();
+        $controller->statusAction();
+        break;
+
     case 'admin_remote_list':
         $controller = new local_remote_backup_provider\output\controllers\admin_controller();
         $controller->remoteListAction();
