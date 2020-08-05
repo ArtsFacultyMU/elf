@@ -359,9 +359,14 @@ class local_remote_backup_provider_external extends external_api {
             self::get_course_name_by_id_parameters(), array('id' => $id)
         );
 
+        // Capability check.
+        if (!has_capability('moodle/course:viewhiddencourses', context_system::instance())) {
+            return false;
+        }
+
         $course = $DB->get_record('course', array('id' => $id));
 
-        if ($course === false) return ['name' => ''];
+        if ($course === false) return false;
         return ['name' => $course->fullname];
     }
 
@@ -374,6 +379,116 @@ class local_remote_backup_provider_external extends external_api {
         return new external_single_structure(
             array(
                 'name' => new external_value(PARAM_TEXT, 'name of the course'),
+            )
+        );
+    }
+
+    /**
+     * Parameter description for get_course_category_by_id().
+     *
+     * @return external_function_parameters
+     */
+    public static function get_course_category_by_id_parameters() {
+        return new external_function_parameters(
+            array(
+                'id' => new external_value(PARAM_INT, 'id'),
+            )
+        );
+    }
+
+    /**
+     * Get name of the course.
+     *
+     * @param int $id the course id
+     * @return array|bool An array containing the url or false on failure
+     */
+    public static function get_course_category_by_id($id) {
+        global $DB;
+        // Validate parameters passed from web service.
+        $params = self::validate_parameters(
+            self::get_course_category_by_id_parameters(), array('id' => $id)
+        );
+
+        // Capability check.
+        if (!has_capability('moodle/course:viewhiddencourses', context_system::instance())) {
+            return false;
+        }
+
+        $course = $DB->get_record('course', array('id' => $id));
+
+        if ($course === false) return false;
+        return ['category' => $course->category];
+    }
+
+    /**
+     * Parameter description for get_course_name_by_id().
+     *
+     * @return external_description
+     */
+    public static function get_course_category_by_id_returns() {
+        return new external_single_structure(
+            array(
+                'category' => new external_value(PARAM_INT, 'id of the category'),
+            )
+        );
+    }
+
+    /**
+     * Parameter description for get_course_category_by_id().
+     *
+     * @return external_function_parameters
+     */
+    public static function get_category_info_parameters() {
+        return new external_function_parameters(
+            array(
+                'id' => new external_value(PARAM_TEXT, 'id'),
+            )
+        );
+    }
+
+    /**
+     * Get name of the course.
+     *
+     * @param int $id the course id
+     * @return array|bool An array containing the url or false on failure
+     */
+    public static function get_category_info($id) {
+        global $DB;
+        // Validate parameters passed from web service.
+        $params = self::validate_parameters(
+            self::get_course_name_by_id_parameters(), array('id' => $id)
+        );
+
+        // Capability check.
+        if (!has_capability('moodle/course:viewhiddencourses', context_system::instance())) {
+            return false;
+        }
+
+        $category = $DB->get_record('course_categories', array('id' => $id));
+
+        if ($category === false) return false;
+        return [
+            'id' => $category->id,
+            'name' => $category->name,
+            'idnumber' => $category->idnumber,
+            'path' => $category->path,
+            'visible' => (int)$category->visible,
+        ];
+    }
+
+    /**
+     * Parameter description for get_course_name_by_id().
+     *
+     * @return external_description
+     */
+    public static function get_category_info_returns() {
+        return new external_single_structure(
+            array(
+                'id' => new external_value(PARAM_INT, 'id of the category'),
+                'name' => new external_value(PARAM_TEXT, 'name of the category'),
+                'idnumber' => new external_value(PARAM_TEXT, 'idnumber of the category'),
+                'path' => new external_value(PARAM_TEXT, 'path to the category'),
+                'visible' => new external_value(PARAM_INT, 'is category visible?'),
             )
         );
     }
