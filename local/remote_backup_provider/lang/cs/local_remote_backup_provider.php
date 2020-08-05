@@ -26,6 +26,8 @@ $string['remove_old_task'] = 'Odstranit staré soubory zálohy';
 $string['create_backup_task'] = 'Vytvořit vzdálenou zálohu';
 $string['transfer_backup_task'] = 'Převést vzdálenou zálohu na lokální';
 $string['restore_backup_task'] = 'Obnovit kurz ze zálohy';
+$string['enrol_teacher_task'] = 'Zapsat učitele do kurzu';
+$string['categorize_task'] = 'Zařadit kurz do kategorie';
 
 $string['import'] = 'Nahrávání ze vzdálené instalace';
 $string['pluginname'] = 'Poskytovatel vzdálené zálohy';

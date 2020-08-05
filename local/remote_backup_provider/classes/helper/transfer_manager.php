@@ -18,6 +18,7 @@ namespace local_remote_backup_provider\helper;
 
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/filelib.php');
+require_once($CFG->dirroot.'/course/lib.php');
 
 use local_remote_backup_provider\exception\transfer_manager_exception;
 use local_remote_backup_provider\exception\configuration_exception;
@@ -56,6 +57,16 @@ class transfer_manager {
      * URL parameters to get course backup.
      */
     const URL_PARAMS_NAME = '&wsfunction=local_remote_backup_provider_get_course_name_by_id';
+
+    /**
+     * URL parameters to get course backup.
+     */
+    const URL_PARAMS_CATEGORYID = '&wsfunction=local_remote_backup_provider_get_course_category_by_id';
+
+    /**
+     * URL parameters to get course backup.
+     */
+    const URL_PARAMS_CATEGORYINFO = '&wsfunction=local_remote_backup_provider_get_category_info';
 
     const STATUS_ADDED = 'added';
     const STATUS_PROCESSING = 'processing';
@@ -393,7 +404,7 @@ class transfer_manager {
         $DB->update_record('local_remotebp_transfer', $transfer_data);
         $this->transfer->courseid = $courseid;
 
-        $this->change_status('Restoration ended successfully.', (string)$courseid, self::STATUS_FINISHED);
+        $this->change_status('Restoration ended successfully.', (string)$courseid, self::STATUS_PROCESSING);
         return true;
     }
 
@@ -447,5 +458,102 @@ class transfer_manager {
      */
     public function get_remote_url() {
         return $this->remote->address;
+    }
+
+    /**
+     * Enrol user as (editing) teacher
+     */
+    public function enrol_teacher() {
+        global $DB;
+
+        $this->change_status('Enroling teacher to the course.', null, self::STATUS_PROCESSING);
+
+        $teacherrole = $DB->get_record('role', ['shortname' => 'editingteacher']);
+        $manualenrol = enrol_get_plugin('manual');
+        
+        $enrolinstance = $DB->get_record('enrol', array('courseid' => $this->transfer->courseid, 'enrol'=>'manual'), '*', MUST_EXIST);
+
+        $manualenrol->enrol_user($enrolinstance, $this->transfer->userid, $teacherrole->id);
+
+        $this->change_status('Teacher enroled successfully.', null, self::STATUS_PROCESSING);
+    }
+
+    /**
+     * Putting course into corresponding category.
+     */
+    public function categorize() {
+        $this->change_status('Categorizing the course.', null, self::STATUS_PROCESSING);
+
+        $this->change_status('Getting category id from remote.', null, self::STATUS_PROCESSING);
+        $url = sprintf(self::URL_BASE_FORMAT, $this->remote->address, $this->remote->token) . self::URL_PARAMS_CATEGORYID;
+        $params = array('id' => $this->transfer->remotecourseid);
+        $curl = new \curl;
+        $results = json_decode($curl->post($url, $params));
+
+
+        $category = $this->_get_local_category($results->category);
+
+        move_courses([$this->transfer->courseid], $category);
+
+        $this->change_status('Categorization finished successfully.', null, self::STATUS_FINISHED);
+    }
+
+    protected function _get_local_category($remotecategoryid) {
+        global $DB;
+
+        $this->change_status('Looking for corresponding local category.',
+                json_encode(['remote' => $this->remote->id, 'remote_category' => $remotecategoryid]),
+                self::STATUS_PROCESSING);
+
+        $record = $DB->get_record('local_remotebp_categories', [
+                    'remoteid' => $this->remote->id,
+                    'remotecategoryid' => $remotecategoryid,
+                ], 'categoryid', IGNORE_MULTIPLE);
+
+        // If found, return its local ID
+        if ($record) {
+            $this->change_status('Category found.',
+                    $record->categoryid,
+                    self::STATUS_PROCESSING);
+
+            return (int)$record->categoryid;
+        }
+
+        // If not, create a new one
+        $this->change_status('Remote category not found locally, creating.',
+                json_encode(['remote' => $this->remote->id, 'remote_category' => $remotecategoryid]),
+                self::STATUS_PROCESSING);
+
+        $url = sprintf(self::URL_BASE_FORMAT, $this->remote->address, $this->remote->token) . self::URL_PARAMS_CATEGORYINFO;
+        $params = array('id' => $remotecategoryid);
+        $curl = new \curl;
+        $results = json_decode($curl->post($url, $params));
+
+        $data = new \stdClass();
+        
+        $this->change_status('Looking for parent category.', $results->path, self::STATUS_PROCESSING);
+        $path = explode('/', $results->path);
+        array_pop($path); // Removing current category from the end.
+        $parent = array_pop($path);        
+        if ($parent !== '') {
+            $data->parent = $this->_get_local_category($parent);
+        }
+
+        $data->idnumber = $results->idnumber;
+        $data->name = $results->name;
+        $data->visible = (int)$results->visible;
+
+        $this->change_status('Creating a new local category.', json_encode($data), self::STATUS_PROCESSING);
+        $category = \core_course_category::create($data);
+
+        $this->change_status('Saving link to newly created category for later use in transfers.', $category->id, self::STATUS_PROCESSING);
+
+        $record = $DB->insert_record('local_remotebp_categories', (object)[
+            'remoteid' => $this->remote->id,
+            'remotecategoryid' => $remotecategoryid,
+            'categoryid' => $category->id,
+        ], 'categoryid', IGNORE_MULTIPLE);
+
+        return (int)$category->id;
     }
 }

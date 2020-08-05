@@ -27,25 +27,25 @@ namespace local_remote_backup_provider\task;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Ad hoc (immediate) task to restore course from backup.
+ * Ad hoc (immediate) task to enrol teacher to the newly created course.
  *
  * @package    local_remote_backup_provider
  * @copyright  2020 Masaryk University
  * @author     Vojtěch Mrkývka <vojtech.mrkyvka@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class transfer_restore_backup extends \core\task\adhoc_task {
+class postprocessing_enrol_teacher extends \core\task\adhoc_task {
     /**
      * Get the name of the task.
      *
      * @return string the name of the task
      */
     public function get_name() {
-        return get_string('restore_backup_task', 'local_remote_backup_provider');
+        return get_string('enrol_teacher_task', 'local_remote_backup_provider');
     }
 
     /**
-     * Restores course from backup.
+     * Enrols teacher to the course.
      *
      * @return bool Always returns true
      */
@@ -56,15 +56,15 @@ class transfer_restore_backup extends \core\task\adhoc_task {
         mtrace('Start transfer manager.');
         $transfer_manager = new \local_remote_backup_provider\helper\transfer_manager($data->transfer_id);
 
-        mtrace('Call for restore.');
-        $transfer_manager->restore();
+        mtrace('Call for enroling teacher.');
+        $transfer_manager->enrol_teacher();
 
-        mtrace('Queue teacher enrol task.');
-        $enrol_task = new postprocessing_enrol_teacher();
-        $enrol_task->set_custom_data(array(
+        mtrace('Queue categorization task.');
+        $categorize_task = new postprocessing_categorize();
+        $categorize_task->set_custom_data(array(
             'transfer_id' => $data->transfer_id,
         ));
-        \core\task\manager::queue_adhoc_task($enrol_task);
+        \core\task\manager::queue_adhoc_task($categorize_task);
 
         mtrace('Finish.');
         return true;

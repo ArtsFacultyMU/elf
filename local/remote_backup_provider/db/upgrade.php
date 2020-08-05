@@ -71,7 +71,6 @@ function xmldb_local_remote_backup_provider_upgrade($oldversion) {
     }
       
     if ($oldversion < 2020052800) {
-
         // Define table local_remotebp_transfer to be created.
         $table = new xmldb_table('local_remotebp_transfer');
 
@@ -115,5 +114,27 @@ function xmldb_local_remote_backup_provider_upgrade($oldversion) {
 
         // Remote_backup_provider savepoint reached.
         upgrade_plugin_savepoint(true, 2020052800, 'local', 'remote_backup_provider');
+    }
+
+    if ($oldversion < 2020080500) {
+        // Define table local_remotebp_categories to be created.
+        $table = new xmldb_table('local_remotebp_categories');
+
+        // Adding fields to table local_remotebp_categories.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('remoteid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('remotecategoryid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('categoryid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+
+        // Adding keys to table local_remotebp_categories.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+
+        // Conditionally launch create table for local_remotebp_categories.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // Remote_backup_provider savepoint reached.
+        upgrade_plugin_savepoint(true, 2020080500, 'local', 'remote_backup_provider');
     }
 }
