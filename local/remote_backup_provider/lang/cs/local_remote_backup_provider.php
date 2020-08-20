@@ -45,9 +45,13 @@ $string['short_course_name'] = 'Zkrácený název';
 $string['full_course_name'] = 'Celý název';
 $string['time_created'] = 'Čas přidání';
 $string['status'] = 'Stav';
+$string['issuer'] = 'Zadal(a)';
 $string['actions'] = 'Akce';
 $string['no_courses_found'] = 'Nebyly nalezeny žádné kurzy';
 $string['button_import'] = 'Nahrát';
+$string['timestamp'] = 'Časová značka';
+$string['notes'] = 'Poznámky';
+
 
 $string['back_to_selection'] = 'Zpět na výběr';
 $string['continue_to_course'] = 'Přejít do převedeného kurzu';
@@ -71,6 +75,8 @@ $string['remote_not_found'] = 'Vzdálená instalace nebyla nalezena.';
 $string['admin_remote_list'] = 'Seznam vzdálených instalací';
 $string['admin_remote_edit'] = 'Upravit vzdálenou instalaci';
 $string['admin_remote_add'] = 'Přidat vzdálenou instalaci';
+$string['admin_transfer_log'] = 'Záznamy o převodech';
+$string['admin_detailed_log'] = 'Detailní záznamy o převodech';
 
 $string['remote_name'] = 'Název';
 $string['remote_url'] = 'URL';
@@ -86,6 +92,7 @@ $string['move_down'] = 'Posunout dolů';
 $string['remote_not_found'] = 'Vzdálená instalace nebyla nalezena.';
 $string['remote_added'] = 'Vzdálená instalace byla úspěšně přidána.';
 $string['remote_updated'] = 'Vzdálená instalace byla úspěšně upravena.';
+$string['transfer_not_found'] = 'Přenos nebyl nalezen.';
 
 $string['transfer_status_added'] = 'Kurz přidán';
 $string['transfer_status_error'] = 'Chyba převodu';

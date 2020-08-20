@@ -112,4 +112,78 @@ class admin_controller {
         $form->display();
         echo $output->footer();
     }
+
+    public function transferLogAction() {
+        global $DB, $CFG, $PAGE;
+
+        require_once($CFG->libdir . '/adminlib.php');
+
+        admin_externalpage_setup('local-remote_backup_provider-transfer_log');
+
+        // Getting which remote courses to display.
+        $remote_id = optional_param('remote', 0, PARAM_INT);
+
+        // Get list of all (visible) remotes.
+        $remote_manager = new \local_remote_backup_provider\helper\remote_manager();
+        $remotes = $remote_manager->getRemotes();
+        if (!$remotes) {
+            throw new \local_remote_backup_provider\exception\configuration_exception(
+                    \local_remote_backup_provider\exception\configuration_exception::CODE_NO_REMOTE);
+        }
+
+        // Set remote to default (currently one on the first position) if not specified.
+        if ($remote_id === 0) {
+            $remote_data = current($remotes);
+            $remote_id = (int)$remote_data->id;
+            unset($remote_data);
+        }
+
+        // Get chosen remote data (throws an exception if invalid).
+        $remote = $remote_manager->getRemote($remote_id);
+
+        $PAGE->set_title(get_string('import', 'local_remote_backup_provider'));
+        $PAGE->set_heading(get_string('import', 'local_remote_backup_provider'));
+
+        $output = $PAGE->get_renderer('local_remote_backup_provider');
+
+        echo $output->header();
+
+        // Print remote tabs.
+        $remote_tabs = new \local_remote_backup_provider\output\renderables\front_remote_tabs_renderable();
+        $remote_tabs->setRemote($remote_id);
+        $remote_tabs->setRemotes($remotes);
+        $remote_tabs->setUrl(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_transfer_log']));
+        echo $output->render($remote_tabs);
+
+        // Print the transfer table.
+        $transfers = $DB->get_records('local_remotebp_transfer', [
+            'remoteid' => $remote_id,
+        ], 'timecreated');
+
+        echo $output->render_admin_transfer_log($transfers, $remote_id);
+        echo $output->footer();
+    }
+
+    public function detailedLogAction() {
+        global $PAGE, $CFG, $DB;
+
+        require_once($CFG->libdir . '/adminlib.php');
+        admin_externalpage_setup('local-remote_backup_provider-detailed_log');
+
+        $transfer_id = optional_param('id', 0, PARAM_INT);
+
+        try {
+            $transfer = new \local_remote_backup_provider\helper\transfer_manager($transfer_id);
+        } catch (\local_remote_backup_provider\exception\transfer_manager_exception $e) {
+            redirect(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_transfer_log']), get_string('transfer_not_found', 'local_remote_backup_provider'), null, \core\output\notification::NOTIFY_WARNING);
+        }
+
+        $logs = $DB->get_records('local_remotebp_transfer_log', ['transferid' => $transfer_id]);
+        
+
+        $output = $PAGE->get_renderer('local_remote_backup_provider');
+        echo $output->header();
+        echo $output->render_admin_detailed_log($logs);
+        echo $output->footer();
+    }
 }

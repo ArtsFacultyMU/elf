@@ -33,4 +33,10 @@ if ($hassiteconfig) {
 
     $settings = new admin_externalpage('local-remote_backup_provider-remote_edit', get_string('admin_remote_add', 'local_remote_backup_provider'), new moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_remote_edit']));
     $ADMIN->add('local-remote_backup_provider', $settings);
+
+    $settings = new admin_externalpage('local-remote_backup_provider-transfer_log', get_string('admin_transfer_log', 'local_remote_backup_provider'), new moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_transfer_log']));
+    $ADMIN->add('local-remote_backup_provider', $settings);
+
+    $settings = new admin_externalpage('local-remote_backup_provider-detailed_log', get_string('admin_detailed_log', 'local_remote_backup_provider'), new moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_detailed_log']), 'moodle/site:config', true);
+    $ADMIN->add('local-remote_backup_provider', $settings);
 }

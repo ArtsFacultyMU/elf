@@ -45,9 +45,12 @@ $string['short_course_name'] = 'Short name';
 $string['full_course_name'] = 'Full name';
 $string['time_created'] = 'Issued';
 $string['status'] = 'Status';
+$string['issuer'] = 'Issuer';
 $string['actions'] = 'Actions';
 $string['no_courses_found'] = 'No courses found';
 $string['button_import'] = 'Import';
+$string['timestamp'] = 'Timestamp';
+$string['notes'] = 'Notes';
 
 $string['back_to_selection'] = 'Back to selection';
 $string['continue_to_course'] = 'Continue to transfered course';
@@ -72,6 +75,9 @@ $string['remote_not_found'] = 'Remote not found.';
 $string['admin_remote_list'] = 'List of remotes';
 $string['admin_remote_edit'] = 'Edit remote';
 $string['admin_remote_add'] = 'Add remote';
+$string['admin_transfer_log'] = 'Transfer log';
+$string['admin_detailed_log'] = 'Detailed transfer log';
+
 
 $string['remote_name'] = 'Name';
 $string['remote_url'] = 'URL';
@@ -87,6 +93,7 @@ $string['move_down'] = 'Move down';
 $string['remote_not_found'] = 'Remote wasn\'t found.';
 $string['remote_added'] = 'Remote was successfully added.';
 $string['remote_updated'] = 'Remote was successfully updated.';
+$string['transfer_not_found'] = 'Transfer wasn\'t found.';
 
 $string['transfer_status_added'] = 'Issued';
 $string['transfer_status_error'] = 'Error';
