@@ -22,52 +22,51 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once(dirname(__FILE__) . '/../../config.php');
-require_once('classes/transfer_manager.php');
-require_once('output/search_form/renderable.php');
-require_once('output/search_form/renderer.php');
-require_once('output/course_list/renderable.php');
-require_once('output/course_list/renderer.php');
+require_once(__DIR__ . '/../../config.php');
 
-$remote = optional_param_array('remote', [], PARAM_INT);
-$search = optional_param('search', '', PARAM_NOTAGS);
+$section = optional_param('section', '', PARAM_ALPHAEXT);
 
-require_login();
-$PAGE->set_url('/local/remote_backup_provider/index.php');
-$PAGE->set_pagelayout('report');
-$returnurl = new moodle_url('/', array('redirect' => 0,));
+switch ($section) {
+    case 'list':
+        $controller = new local_remote_backup_provider\output\controllers\front_controller();
+        $controller->listAction();
+        break;
 
-// Check the permissions.
-$context = context_system::instance();
-require_capability('local/remote_backup_provider:access', $context);
+    case 'process':
+        $controller = new local_remote_backup_provider\output\controllers\front_controller();
+        $controller->processAction();
+        break;
 
-// Get config settings and initiate transfer manager.
-try {
-    $transfer_manager = new local_remote_backup_provider\transfer_manager();
-} catch (Exception $e) {
-    print_error('pluginnotconfigured', 'local_remote_backup_provider', $returnurl);
+    case 'status':
+        $controller = new local_remote_backup_provider\output\controllers\front_controller();
+        $controller->statusAction();
+        break;
+
+    case 'admin_remote_list':
+        $controller = new local_remote_backup_provider\output\controllers\admin_controller();
+        $controller->remoteListAction();
+        break;
+
+    case 'admin_remote_edit':
+        $controller = new local_remote_backup_provider\output\controllers\admin_controller();
+        $controller->remoteEditAction();
+        break;
+
+    case 'admin_transfer_log':
+        $controller = new local_remote_backup_provider\output\controllers\admin_controller();
+        $controller->transferLogAction();
+        break;
+
+    case 'admin_detailed_log':
+        $controller = new local_remote_backup_provider\output\controllers\admin_controller();
+        $controller->detailedLogAction();
+        break;
+
+    case '':
+        redirect(new moodle_url('/local/remote_backup_provider/index.php', ['section' => 'list']));
+        break;
+
+    default:
+        throw new moodle_exception('invalid_section', 'local_remote_backup_provider', new moodle_url('/'));
+        break;
 }
-
-$PAGE->set_title(get_string('import', 'local_remote_backup_provider'));
-$PAGE->set_heading(get_string('import', 'local_remote_backup_provider'));
-
-echo $OUTPUT->header();
-
-// Display the courses.
-if (!empty($search)) {
-    $courses = $transfer_manager->search($search);
-    echo $OUTPUT->heading(get_string('available_courses', 'local_remote_backup_provider'), 2);
-    echo html_writer::tag('p', html_writer::link(new moodle_url('/local/remote_backup_provider/index.php'), $OUTPUT->larrow() . ' ' . get_string('back_to_search', 'local_remote_backup_provider')));
-    $course_list_renderable = new local_remote_backup_provider\output\course_list\renderable($courses);
-    $course_list_renderer = $PAGE->get_renderer('local_remote_backup_provider', 'course_list');
-    echo $course_list_renderer->render_course_list($course_list_renderable, $courses, $transfer_manager->get_remote_url());
-
-// Show the search form.
-} else {
-    echo $OUTPUT->heading(get_string('available_courses_search', 'local_remote_backup_provider'), 2);
-    $form_renderable = new local_remote_backup_provider\output\search_form\renderable();
-    $form_renderer = $PAGE->get_renderer('local_remote_backup_provider', 'search_form');
-    echo $form_renderer->render_form($form_renderable);
-}
-
-echo $OUTPUT->footer();

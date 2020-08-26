@@ -43,7 +43,7 @@ class local_remote_backup_provider_external extends external_api {
     public static function find_courses_parameters() {
         return new external_function_parameters(
             array(
-                'search' => new external_value(PARAM_CLEAN, 'search'),
+                'search' => new external_value(PARAM_TEXT, 'search'),
             )
         );
     }
@@ -240,12 +240,45 @@ class local_remote_backup_provider_external extends external_api {
             self::get_course_backup_by_id_parameters(), array('id' => $id, 'username' => $username)
         );
 
+        //ini_set('max_execution_time', 1);
+        //sleep(10);
+
         // Extract the userid from the username.
         $userid = $DB->get_field('user', 'id', array('username' => $username));
 
         // Instantiate controller.
         $bc = new backup_controller(
             \backup::TYPE_1COURSE, $id, backup::FORMAT_MOODLE, backup::INTERACTIVE_NO, backup::MODE_GENERAL, $userid);
+
+        // Alter the initial backup settings.
+        $backupsettings = array (
+            'users' => 0,               // Include enrolled users (default = 1)
+            'anonymize' => 0,           // Anonymize user information (default = 0)
+            'role_assignments' => 1,    // Include user role assignments (default = 1)
+            'activities' => 1,          // Include activities (default = 1)
+            'blocks' => 1,              // Include blocks (default = 1)
+            'filters' => 1,             // Include filters (default = 1)
+            'comments' => 1,            // Include comments (default = 1)
+            'userscompletion' => 0,     // Include user completion details (default = 1)
+            'logs' => 0,                // Include course logs (default = 0)
+            'grade_histories' => 0      // Include grade history (default = 0)
+        );
+
+        foreach ($bc->get_plan()->get_tasks() as $taskindex => $task) {
+            $settings = $task->get_settings();
+            foreach ($settings as $settingindex => $setting) {
+                $setting->set_status(backup_setting::NOT_LOCKED);
+
+                // Modify the values of the intial backup settings
+                if ($taskindex == 0) {
+                    foreach ($backupsettings as $key => $value) {
+                        if ($setting->get_name() == $key) {
+                            $setting->set_value($value);
+                        }
+                    }
+                }
+            }
+        }        
 
         // Run the backup.
         $bc->set_status(backup::STATUS_AWAITING);
@@ -296,6 +329,166 @@ class local_remote_backup_provider_external extends external_api {
         return new external_single_structure(
             array(
                 'url' => new external_value(PARAM_RAW, 'url of the backup file'),
+            )
+        );
+    }
+
+    /**
+     * Parameter description for get_course_name_by_id().
+     *
+     * @return external_function_parameters
+     */
+    public static function get_course_name_by_id_parameters() {
+        return new external_function_parameters(
+            array(
+                'id' => new external_value(PARAM_INT, 'id'),
+            )
+        );
+    }
+
+    /**
+     * Get name of the course.
+     *
+     * @param int $id the course id
+     * @return array|bool An array containing the url or false on failure
+     */
+    public static function get_course_name_by_id($id) {
+        global $DB;
+        // Validate parameters passed from web service.
+        $params = self::validate_parameters(
+            self::get_course_name_by_id_parameters(), array('id' => $id)
+        );
+
+        // Capability check.
+        if (!has_capability('moodle/course:viewhiddencourses', context_system::instance())) {
+            return false;
+        }
+
+        $course = $DB->get_record('course', array('id' => $id));
+
+        if ($course === false) return false;
+        return ['name' => $course->fullname];
+    }
+
+    /**
+     * Parameter description for get_course_name_by_id().
+     *
+     * @return external_description
+     */
+    public static function get_course_name_by_id_returns() {
+        return new external_single_structure(
+            array(
+                'name' => new external_value(PARAM_TEXT, 'name of the course'),
+            )
+        );
+    }
+
+    /**
+     * Parameter description for get_course_category_by_id().
+     *
+     * @return external_function_parameters
+     */
+    public static function get_course_category_by_id_parameters() {
+        return new external_function_parameters(
+            array(
+                'id' => new external_value(PARAM_INT, 'id'),
+            )
+        );
+    }
+
+    /**
+     * Get name of the course.
+     *
+     * @param int $id the course id
+     * @return array|bool An array containing the url or false on failure
+     */
+    public static function get_course_category_by_id($id) {
+        global $DB;
+        // Validate parameters passed from web service.
+        $params = self::validate_parameters(
+            self::get_course_category_by_id_parameters(), array('id' => $id)
+        );
+
+        // Capability check.
+        if (!has_capability('moodle/course:viewhiddencourses', context_system::instance())) {
+            return false;
+        }
+
+        $course = $DB->get_record('course', array('id' => $id));
+
+        if ($course === false) return false;
+        return ['category' => $course->category];
+    }
+
+    /**
+     * Parameter description for get_course_name_by_id().
+     *
+     * @return external_description
+     */
+    public static function get_course_category_by_id_returns() {
+        return new external_single_structure(
+            array(
+                'category' => new external_value(PARAM_INT, 'id of the category'),
+            )
+        );
+    }
+
+    /**
+     * Parameter description for get_course_category_by_id().
+     *
+     * @return external_function_parameters
+     */
+    public static function get_category_info_parameters() {
+        return new external_function_parameters(
+            array(
+                'id' => new external_value(PARAM_TEXT, 'id'),
+            )
+        );
+    }
+
+    /**
+     * Get name of the course.
+     *
+     * @param int $id the course id
+     * @return array|bool An array containing the url or false on failure
+     */
+    public static function get_category_info($id) {
+        global $DB;
+        // Validate parameters passed from web service.
+        $params = self::validate_parameters(
+            self::get_course_name_by_id_parameters(), array('id' => $id)
+        );
+
+        // Capability check.
+        if (!has_capability('moodle/course:viewhiddencourses', context_system::instance())) {
+            return false;
+        }
+
+        $category = $DB->get_record('course_categories', array('id' => $id));
+
+        if ($category === false) return false;
+        return [
+            'id' => $category->id,
+            'name' => $category->name,
+            'idnumber' => $category->idnumber,
+            'path' => $category->path,
+            'visible' => (int)$category->visible,
+        ];
+    }
+
+    /**
+     * Parameter description for get_course_name_by_id().
+     *
+     * @return external_description
+     */
+    public static function get_category_info_returns() {
+        return new external_single_structure(
+            array(
+                'id' => new external_value(PARAM_INT, 'id of the category'),
+                'name' => new external_value(PARAM_TEXT, 'name of the category'),
+                'idnumber' => new external_value(PARAM_TEXT, 'idnumber of the category'),
+                'path' => new external_value(PARAM_TEXT, 'path to the category'),
+                'visible' => new external_value(PARAM_INT, 'is category visible?'),
             )
         );
     }

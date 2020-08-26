@@ -25,16 +25,18 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig) {
-    $settings = new admin_settingpage('local_remote_backup_provider', get_string('pluginname', 'local_remote_backup_provider'));
-    $ADMIN->add('localplugins', $settings);
+    $category = new admin_category('local-remote_backup_provider', get_string('pluginname', 'local_remote_backup_provider'));
+    $ADMIN->add('localplugins', $category);
 
-    $adminsetting = new admin_setting_configtext('remotesite', get_string('remotesite', 'local_remote_backup_provider'),
-        get_string('remotesite_desc', 'local_remote_backup_provider'), '');
-    $adminsetting->plugin = 'local_remote_backup_provider';
-    $settings->add($adminsetting);
+    $settings = new admin_externalpage('local-remote_backup_provider-remote_list', get_string('admin_remote_list', 'local_remote_backup_provider'), new moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_remote_list']));
+    $ADMIN->add('local-remote_backup_provider', $settings);
 
-    $adminsetting = new admin_setting_configtext('wstoken', get_string('wstoken', 'local_remote_backup_provider'),
-        get_string('wstoken_desc', 'local_remote_backup_provider'), '');
-    $adminsetting->plugin = 'local_remote_backup_provider';
-    $settings->add($adminsetting);
+    $settings = new admin_externalpage('local-remote_backup_provider-remote_edit', get_string('admin_remote_add', 'local_remote_backup_provider'), new moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_remote_edit']));
+    $ADMIN->add('local-remote_backup_provider', $settings);
+
+    $settings = new admin_externalpage('local-remote_backup_provider-transfer_log', get_string('admin_transfer_log', 'local_remote_backup_provider'), new moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_transfer_log']));
+    $ADMIN->add('local-remote_backup_provider', $settings);
+
+    $settings = new admin_externalpage('local-remote_backup_provider-detailed_log', get_string('admin_detailed_log', 'local_remote_backup_provider'), new moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_detailed_log']), 'moodle/site:config', true);
+    $ADMIN->add('local-remote_backup_provider', $settings);
 }

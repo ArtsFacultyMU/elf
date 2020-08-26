@@ -14,18 +14,27 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * local_remote_backup_provider version information
- *
- * @package    local_remote_backup_provider
- * @copyright  2015 Lafayette College ITS
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
+namespace local_remote_backup_provider\exception;
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'local_remote_backup_provider';
-$plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = 'v4.1.0';
-$plugin->requires  = 2018051700;
-$plugin->version   = 2020080500;
+/**
+ * Manages exceptions linked to transfer manager
+ *
+ * @package    local_remote_backup_provider
+ * @copyright  2019 Masaryk University
+ * @author     Vojtěch Mrkývka <vojtech.mrkyvka@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class transfer_manager_exception extends \moodle_exception {
+    const CODE_RESTORE_INVALID_BACKUP_FILE = 'exception_tm_restore_error_invalid_backup_file';
+    const CODE_RESTORE_PRECHECK_FAILED = 'exception_tm_restore_error_precheck_failed';
+    const CODE_RECORD_DOES_NOT_EXIST = 'exception_tm_record_does_not_exist';
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct($errorcode, $link='', $a=NULL, $debuginfo=null) {
+        return parent::__construct($errorcode, 'local_remote_backup_provider', $link, $a, $debuginfo);
+    }
+}
