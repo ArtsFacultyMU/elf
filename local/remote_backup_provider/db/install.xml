@@ -39,7 +39,8 @@
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="transferid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="ID from table local_remotebp_transfer"/>
         <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-        <FIELD NAME="status" TYPE="char" LENGTH="1024" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="status" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="added" SEQUENCE="false" COMMENT="Public processing status."/>
+        <FIELD NAME="fullstatus" TYPE="char" LENGTH="1024" NOTNULL="true" SEQUENCE="false"/>
         <FIELD NAME="notes" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>

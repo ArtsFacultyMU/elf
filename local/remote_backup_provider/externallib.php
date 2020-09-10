@@ -158,9 +158,9 @@ class local_remote_backup_provider_external extends external_api {
         $filtered_courses = [];
         foreach($courses as $course) {
             // Check the name of the course.
-            if (stripos($course->fullname, $search)===FALSE 
-                    && stripos($course->shortname, $search)===FALSE
-                    && stripos($course->idnumber, $search)===FALSE) {
+            if (mb_stripos($course->fullname, $search, 0, 'UTF-8')===FALSE 
+                    && mb_stripos($course->shortname, $search, 0, 'UTF-8')===FALSE
+                    && mb_stripos($course->idnumber, $search, 0, 'UTF-8')===FALSE) {
                 continue;
             }
 

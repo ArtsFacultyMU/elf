@@ -91,13 +91,14 @@ class local_remote_backup_provider_renderer extends plugin_renderer_base {
         return $table->finish_output();
     }
 
-    public function render_front_transfer_list(array $transfers) {
+    public function render_front_transfer_list(int $remote_id, array $transfers) {
         global $CFG;
 
         require_once($CFG->libdir . '/tablelib.php');
         require_once($CFG->libdir . '/moodlelib.php');
         
         $table = new \flexible_table('local_remote_backup_provider__transfer_list');
+        $table->define_baseurl(new moodle_url('/local/remote_backup_provider/index.php', ['section'=> 'status', 'remote' => $remote_id]));
         $table->define_columns(['name', 'added', 'status', 'actions']);
         $table->define_headers([
             get_string('full_course_name', 'local_remote_backup_provider'),
@@ -130,6 +131,99 @@ class local_remote_backup_provider_renderer extends plugin_renderer_base {
         
             $table->add_data($row);
         }
+        return $table->finish_output();
+    }
+
+    public function render_admin_transfer_log(array $transfers, int $remote) {
+        global $CFG, $DB;
+
+        require_once($CFG->libdir . '/tablelib.php');
+        require_once($CFG->libdir . '/moodlelib.php');
+
+        $table = new \flexible_table('local_remote_backup_provider__transfer_list');
+        $table->define_baseurl(new moodle_url('/local/remote_backup_provider/index.php', ['section'=> 'admin_transfer_log', 'remote' => $remote]));
+        $table->define_columns(['name', 'added', 'issuer', 'status', 'actions']);
+        $table->define_headers([
+            get_string('full_course_name', 'local_remote_backup_provider'),
+            get_string('time_created', 'local_remote_backup_provider'),
+            get_string('issuer', 'local_remote_backup_provider'),
+            get_string('status', 'local_remote_backup_provider'),
+            get_string('actions', 'local_remote_backup_provider'),
+        ]);
+        $table->set_attribute('class', 'admintable generaltable');
+        $table->setup();
+
+        $issuers = [];
+
+        foreach ($transfers as $transfer) {    
+            $row = [];
+        
+            $row[] = $transfer->remotecoursename;
+            $row[] = userdate($transfer->timecreated);
+            
+            if (!isset($issuers[$transfer->userid])) {
+                $user = $DB->get_record('user', ['id' => $transfer->userid], 'id, firstname, lastname');
+                $issuers[$user->id] = mb_substr($user->firstname, 0, 1, "UTF-8") . '. ' . $user->lastname;
+            }
+            $row[] = $issuers[$transfer->userid];
+            
+            $row[] = '<span class="badge badge-' . \local_remote_backup_provider\helper\transfer_manager::LABEL_FOR_STATUS[$transfer->status] . '">'
+                    . get_string('transfer_status_' . $transfer->status, 'local_remote_backup_provider')
+                    . '</span> ' 
+                    . $this->pix_icon('i/scheduled', userdate($transfer->timemodified));
+            
+            $actions = [];
+            $actions[] = \html_writer::link(
+                new \moodle_url('/local/remote_backup_provider/index.php', ['section'=> 'admin_detailed_log', 'id' => $transfer->id]),
+                $this->pix_icon('i/info', get_string('admin_detailed_log', 'local_remote_backup_provider'))
+            );
+
+
+            if (
+                $transfer->status !== \local_remote_backup_provider\helper\transfer_manager::STATUS_CANCELED
+                && $transfer->status !== \local_remote_backup_provider\helper\transfer_manager::STATUS_FINISHED
+            ) {
+                $actions[] = \html_writer::link(
+                    new \moodle_url('/local/remote_backup_provider/index.php', ['section'=> 'admin_manual_cancel', 'id' => $transfer->id]),
+                    $this->pix_icon('t/block', get_string('admin_manual_cancel', 'local_remote_backup_provider'))
+                );
+            }
+
+            if ($transfer->courseid !== null) {
+                $actions[] = \html_writer::link(
+                        new \moodle_url('/course/view.php', ['id' => $transfer->courseid]),
+                        $this->pix_icon('t/right', get_string('continue_to_course', 'local_remote_backup_provider'))
+                );
+            }
+                    $row[] = implode(' ', $actions);
+        
+            $table->add_data($row);
+        }
+        return $table->finish_output();
+    }
+
+    public function render_admin_detailed_log(int $id, array $logs) {
+        $table = new \flexible_table('local_remote_backup_provider__transfer_log');
+        $table->define_baseurl(new moodle_url('/local/remote_backup_provider/index.php', ['section'=> 'admin_detailed_log', 'id' => $id]));
+        $table->define_columns(['timestamp', 'status', 'notes']);
+        $table->define_headers([
+            get_string('timestamp', 'local_remote_backup_provider'),
+            get_string('status', 'local_remote_backup_provider'),
+            get_string('notes', 'local_remote_backup_provider'),
+        ]);
+        $table->set_attribute('class', 'admintable generaltable');
+        $table->setup();
+
+        foreach ($logs as $log) {
+            $row = [];
+            $row[] = userdate($log->timemodified);
+            $row[] = '<span class="badge badge-' . \local_remote_backup_provider\helper\transfer_manager::LABEL_FOR_STATUS[$log->status] . '">'
+                    . get_string('transfer_fullstatus_' . $log->fullstatus, 'local_remote_backup_provider')
+                    . '</span> ';
+            $row[] = $log->notes;
+            $table->add_data($row);
+        }
+        
         return $table->finish_output();
     }
 }

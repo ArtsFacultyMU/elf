@@ -52,6 +52,21 @@ switch ($section) {
         $controller->remoteEditAction();
         break;
 
+    case 'admin_transfer_log':
+        $controller = new local_remote_backup_provider\output\controllers\admin_controller();
+        $controller->transferLogAction();
+        break;
+
+    case 'admin_detailed_log':
+        $controller = new local_remote_backup_provider\output\controllers\admin_controller();
+        $controller->detailedLogAction();
+        break;
+
+    case 'admin_manual_cancel':
+        $controller = new local_remote_backup_provider\output\controllers\admin_controller();
+        $controller->manualCancelAction();
+        break;
+
     case '':
         redirect(new moodle_url('/local/remote_backup_provider/index.php', ['section' => 'list']));
         break;
