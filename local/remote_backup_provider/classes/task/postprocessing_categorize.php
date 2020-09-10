@@ -56,6 +56,13 @@ class postprocessing_categorize extends \core\task\adhoc_task {
         mtrace('Start transfer manager.');
         $transfer_manager = new \local_remote_backup_provider\helper\transfer_manager($data->transfer_id);
 
+        mtrace('Check the preflight.');
+        try {
+            $transfer_manager->adhoc_preflight_check();
+        } catch (\local_remote_backup_provider\exception\transfer_manager_exception $e) {
+            return true;
+        }
+
         mtrace('Call for categorization.');
         $transfer_manager->categorize();
 

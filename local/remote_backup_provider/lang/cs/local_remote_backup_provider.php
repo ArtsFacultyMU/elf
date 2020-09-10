@@ -51,7 +51,7 @@ $string['no_courses_found'] = 'Nebyly nalezeny žádné kurzy';
 $string['button_import'] = 'Nahrát';
 $string['timestamp'] = 'Časová značka';
 $string['notes'] = 'Poznámky';
-
+$string['remote_course'] = 'Kurz ve vzdálené instalaci';
 
 $string['back_to_selection'] = 'Zpět na výběr';
 $string['continue_to_course'] = 'Přejít do převedeného kurzu';
@@ -72,17 +72,22 @@ $string['no_token'] = 'Vybraná vzdálená instalace nemá zadán přístupový 
 $string['no_address'] = 'Vybraná vzdálená instalace nemá zadanou adresu.';
 $string['remote_not_found'] = 'Vzdálená instalace nebyla nalezena.';
 
+$string['admin_general_settings'] = "Obecná nastavení";
 $string['admin_remote_list'] = 'Seznam vzdálených instalací';
 $string['admin_remote_edit'] = 'Upravit vzdálenou instalaci';
 $string['admin_remote_add'] = 'Přidat vzdálenou instalaci';
 $string['admin_transfer_log'] = 'Záznamy o převodech';
 $string['admin_detailed_log'] = 'Detailní záznamy o převodech';
+$string['admin_manual_cancel'] = 'Zrušit převod ručně';
 
 $string['remote_name'] = 'Název';
 $string['remote_url'] = 'URL';
 $string['remote_token'] = 'Token';
 $string['remote_active'] = 'Aktivní';
 $string['remote_position'] = 'Pozice';
+
+$string['task_maximum_transfer_time'] = 'Maximální doba převodu';
+$string['task_maximum_transfer_time_description'] = 'Po určené době bude automaticky rušen převod. Nula znamená bez limitu.';
 
 $string['hide'] = 'Skrýt';
 $string['show'] = 'Zobrazit';
@@ -93,8 +98,43 @@ $string['remote_not_found'] = 'Vzdálená instalace nebyla nalezena.';
 $string['remote_added'] = 'Vzdálená instalace byla úspěšně přidána.';
 $string['remote_updated'] = 'Vzdálená instalace byla úspěšně upravena.';
 $string['transfer_not_found'] = 'Přenos nebyl nalezen.';
+$string['transfer_already_canceled'] = 'Převod byl již zrušen.';
+$string['transfer_already_finished'] = 'Převod byl již dokončen.';
+$string['transfer_manualcancel_areyousure'] = 'Vážně chcete zrušit následující kurz?';
+$string['transfer_canceled_successfully'] = 'Převod byl úspěšně zrušen.';
 
-$string['transfer_status_added'] = 'Kurz přidán';
-$string['transfer_status_error'] = 'Chyba převodu';
-$string['transfer_status_processing'] = 'Převod probíhá';
-$string['transfer_status_finished'] = 'Převod dokončen';
+$string['transfer_status_added'] = 'Přidáno';
+$string['transfer_status_error'] = 'Chyba';
+$string['transfer_status_processing'] = 'Probíhá';
+$string['transfer_status_finished'] = 'Dokončeno';
+$string['transfer_status_canceled'] = 'Zrušeno';
+
+$string['transfer_fullstatus_added'] = 'Přidáno.';
+$string['transfer_fullstatus_conf_noremote'] = 'Chyba konfigurace: Chybí adresa vzdálené instalace.';
+$string['transfer_fullstatus_conf_notoken'] = 'Chyba konfigurace: Chybí token ke vzdálené instalaci.';
+$string['transfer_fullstatus_backup_started'] = 'Začala vzdálená záloha.';
+$string['transfer_fullstatus_backup_usernotfound'] = 'Nebyl nalezen uživatel ve vzdálené instalaci.';
+$string['transfer_fullstatus_backup_invalidhttpcode'] = 'Při vzdálené záloze byl vrácen špatný HTTP kód.';
+$string['transfer_fullstatus_backup_invalidurlstart'] = 'Url vzdálené zálohy nezačíná adresou vzdálené instalace.';
+$string['transfer_fullstatus_backup_ended'] = 'Vzdálená záloha skončila úspěchem.';
+$string['transfer_fullstatus_transfer_started'] = 'Začal převod zálohy.';
+$string['transfer_fullstatus_transfer_missingurl'] = 'Převod zálohy selhal: chybí adresa souboru se zálohou.';
+$string['transfer_fullstatus_transfer_failedfilecreation'] = 'Převod zálohy selhal: Nepodařilo se vytvořit lokální soubor.';
+$string['transfer_fullstatus_transfer_ended'] = 'Převod zálohy skončil úspěchem..';
+$string['transfer_fullstatus_restore_started'] = 'Začala obnova.';
+$string['transfer_fullstatus_restore_invalidfile'] = 'Soubor obnovy není platný.';
+$string['transfer_fullstatus_restore_prechecksfailed'] = 'Selhala předběžná kontrola souboru k obnovení.';
+$string['transfer_fullstatus_restore_ended'] = 'Obnova skončila úspěchem.';
+$string['transfer_fullstatus_teacherenrol_started'] = 'Začalo zapisování učitele do kurzu.';
+$string['transfer_fullstatus_teacherenrol_ended'] = 'Zapisování učitele do kurzu skončilo úspěchem.';
+$string['transfer_fullstatus_categorization_started'] = 'Začalo řazení kurzu do kategorie.';
+$string['transfer_fullstatus_categorization_gettingremotecatid'] = 'Získávání ID kategorie.';
+$string['transfer_fullstatus_categorization_ended'] = 'Kategorizace skončila úspěchem.';
+$string['transfer_fullstatus_categorization_lookingforlocalcat'] = 'Hledání odpovídající lokální kategorie.';
+$string['transfer_fullstatus_categorization_catfound'] = 'Kategorie nalezena.';
+$string['transfer_fullstatus_categorization_remotenotfoundlocally'] = 'Nebyla nalezena lokální kategorie odpovídající vzdálené, vytváří se nová.';
+$string['transfer_fullstatus_categorization_lookingforparent'] = 'Hledání nadřazené kategorie.';
+$string['transfer_fullstatus_categorization_creatingnewcat'] = 'Vytváření nové lokální kategorie.';
+$string['transfer_fullstatus_categorization_savingforlater'] = 'Ukládání vazby k nově vytvořené kategorii pro budoucí užití v přenosech.';
+$string['transfer_fullstatus_cancelled_timeout'] = 'Přenos zrušen kvůli vypršení limitu.';
+$string['transfer_fullstatus_cancelled_manually'] = 'Přenos zrušen ručně.';

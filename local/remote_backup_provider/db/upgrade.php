@@ -137,4 +137,159 @@ function xmldb_local_remote_backup_provider_upgrade($oldversion) {
         // Remote_backup_provider savepoint reached.
         upgrade_plugin_savepoint(true, 2020080500, 'local', 'remote_backup_provider');
     }
+
+    if ($oldversion < 2020090100.01) {
+
+        // Rename field status on table local_remotebp_transfer_log to fullstatus.
+        $table = new xmldb_table('local_remotebp_transfer_log');
+        $field = new xmldb_field('status', XMLDB_TYPE_CHAR, '1024', null, XMLDB_NOTNULL, null, null, 'status');
+        // Launch rename field status.
+        $dbman->rename_field($table, $field, 'fullstatus');
+        // Remote_backup_provider savepoint reached.
+        upgrade_plugin_savepoint(true, 2020090100.01, 'local', 'remote_backup_provider');
+    }
+
+    if ($oldversion < 2020090100.02) {
+        // Define field status to be added to local_remotebp_transfer_log.
+        $table = new xmldb_table('local_remotebp_transfer_log');
+        $field = new xmldb_field('status', XMLDB_TYPE_CHAR, '20', null, XMLDB_NOTNULL, null, 'added', 'timemodified');
+
+        // Conditionally launch add field status.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Remote_backup_provider savepoint reached.
+        upgrade_plugin_savepoint(true, 2020090100.02, 'local', 'remote_backup_provider');
+    }
+
+    if ($oldversion < 2020091000) {
+        $logs = $DB->get_records('local_remotebp_transfer_log');
+        foreach ($logs as $log) {
+            $status = null;
+            $fullstatus = null;
+
+            switch ($log->fullstatus) {
+                case 'Added.':
+                    $status = 'added';
+                    $fullstatus = 'added';
+                    break;
+                case 'Configuration error: No remote address.':
+                    $status = 'error';
+                    $fullstatus = 'conf_noremote';
+                    break;
+                case 'Configuration error: No remote token.':
+                    $status = 'error';
+                    $fullstatus = 'conf_notoken';
+                    break;
+                case 'Remote backup started.':
+                    $status = 'processing';
+                    $fullstatus = 'backup_started';
+                    break;
+                case 'Remote backup: User not found.':
+                    $status = 'error';
+                    $fullstatus = 'backup_usernotfound';
+                    break;
+                case 'Remote backup wrong HTTP code.':
+                    $status = 'error';
+                    $fullstatus = 'backup_invalidhttpcode';
+                    break;
+                case 'Remote backup URL not starting with remote address.':
+                    $status = 'error';
+                    $fullstatus = 'backup_invalidurlstart';
+                    break;
+                case 'Remote backup ended successfully.':
+                    $status = 'processing';
+                    $fullstatus = 'backup_ended';
+                    break;
+                case 'Transfering backup started.':
+                    $status = 'processing';
+                    $fullstatus = 'transfer_started';
+                    break;
+                case 'Transfering backup failed on missing remote backup URL.':
+                    $status = 'error';
+                    $fullstatus = 'transfer_missingurl';
+                    break;
+                case 'Transfering backup failed on creating file.':
+                    $status = 'error';
+                    $fullstatus = 'transfer_failedfilecreation';
+                    break;
+                case 'Transfering backup ended successfully.':
+                    $status = 'processing';
+                    $fullstatus = 'transfer_ended';
+                    break;
+                case 'Restoration started.':
+                    $status = 'processing';
+                    $fullstatus = 'restore_started';
+                    break;
+                case 'Restoration file invalid.':
+                    $status = 'error';
+                    $fullstatus = 'restore_invalidfile';
+                    break;
+                case 'Restoration prechecks failed.':
+                    $status = 'error';
+                    $fullstatus = 'restore_prechecksfailed';
+                    break;
+                case 'Restoration ended successfully.':
+                    $status = 'processing';
+                    $fullstatus = 'restore_ended';
+                    break;
+                case 'Enroling teacher to the course.':
+                    $status = 'processing';
+                    $fullstatus = 'teacherenrol_started';
+                    break;
+                case 'Teacher enroled successfully.':
+                    $status = 'processing';
+                    $fullstatus = 'teacherenrol_ended';
+                    break;
+                case 'Categorizing the course.':
+                    $status = 'processing';
+                    $fullstatus = 'categorization_started';
+                    break;
+                case 'Getting category id from remote.':
+                    $status = 'processing';
+                    $fullstatus = 'categorization_gettingremotecatid';
+                    break;
+                case 'Categorization finished successfully.':
+                    $status = 'finished';
+                    $fullstatus = 'categorization_ended';
+                    break;
+                case 'Looking for corresponding local category.':
+                    $status = 'processing';
+                    $fullstatus = 'categorization_lookingforlocalcat';
+                    break;
+                case 'Category found.':
+                    $status = 'processing';
+                    $fullstatus = 'categorization_catfound';
+                    break;
+                case 'Remote category not found locally, creating.':
+                    $status = 'processing';
+                    $fullstatus = 'categorization_remotenotfoundlocally';
+                    break;
+                case 'Looking for parent category.':
+                    $status = 'processing';
+                    $fullstatus = 'categorization_lookingforparent';
+                    break;
+                case 'Creating a new local category.':
+                    $status = 'processing';
+                    $fullstatus = 'categorization_creatingnewcat';
+                    break;
+                case 'Saving link to newly created category for later use in transfers.':
+                    $status = 'processing';
+                    $fullstatus = 'categorization_savingforlater';
+                    break;       
+            }
+
+            $data = (object)[
+                'id' => $log->id,
+                'status' => $status,
+                'fullstatus' => $fullstatus,
+            ];
+            $DB->update_record('local_remotebp_transfer_log', $data);
+        }
+
+        // Remote_backup_provider savepoint reached.
+        upgrade_plugin_savepoint(true, 2020091000, 'local', 'remote_backup_provider');
+    }
+
 }

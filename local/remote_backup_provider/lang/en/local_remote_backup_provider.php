@@ -51,6 +51,7 @@ $string['no_courses_found'] = 'No courses found';
 $string['button_import'] = 'Import';
 $string['timestamp'] = 'Timestamp';
 $string['notes'] = 'Notes';
+$string['remote_course'] = 'Course on remote';
 
 $string['back_to_selection'] = 'Back to selection';
 $string['continue_to_course'] = 'Continue to transfered course';
@@ -72,18 +73,22 @@ $string['no_address'] = 'Selected remote does not have address filled in.';
 
 $string['remote_not_found'] = 'Remote not found.';
 
+$string['admin_general_settings'] = "General settings";
 $string['admin_remote_list'] = 'List of remotes';
 $string['admin_remote_edit'] = 'Edit remote';
 $string['admin_remote_add'] = 'Add remote';
 $string['admin_transfer_log'] = 'Transfer log';
 $string['admin_detailed_log'] = 'Detailed transfer log';
-
+$string['admin_manual_cancel'] = 'Cancel transfer manually';
 
 $string['remote_name'] = 'Name';
 $string['remote_url'] = 'URL';
 $string['remote_token'] = 'Token';
 $string['remote_active'] = 'Active';
 $string['remote_position'] = 'Position';
+
+$string['task_maximum_transfer_time'] = 'Maximum transfer time';
+$string['task_maximum_transfer_time_description'] = 'After a given time the transfer will be automatically canceled. Zero means no limit.';
 
 $string['hide'] = 'Hide';
 $string['show'] = 'Show';
@@ -94,8 +99,43 @@ $string['remote_not_found'] = 'Remote wasn\'t found.';
 $string['remote_added'] = 'Remote was successfully added.';
 $string['remote_updated'] = 'Remote was successfully updated.';
 $string['transfer_not_found'] = 'Transfer wasn\'t found.';
+$string['transfer_already_canceled'] = 'Transfer was already canceled.';
+$string['transfer_already_finished'] = 'Transfer was already finished.';
+$string['transfer_manualcancel_areyousure'] = 'Are you sure to cancel the following course?';
+$string['transfer_canceled_successfully'] = 'Transfer was successfully canceled.';
 
 $string['transfer_status_added'] = 'Issued';
 $string['transfer_status_error'] = 'Error';
 $string['transfer_status_processing'] = 'Processing';
 $string['transfer_status_finished'] = 'Finished';
+$string['transfer_status_canceled'] = 'Canceled';
+
+$string['transfer_fullstatus_added'] = 'Added.';
+$string['transfer_fullstatus_conf_noremote'] = 'Configuration error: No remote address.';
+$string['transfer_fullstatus_conf_notoken'] = 'Configuration error: No remote token.';
+$string['transfer_fullstatus_backup_started'] = 'Remote backup started.';
+$string['transfer_fullstatus_backup_usernotfound'] = 'Remote backup: User not found.';
+$string['transfer_fullstatus_backup_invalidhttpcode'] = 'Remote backup wrong HTTP code.';
+$string['transfer_fullstatus_backup_invalidurlstart'] = 'Remote backup URL not starting with remote address.';
+$string['transfer_fullstatus_backup_ended'] = 'Remote backup ended successfully.';
+$string['transfer_fullstatus_transfer_started'] = 'Transfering backup started.';
+$string['transfer_fullstatus_transfer_missingurl'] = 'Transfering backup failed on missing remote backup URL.';
+$string['transfer_fullstatus_transfer_failedfilecreation'] = 'Transfering backup failed on creating file.';
+$string['transfer_fullstatus_transfer_ended'] = 'Transfering backup ended successfully.';
+$string['transfer_fullstatus_restore_started'] = 'Restoration started.';
+$string['transfer_fullstatus_restore_invalidfile'] = 'Restoration file invalid.';
+$string['transfer_fullstatus_restore_prechecksfailed'] = 'Restoration prechecks failed.';
+$string['transfer_fullstatus_restore_ended'] = 'Restoration ended successfully.';
+$string['transfer_fullstatus_teacherenrol_started'] = 'Enroling teacher to the course.';
+$string['transfer_fullstatus_teacherenrol_ended'] = 'Teacher enroled successfully.';
+$string['transfer_fullstatus_categorization_started'] = 'Categorizing the course.';
+$string['transfer_fullstatus_categorization_gettingremotecatid'] = 'Getting category id from remote.';
+$string['transfer_fullstatus_categorization_ended'] = 'Categorization finished successfully.';
+$string['transfer_fullstatus_categorization_lookingforlocalcat'] = 'Looking for corresponding local category.';
+$string['transfer_fullstatus_categorization_catfound'] = 'Category found.';
+$string['transfer_fullstatus_categorization_remotenotfoundlocally'] = 'Remote category not found locally, creating.';
+$string['transfer_fullstatus_categorization_lookingforparent'] = 'Looking for parent category.';
+$string['transfer_fullstatus_categorization_creatingnewcat'] = 'Creating a new local category.';
+$string['transfer_fullstatus_categorization_savingforlater'] = 'Saving link to newly created category for later use in transfers.';
+$string['transfer_fullstatus_cancelled_timeout'] = 'Transfer canceled on timeout.';
+$string['transfer_fullstatus_cancelled_manually'] = 'Transfer canceled manually.';

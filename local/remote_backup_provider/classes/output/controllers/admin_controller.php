@@ -158,7 +158,7 @@ class admin_controller {
         // Print the transfer table.
         $transfers = $DB->get_records('local_remotebp_transfer', [
             'remoteid' => $remote_id,
-        ], 'timecreated');
+        ], 'timecreated DESC');
 
         echo $output->render_admin_transfer_log($transfers, $remote_id);
         echo $output->footer();
@@ -178,12 +178,52 @@ class admin_controller {
             redirect(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_transfer_log']), get_string('transfer_not_found', 'local_remote_backup_provider'), null, \core\output\notification::NOTIFY_WARNING);
         }
 
-        $logs = $DB->get_records('local_remotebp_transfer_log', ['transferid' => $transfer_id]);
+        $logs = $DB->get_records('local_remotebp_transfer_log', ['transferid' => $transfer_id], 'timemodified DESC');
         
-
         $output = $PAGE->get_renderer('local_remote_backup_provider');
         echo $output->header();
-        echo $output->render_admin_detailed_log($logs);
+        echo $output->render_admin_detailed_log($transfer_id, $logs);
+        echo $output->footer();
+    }
+
+    public function manualCancelAction() {
+        global $PAGE, $CFG, $DB;
+
+        require_once($CFG->libdir . '/adminlib.php');
+        admin_externalpage_setup('local-remote_backup_provider-manual_cancel');
+
+        $transfer_id = optional_param('id', 0, PARAM_INT);
+        $sure = optional_param('sure', 0, PARAM_INT);
+
+        // Prechecks
+        try {
+            $transfer_manager = new \local_remote_backup_provider\helper\transfer_manager($transfer_id);
+        } catch (\local_remote_backup_provider\exception\transfer_manager_exception $e) {
+            redirect(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_transfer_log']), get_string('transfer_not_found', 'local_remote_backup_provider'), null, \core\output\notification::NOTIFY_WARNING);
+        }
+        if ($transfer_manager->transfer->status == \local_remote_backup_provider\helper\transfer_manager::STATUS_CANCELED) {
+            redirect(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_transfer_log', 'remote' => $transfer_manager->remote->id]), get_string('transfer_already_canceled', 'local_remote_backup_provider'), null, \core\output\notification::NOTIFY_WARNING);
+        }
+        if ($transfer_manager->transfer->status == \local_remote_backup_provider\helper\transfer_manager::STATUS_FINISHED) {
+            redirect(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_transfer_log', 'remote' => $transfer_manager->remote->id]), get_string('transfer_already_finished', 'local_remote_backup_provider'), null, \core\output\notification::NOTIFY_WARNING);
+        }
+        if ($transfer_manager->transfer->manualcancel) {
+            redirect(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_transfer_log', 'remote' => $transfer_manager->remote->id]), get_string('transfer_already_canceled', 'local_remote_backup_provider'), null, \core\output\notification::NOTIFY_WARNING);
+        }
+
+        // If already consented, change to canceled
+        if ($sure) {
+            $transfer_manager->cancel_manually();
+            redirect(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_transfer_log', 'remote' => $transfer_manager->remote->id]), get_string('transfer_canceled_successfully', 'local_remote_backup_provider'), null, \core\output\notification::NOTIFY_SUCCESS);
+        }
+
+        // Otherwise show consent button
+        $output = $PAGE->get_renderer('local_remote_backup_provider');
+        echo $output->header();
+        echo $output->box(
+            \html_writer::tag('p', get_string('transfer_manualcancel_areyousure', 'local_remote_backup_provider') . ' ' .  \html_writer::tag('b', $transfer_manager->transfer->remotecoursename))
+            . $output->continue_button(new \moodle_url('/local/remote_backup_provider/index.php', ['section'=> 'admin_manual_cancel', 'id' => $transfer_id, 'sure' => 1]))
+        );
         echo $output->footer();
     }
 }

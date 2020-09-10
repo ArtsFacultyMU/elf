@@ -30,6 +30,7 @@ class transfer_manager_exception extends \moodle_exception {
     const CODE_RESTORE_INVALID_BACKUP_FILE = 'exception_tm_restore_error_invalid_backup_file';
     const CODE_RESTORE_PRECHECK_FAILED = 'exception_tm_restore_error_precheck_failed';
     const CODE_RECORD_DOES_NOT_EXIST = 'exception_tm_record_does_not_exist';
+    const CODE_PREFLIGHT_FAILED = 'exception_tm_preflight_failed';
 
     /**
      * {@inheritdoc}

@@ -78,7 +78,7 @@ class front_course_list_renderable implements \renderable {
                 $table->data[] = [
                     \html_writer::checkbox('remote_id[]', $course->id, false, null, ['form' => self::FORM_ID, 'class'=>'remote_course_checkbox']),
                     $course->shortname,
-                    \html_writer::link($this->remote->url . '/course/view.php?id=' . $course->id, $course->fullname, ['target' => '_blank']),
+                    \html_writer::link($this->remote->address . '/course/view.php?id=' . $course->id, $course->fullname, ['target' => '_blank', 'title' => get_string('remote_course', 'local_remote_backup_provider')]),
                 ];
             }, $this->courses);
             return \html_writer::div(\html_writer::table($table), "", ['style' => 'margin: 20px 0']);

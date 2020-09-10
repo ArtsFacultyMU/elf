@@ -71,12 +71,14 @@ class transfer_manager {
     const STATUS_ADDED = 'added';
     const STATUS_PROCESSING = 'processing';
     const STATUS_ERROR = 'error';
+    const STATUS_CANCELED = 'canceled';
     const STATUS_FINISHED = 'finished';
 
     const LABEL_FOR_STATUS = [
         self::STATUS_ADDED => 'secondary',
         self::STATUS_PROCESSING => 'secondary',
         self::STATUS_ERROR => 'warning',
+        self::STATUS_CANCELED => 'warning',
         self::STATUS_FINISHED => 'success',
     ];
 
@@ -182,7 +184,8 @@ class transfer_manager {
         $log_data = (object) [
             'transferid' => $transfer_id,
             'timemodified' => $datetime->getTimestamp(),
-            'status' => 'Added.',
+            'status' => 'added',
+            'fullstatus' => 'added',
             'notes' => null,
         ];
         $DB->insert_record('local_remotebp_transfer_log', $log_data);
@@ -217,14 +220,33 @@ class transfer_manager {
         $this->remote = $DB->get_record('local_remotebp_remotes', ['id' => $this->transfer->remoteid]);
 
         if (empty($this->remote->address)) {
-            $this->change_status('Configuration error: No remote address.', null, self::STATUS_ERROR);
+            $this->change_status('conf_noremote', null, self::STATUS_ERROR);
             throw new configuration_exception(configuration_exception::CODE_NO_ADDRESS);
         }
 
         if (empty($this->remote->token)) {
-            $this->change_status('Configuration error: No remote token.', null, self::STATUS_ERROR);
+            $this->change_status('conf_notoken', null, self::STATUS_ERROR);
             throw new configuration_exception(configuration_exception::CODE_NO_TOKEN);
         }
+    }
+
+    public function __get($name)
+    {
+        if ($name === 'transfer') {
+            return clone $this->transfer;
+        }
+
+        if ($name === 'remote') {
+            return clone $this->remote;
+        }
+
+        $trace = debug_backtrace();
+        trigger_error(
+            'Undefined property via __get(): ' . $name .
+            ' in ' . $trace[0]['file'] .
+            ' on line ' . $trace[0]['line'],
+            E_USER_NOTICE);
+        return null;
     }
 
     /**
@@ -235,14 +257,14 @@ class transfer_manager {
     public function backup_on_remote() {
         global $DB;
 
-        $this->change_status('Remote backup started.', null, self::STATUS_PROCESSING);
+        $this->change_status('backup_started', null, self::STATUS_PROCESSING);
 
         $url = sprintf(self::URL_BASE_FORMAT, $this->remote->address, $this->remote->token) . self::URL_PARAMS_BACKUP;
 
         // Check user defined in transfer.
         if (!$DB->record_exists('user', ['id' => $this->transfer->userid])) {
             // Log error and return failure.
-            $this->change_status('Remote backup: User not found.', (string)$this->transfer->userid, self::STATUS_ERROR);
+            $this->change_status('backup_usernotfound', (string)$this->transfer->userid, self::STATUS_ERROR);
             throw new \Exception();
         }
 
@@ -258,7 +280,7 @@ class transfer_manager {
         // Check returned HTTP status code.
         if ($curl->info['http_code'] != 200) {
             // Log error and return failure.
-            $this->change_status('Remote backup wrong HTTP code.', (string)$curl->info['http_code'], self::STATUS_ERROR);
+            $this->change_status('backup_invalidhttpcode', (string)$curl->info['http_code'], self::STATUS_ERROR);
             throw new \Exception();
         }
         // Get url of the backup file.
@@ -268,7 +290,7 @@ class transfer_manager {
         // Check if url starts with remote's base url
         if (0 !== strpos($backup_url, $this->remote->address)) {
             // Log error and return failure.
-            $this->change_status('Remote backup URL not starting with remote address.', (string)$backup_url, self::STATUS_ERROR);
+            $this->change_status('backup_invalidurlstart', (string)$backup_url, self::STATUS_ERROR);
             throw new \Exception();
         }
 
@@ -283,7 +305,7 @@ class transfer_manager {
         $DB->update_record('local_remotebp_transfer', $transfer_data);
         $this->transfer->remotebackupurl = $backup_url;
 
-        $this->change_status('Remote backup ended successfully.', null, self::STATUS_PROCESSING);
+        $this->change_status('backup_ended', null, self::STATUS_PROCESSING);
 
         return true;
     }
@@ -295,10 +317,10 @@ class transfer_manager {
      * @return True on success, False on failure.
      */
     public function transfer_backup() {
-        $this->change_status('Transfering backup started.', null, self::STATUS_PROCESSING);
+        $this->change_status('transfer_started', null, self::STATUS_PROCESSING);
 
         if ($this->transfer->remotebackupurl === null) {
-            $this->change_status('Transfering backup failed on missing remote backup URL.', null, self::STATUS_ERROR);
+            $this->change_status('transfer_missingurl', null, self::STATUS_ERROR);
             throw new \Exception();
         }
 
@@ -321,11 +343,11 @@ class transfer_manager {
             $fs->create_file_from_url($filerecord,
                     $this->remote->address . $this->transfer->remotebackupurl . '?token=' . $this->remote->token, null, true);
         } catch (\Exception $e) {
-            $this->change_status('Transfering backup failed on creating file.', (string)$e, self::STATUS_PROCESSING);
+            $this->change_status('transfer_failedfilecreation', (string)$e, self::STATUS_PROCESSING);
             throw $e;
         }
         
-        $this->change_status('Transfering backup ended successfully.', null, self::STATUS_PROCESSING);
+        $this->change_status('transfer_ended', null, self::STATUS_PROCESSING);
         return true;
     }
 
@@ -338,7 +360,7 @@ class transfer_manager {
         global $DB, $CFG, $SITE, $USER;
         require_once($CFG->dirroot . '/backup/util/includes/restore_includes.php');
         
-        $this->change_status('Restoration started.', null, self::STATUS_PROCESSING);
+        $this->change_status('restore_started', null, self::STATUS_PROCESSING);
 
         $context = \context_system::instance();
         $fs = get_file_storage();
@@ -361,7 +383,7 @@ class transfer_manager {
         $backupid = \restore_controller::get_tempdir_name($SITE->id, $USER->id);
         $path = "$CFG->tempdir/backup/$backupid/";
         if (!$packer->extract_to_pathname($file, $path)) {
-            $this->change_status('Restoration file invalid.', null, self::STATUS_ERROR);
+            $this->change_status('restore_invalidfile', null, self::STATUS_ERROR);
             throw new transfer_manager_exception(transfer_manager_exception::CODE_RESTORE_INVALID_BACKUP_FILE);
         }
 
@@ -385,7 +407,7 @@ class transfer_manager {
             try {
                 $transaction->rollback(new \Exception('Prechecked failed'));
             } catch (\Exception $e) {
-                $this->change_status('Restoration prechecks failed.', null, self::STATUS_ERROR);
+                $this->change_status('restore_prechecksfailed', null, self::STATUS_ERROR);
                 throw new transfer_manager_exception(transfer_manager_exception::CODE_RESTORE_PRECHECK_FAILED);
             }
         }
@@ -404,7 +426,7 @@ class transfer_manager {
         $DB->update_record('local_remotebp_transfer', $transfer_data);
         $this->transfer->courseid = $courseid;
 
-        $this->change_status('Restoration ended successfully.', (string)$courseid, self::STATUS_PROCESSING);
+        $this->change_status('restore_ended', (string)$courseid, self::STATUS_PROCESSING);
         return true;
     }
 
@@ -414,11 +436,11 @@ class transfer_manager {
      * If the public_status is set, public status is also changed,
      * otherwise only log (admin) status is updated.
      * 
-     * @param string $status New status to be used in the log table.
+     * @param string $fullstatus New status to be used in the log table.
      * @param string|null $notes Additional information about the status.
      * @param string|null $public_status Public status to be changed to (if not already that status).
      */
-    public function change_status(string $status, ?string $notes = null, ?string $public_status = null) {
+    public function change_status(string $fullstatus, ?string $notes = null, ?string $public_status = null) {
         global $DB;
         
         // Get datetime once to prevent having public and private status out of sync.
@@ -428,7 +450,8 @@ class transfer_manager {
         $log_data = (object) [
             'transferid' => $this->transfer->id,
             'timemodified' => $datetime->getTimestamp(),
-            'status' => $status,
+            'status' => $public_status,
+            'fullstatus' => $fullstatus,
             'notes' => $notes,
         ];
         $DB->insert_record('local_remotebp_transfer_log', $log_data);
@@ -466,7 +489,7 @@ class transfer_manager {
     public function enrol_teacher() {
         global $DB;
 
-        $this->change_status('Enroling teacher to the course.', null, self::STATUS_PROCESSING);
+        $this->change_status('teacherenrol_started', null, self::STATUS_PROCESSING);
 
         $teacherrole = $DB->get_record('role', ['shortname' => 'editingteacher']);
         $manualenrol = enrol_get_plugin('manual');
@@ -475,16 +498,16 @@ class transfer_manager {
 
         $manualenrol->enrol_user($enrolinstance, $this->transfer->userid, $teacherrole->id);
 
-        $this->change_status('Teacher enroled successfully.', null, self::STATUS_PROCESSING);
+        $this->change_status('teacherenrol_ended', null, self::STATUS_PROCESSING);
     }
 
     /**
      * Putting course into corresponding category.
      */
     public function categorize() {
-        $this->change_status('Categorizing the course.', null, self::STATUS_PROCESSING);
+        $this->change_status('categorization_started', null, self::STATUS_PROCESSING);
 
-        $this->change_status('Getting category id from remote.', null, self::STATUS_PROCESSING);
+        $this->change_status('categorization_gettingremotecatid', null, self::STATUS_PROCESSING);
         $url = sprintf(self::URL_BASE_FORMAT, $this->remote->address, $this->remote->token) . self::URL_PARAMS_CATEGORYID;
         $params = array('id' => $this->transfer->remotecourseid);
         $curl = new \curl;
@@ -495,13 +518,13 @@ class transfer_manager {
 
         move_courses([$this->transfer->courseid], $category);
 
-        $this->change_status('Categorization finished successfully.', null, self::STATUS_FINISHED);
+        $this->change_status('categorization_ended', null, self::STATUS_FINISHED);
     }
 
     protected function _get_local_category($remotecategoryid) {
         global $DB;
 
-        $this->change_status('Looking for corresponding local category.',
+        $this->change_status('categorization_lookingforlocalcat',
                 json_encode(['remote' => $this->remote->id, 'remote_category' => $remotecategoryid]),
                 self::STATUS_PROCESSING);
 
@@ -512,7 +535,7 @@ class transfer_manager {
 
         // If found, return its local ID
         if ($record) {
-            $this->change_status('Category found.',
+            $this->change_status('categorization_catfound',
                     $record->categoryid,
                     self::STATUS_PROCESSING);
 
@@ -520,7 +543,7 @@ class transfer_manager {
         }
 
         // If not, create a new one
-        $this->change_status('Remote category not found locally, creating.',
+        $this->change_status('categorization_remotenotfoundlocally',
                 json_encode(['remote' => $this->remote->id, 'remote_category' => $remotecategoryid]),
                 self::STATUS_PROCESSING);
 
@@ -531,7 +554,7 @@ class transfer_manager {
 
         $data = new \stdClass();
         
-        $this->change_status('Looking for parent category.', $results->path, self::STATUS_PROCESSING);
+        $this->change_status('categorization_lookingforparent', $results->path, self::STATUS_PROCESSING);
         $path = explode('/', $results->path);
         array_pop($path); // Removing current category from the end.
         $parent = array_pop($path);        
@@ -543,10 +566,10 @@ class transfer_manager {
         $data->name = $results->name;
         $data->visible = (int)$results->visible;
 
-        $this->change_status('Creating a new local category.', json_encode($data), self::STATUS_PROCESSING);
+        $this->change_status('categorization_creatingnewcat', json_encode($data), self::STATUS_PROCESSING);
         $category = \core_course_category::create($data);
 
-        $this->change_status('Saving link to newly created category for later use in transfers.', $category->id, self::STATUS_PROCESSING);
+        $this->change_status('categorization_savingforlater', $category->id, self::STATUS_PROCESSING);
 
         $record = $DB->insert_record('local_remotebp_categories', (object)[
             'remoteid' => $this->remote->id,
@@ -555,5 +578,52 @@ class transfer_manager {
         ], 'categoryid', IGNORE_MULTIPLE);
 
         return (int)$category->id;
+    }
+
+    /**
+     * Check if the timer for transfer already exceeded.
+     * 
+     * The value can be set in:
+     * Site administration > Plugins > Local plugins
+     * > Remote backup provider > General settings
+     */
+    protected function _is_timed_out() {
+        $datetime = new \DateTime();
+        $max_transfer_time = get_config('local_remote_backup_provider', 'max_transfer_time');
+        
+        // If max transfer time is set to zero,
+        // do not check it at all 
+        if ($max_transfer_time == 0) return false;
+        
+        $transfer_time = $datetime->getTimestamp() - $this->transfer->timecreated;
+        return ($transfer_time > $max_transfer_time);
+    }
+
+    /**
+     * Checks the transfer before executing other parts of the ad-hoc task.
+     * 
+     * @throws transfer_manager_exception On any failure.
+     * @return bool True on success.
+     */
+    public function adhoc_preflight_check() {
+        // If status is Canceled or Finished, do not continue in processing.
+        if ($this->transfer->status == self::STATUS_CANCELED
+                || $this->transfer->status == self::STATUS_FINISHED) {
+            throw new transfer_manager_exception(transfer_manager_exception::CODE_PREFLIGHT_FAILED);
+        }
+
+        // Checks whether the ad-hoc timeout exceeded. See _is_timed_out() method for more information.
+        if ($this->_is_timed_out()) {
+            $this->change_status('cancelled_timeout', null, self::STATUS_CANCELED);
+            throw new transfer_manager_exception(transfer_manager_exception::CODE_PREFLIGHT_FAILED);
+        }
+    }
+
+    /**
+     * Executes manual cancelation of the course.
+     */
+    public function cancel_manually() {
+        global $USER;
+        $this->change_status('cancelled_manually', $USER->id, self::STATUS_CANCELED);
     }
 }

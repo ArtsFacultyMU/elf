@@ -65,6 +65,7 @@ class front_controller {
         $remote = $remote_manager->getRemote($remote_id);
 
 
+        $PAGE->set_context($context);
         $PAGE->set_title(get_string('import', 'local_remote_backup_provider'));
         $PAGE->set_heading(get_string('import', 'local_remote_backup_provider'));
 
@@ -184,6 +185,7 @@ class front_controller {
         // Get chosen remote data (throws an exception if invalid).
         $remote = $remote_manager->getRemote($remote_id);
 
+        $PAGE->set_context($context);
         $PAGE->set_title(get_string('import', 'local_remote_backup_provider'));
         $PAGE->set_heading(get_string('import', 'local_remote_backup_provider'));
 
@@ -207,7 +209,7 @@ class front_controller {
             'remoteid' => $remote_id,
         ], 'timecreated');
 
-        echo $output->render_front_transfer_list($transfers);
+        echo $output->render_front_transfer_list($remote_id, $transfers);
 
         // Print return link;
         echo \html_writer::tag('p', $output->larrow() . \html_writer::link(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'list', 'remote' => $remote_id]), get_string('back_to_selection', 'local_remote_backup_provider')));
