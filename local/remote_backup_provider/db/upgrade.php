@@ -166,8 +166,12 @@ function xmldb_local_remote_backup_provider_upgrade($oldversion) {
     if ($oldversion < 2020091000) {
         $logs = $DB->get_records('local_remotebp_transfer_log');
         foreach ($logs as $log) {
-            $status = null;
-            $fullstatus = null;
+            $status = $log->status;
+            $fullstatus = $log->fullstatus;
+
+            if ($status == '') {
+                $status = 'processing';
+            }
 
             switch ($log->fullstatus) {
                 case 'Added.':
