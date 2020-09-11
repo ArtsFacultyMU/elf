@@ -163,137 +163,77 @@ function xmldb_local_remote_backup_provider_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2020090100.02, 'local', 'remote_backup_provider');
     }
 
+    if ($oldversion < 2020090100.03) {
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'added', ['fullstatus' => 'Added.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'error', ['fullstatus' => 'Configuration error: No remote address.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'error', ['fullstatus' => 'Configuration error: No remote token.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'processing', ['fullstatus' => 'Remote backup started.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'error', ['fullstatus' => 'Remote backup: User not found.']);
+
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'error', ['fullstatus' => 'Remote backup wrong HTTP code.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'error', ['fullstatus' => 'Remote backup URL not starting with remote address.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'processing', ['fullstatus' => 'Remote backup ended successfully.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'processing', ['fullstatus' => 'Transfering backup started.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'error', ['fullstatus' => 'Transfering backup failed on missing remote backup URL.']);
+
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'error', ['fullstatus' => 'Transfering backup failed on creating file.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'processing', ['fullstatus' => 'Transfering backup ended successfully.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'processing', ['fullstatus' => 'Restoration started.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'error', ['fullstatus' => 'Restoration file invalid.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'error', ['fullstatus' => 'Restoration prechecks failed.']);
+
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'processing', ['fullstatus' => 'Restoration ended successfully.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'processing', ['fullstatus' => 'Enroling teacher to the course.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'processing', ['fullstatus' => 'Teacher enroled successfully.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'processing', ['fullstatus' => 'Categorizing the course.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'processing', ['fullstatus' => 'Getting category id from remote.']);  
+
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'finished', ['fullstatus' => 'Categorization finished successfully.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'processing', ['fullstatus' => 'Looking for corresponding local category.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'processing', ['fullstatus' => 'Category found.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'processing', ['fullstatus' => 'Remote category not found locally, creating.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'processing', ['fullstatus' => 'Looking for parent category.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'processing', ['fullstatus' => 'Creating a new local category.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'processing', ['fullstatus' => 'Saving link to newly created category for later use in transfers.']);
+
+        // Remote_backup_provider savepoint reached.
+        upgrade_plugin_savepoint(true, 2020090100.03, 'local', 'remote_backup_provider');
+    }
+
     if ($oldversion < 2020091000) {
-        $logs = $DB->get_records('local_remotebp_transfer_log');
-        foreach ($logs as $log) {
-            $status = $log->status;
-            $fullstatus = $log->fullstatus;
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'added', ['fullstatus' => 'Added.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'conf_noremote', ['fullstatus' => 'Configuration error: No remote address.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'conf_notoken', ['fullstatus' => 'Configuration error: No remote token.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'backup_started', ['fullstatus' => 'Remote backup started.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'backup_usernotfound', ['fullstatus' => 'Remote backup: User not found.']);
 
-            if ($status == '') {
-                $status = 'processing';
-            }
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'backup_invalidhttpcode', ['fullstatus' => 'Remote backup wrong HTTP code.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'backup_invalidurlstart', ['fullstatus' => 'Remote backup URL not starting with remote address.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'backup_ended', ['fullstatus' => 'Remote backup ended successfully.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'transfer_started', ['fullstatus' => 'Transfering backup started.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'transfer_missingurl', ['fullstatus' => 'Transfering backup failed on missing remote backup URL.']);
 
-            switch ($log->fullstatus) {
-                case 'Added.':
-                    $status = 'added';
-                    $fullstatus = 'added';
-                    break;
-                case 'Configuration error: No remote address.':
-                    $status = 'error';
-                    $fullstatus = 'conf_noremote';
-                    break;
-                case 'Configuration error: No remote token.':
-                    $status = 'error';
-                    $fullstatus = 'conf_notoken';
-                    break;
-                case 'Remote backup started.':
-                    $status = 'processing';
-                    $fullstatus = 'backup_started';
-                    break;
-                case 'Remote backup: User not found.':
-                    $status = 'error';
-                    $fullstatus = 'backup_usernotfound';
-                    break;
-                case 'Remote backup wrong HTTP code.':
-                    $status = 'error';
-                    $fullstatus = 'backup_invalidhttpcode';
-                    break;
-                case 'Remote backup URL not starting with remote address.':
-                    $status = 'error';
-                    $fullstatus = 'backup_invalidurlstart';
-                    break;
-                case 'Remote backup ended successfully.':
-                    $status = 'processing';
-                    $fullstatus = 'backup_ended';
-                    break;
-                case 'Transfering backup started.':
-                    $status = 'processing';
-                    $fullstatus = 'transfer_started';
-                    break;
-                case 'Transfering backup failed on missing remote backup URL.':
-                    $status = 'error';
-                    $fullstatus = 'transfer_missingurl';
-                    break;
-                case 'Transfering backup failed on creating file.':
-                    $status = 'error';
-                    $fullstatus = 'transfer_failedfilecreation';
-                    break;
-                case 'Transfering backup ended successfully.':
-                    $status = 'processing';
-                    $fullstatus = 'transfer_ended';
-                    break;
-                case 'Restoration started.':
-                    $status = 'processing';
-                    $fullstatus = 'restore_started';
-                    break;
-                case 'Restoration file invalid.':
-                    $status = 'error';
-                    $fullstatus = 'restore_invalidfile';
-                    break;
-                case 'Restoration prechecks failed.':
-                    $status = 'error';
-                    $fullstatus = 'restore_prechecksfailed';
-                    break;
-                case 'Restoration ended successfully.':
-                    $status = 'processing';
-                    $fullstatus = 'restore_ended';
-                    break;
-                case 'Enroling teacher to the course.':
-                    $status = 'processing';
-                    $fullstatus = 'teacherenrol_started';
-                    break;
-                case 'Teacher enroled successfully.':
-                    $status = 'processing';
-                    $fullstatus = 'teacherenrol_ended';
-                    break;
-                case 'Categorizing the course.':
-                    $status = 'processing';
-                    $fullstatus = 'categorization_started';
-                    break;
-                case 'Getting category id from remote.':
-                    $status = 'processing';
-                    $fullstatus = 'categorization_gettingremotecatid';
-                    break;
-                case 'Categorization finished successfully.':
-                    $status = 'finished';
-                    $fullstatus = 'categorization_ended';
-                    break;
-                case 'Looking for corresponding local category.':
-                    $status = 'processing';
-                    $fullstatus = 'categorization_lookingforlocalcat';
-                    break;
-                case 'Category found.':
-                    $status = 'processing';
-                    $fullstatus = 'categorization_catfound';
-                    break;
-                case 'Remote category not found locally, creating.':
-                    $status = 'processing';
-                    $fullstatus = 'categorization_remotenotfoundlocally';
-                    break;
-                case 'Looking for parent category.':
-                    $status = 'processing';
-                    $fullstatus = 'categorization_lookingforparent';
-                    break;
-                case 'Creating a new local category.':
-                    $status = 'processing';
-                    $fullstatus = 'categorization_creatingnewcat';
-                    break;
-                case 'Saving link to newly created category for later use in transfers.':
-                    $status = 'processing';
-                    $fullstatus = 'categorization_savingforlater';
-                    break;       
-            }
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'transfer_failedfilecreation', ['fullstatus' => 'Transfering backup failed on creating file.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'transfer_ended', ['fullstatus' => 'Transfering backup ended successfully.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'restore_started', ['fullstatus' => 'Restoration started.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'restore_invalidfile', ['fullstatus' => 'Restoration file invalid.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'restore_prechecksfailed', ['fullstatus' => 'Restoration prechecks failed.']);
 
-            $data = (object)[
-                'id' => $log->id,
-                'status' => $status,
-                'fullstatus' => $fullstatus,
-            ];
-            $DB->update_record('local_remotebp_transfer_log', $data);
-        }
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'restore_ended', ['fullstatus' => 'Restoration ended successfully.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'teacherenrol_started', ['fullstatus' => 'Enroling teacher to the course.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'teacherenrol_ended', ['fullstatus' => 'Teacher enroled successfully.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'categorization_started', ['fullstatus' => 'Categorizing the course.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'categorization_gettingremotecatid', ['fullstatus' => 'Getting category id from remote.']);  
+
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'categorization_ended', ['fullstatus' => 'Categorization finished successfully.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'categorization_lookingforlocalcat', ['fullstatus' => 'Looking for corresponding local category.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'categorization_catfound', ['fullstatus' => 'Category found.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'categorization_remotenotfoundlocally', ['fullstatus' => 'Remote category not found locally, creating.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'categorization_lookingforparent', ['fullstatus' => 'Looking for parent category.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'categorization_creatingnewcat', ['fullstatus' => 'Creating a new local category.']);
+        $DB->set_field('local_remotebp_transfer_log', 'fullstatus', 'categorization_savingforlater', ['fullstatus' => 'Saving link to newly created category for later use in transfers.']);
 
         // Remote_backup_provider savepoint reached.
         upgrade_plugin_savepoint(true, 2020091000, 'local', 'remote_backup_provider');
     }
-
 }
