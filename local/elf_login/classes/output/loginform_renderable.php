@@ -34,11 +34,9 @@ use context_course;
 
 class loginform_renderable extends \core_auth\output\login {
     const LINK_IS_MUNI_FRONTPAGE = 'https://is.muni.cz';
-    const LINK_IS_MUNI_SECONDARYPASSCHANGE = 'https://is.muni.cz/system/heslo_pop.pl';
+    const LINK_IS_MUNI_PASSCHANGE = 'https://is.muni.cz/podpora/obnova_pristupu?akce=login';
 
     const PATH_SHIBBOLETH = '/auth/shibboleth/index.php';
-    const PATH_IMAGE_SSO_EN = '/local/elf_login/img/muni-sso-en.png';
-    const PATH_IMAGE_SSO_CS = '/local/elf_login/img/muni-sso-cs.png';
 
     public function export_for_template(renderer_base $output) {
         // $OUTPUT should not be used here, but rewriting
@@ -62,14 +60,12 @@ class loginform_renderable extends \core_auth\output\login {
 
         // ELF-specific variables for MUNI login.
         $data->shibboleth_path = new \moodle_url(self::PATH_SHIBBOLETH);
-        $data->muni_sso_logourl = new \moodle_url(self::PATH_IMAGE_SSO_EN);
         $data->muni_is_front = self::LINK_IS_MUNI_FRONTPAGE . '?lang=en';
-        $data->muni_is_pass = self::LINK_IS_MUNI_SECONDARYPASSCHANGE . '?lang=en';
+        $data->muni_is_pass = self::LINK_IS_MUNI_PASSCHANGE . ';lang=en';
         
         if (current_language() == 'cs') {
-            $data->muni_sso_logourl = new \moodle_url(self::PATH_IMAGE_SSO_CS);
             $data->muni_is_front = self::LINK_IS_MUNI_FRONTPAGE . '?lang=cs';
-            $data->muni_is_pass = self::LINK_IS_MUNI_SECONDARYPASSCHANGE . '?lang=cs';
+            $data->muni_is_pass = self::LINK_IS_MUNI_PASSCHANGE . ';lang=cs';
         }
         return $data;
     }

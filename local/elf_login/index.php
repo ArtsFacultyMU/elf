@@ -30,6 +30,8 @@ $errorcode = optional_param('errorcode', 0, PARAM_INT);
 $errormsg = '';
 
 // Take care of basic layout.
+$context = context_system::instance();
+$PAGE->set_context($context);
 $PAGE->set_pagelayout('login');
 $PAGE->set_title("$SITE->fullname: " . get_string("loginsite"));
 $PAGE->set_heading("$SITE->fullname");

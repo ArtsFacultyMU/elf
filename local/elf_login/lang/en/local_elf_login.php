@@ -39,9 +39,9 @@ $string['teachers_students_info_1'] = 'Provided you have an active account in
         the <a href="{$a->ismunilink}" target="_blank">Information system of
         Masaryk University (IS MUNI)</a>, click on the 
         university logo on the left and fill in your <b>UCO (university
-        number)</b> and your <b>secondary password</b>. If you haven\'t
-        received any secondary password yet or you have lost or forgotten it,
-        you can set the password instantly <b><a href="{$a->ismunipasslink}"
+        number)</b> and your <b>primary password</b>. If you haven\'t
+        want to restore access to your university account,
+        you can ask for a new password <b><a href="{$a->ismunipasslink}"
         target="_blank">by clicking on this link</a></b>.';
 $string['teachers_students_info_2'] = '<b>FIRST LOGIN:</b> Students and teachers
         at <b>FF</b>, <b>FSS</b> and <b>FSpS</b> have their accounts in ELF

@@ -39,8 +39,8 @@ $string['teachers_students_info_1'] = 'Pokud máte aktivní účet v
         <a href="{$a->ismunilink}" target="_blank">Informačním systému
         Masarykovy univerzity (IS MUNI)</a>, pro vstup do ELFu zadejte do
         přihlašovacího formuláře (po kliknutí) své <b>UČO</b> a své
-        <b>sekundární heslo</b>. V případě problémů si sekundární heslo můžete
-        nastavit či obnovit <b><a href="{$a->ismunipasslink}"
+        <b>primární heslo</b>. V případě problémů si můžete požádat o změnu
+        primárního hesla <b><a href="{$a->ismunipasslink}"
         target="_blank">přímo na tomto místě</a></b>.';
 $string['teachers_students_info_2'] = '<b>PRVNÍ PŘIHLÁŠENÍ:</b> Studenti a
         učitelé <b>FF</b>, <b>FSS</b> a <b>FSpS</b> mají v ELFu <b>účet
