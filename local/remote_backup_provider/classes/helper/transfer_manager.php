@@ -387,19 +387,38 @@ class transfer_manager {
             throw new transfer_manager_exception(transfer_manager_exception::CODE_RESTORE_INVALID_BACKUP_FILE);
         }
 
+        if ($this->transfer->courseid) {
+            $this->change_status('restore_existingcourse', $this->transfer->courseid, self::STATUS_PROCESSING);
+            $backup_target = \backup::TARGET_EXISTING_DELETING;
+        } else {
+            $this->change_status('restore_newcourse', null, self::STATUS_PROCESSING);
+            // Create new course.
+            $folder             = $backupid; // as found in: $CFG->dataroot . '/temp/backup/' 
+            $categoryid         = 1;//$options['categoryid']; // e.g. 1 == Miscellaneous
+            $userdoingrestore   = $USER->id;
+            $courseid           = \restore_dbops::create_new_course('', '', $categoryid);
+        
+            // Save data to the database.
+            $transfer_data = (object) [
+                'id' => $this->transfer->id,
+                'courseid' => $courseid,
+            ];
+            $DB->update_record('local_remotebp_transfer', $transfer_data);
+            $this->transfer->courseid = $courseid;
+            $this->change_status('restore_newcoursefinished', $courseid, self::STATUS_PROCESSING);
+            $backup_target = \backup::TARGET_NEW_COURSE;            
+        }
+
+
+        $DB->update_record('restore_itself', $transfer_data);
+
         // Transaction.
         $transaction = $DB->start_delegated_transaction();
-    
-        // Create new course.
-        $folder             = $backupid; // as found in: $CFG->dataroot . '/temp/backup/' 
-        $categoryid         = 1;//$options['categoryid']; // e.g. 1 == Miscellaneous
-        $userdoingrestore   = $USER->id;
-        $courseid           = \restore_dbops::create_new_course('', '', $categoryid);
-    
+
         // Restore backup into course.
-        $controller = new \restore_controller($folder, $courseid, 
+        $controller = new \restore_controller($folder, $this->transfer->courseid, 
         \backup::INTERACTIVE_NO, \backup::MODE_GENERAL, $userdoingrestore,
-        \backup::TARGET_NEW_COURSE);
+        $backup_target);
     
         if ($controller->execute_precheck()) {
             $controller->execute_plan();
@@ -417,14 +436,6 @@ class transfer_manager {
         unset($transaction);
         $controller->destroy();
         unset($controller);
-
-        // Save data to the database.
-        $transfer_data = (object) [
-            'id' => $this->transfer->id,
-            'courseid' => $courseid,
-        ];
-        $DB->update_record('local_remotebp_transfer', $transfer_data);
-        $this->transfer->courseid = $courseid;
 
         $this->change_status('restore_ended', (string)$courseid, self::STATUS_PROCESSING);
         return true;
