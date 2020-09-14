@@ -67,17 +67,22 @@ function atto_helixatto_params_for_js($elementid, $options, $fpoptions) {
         $disabled=true;
     }
 
-    if ($add == "helixmedia" || $action == "grader" || $action == "grade" ||
-        strpos($PAGE->url, '/forum/post.php')!==false) {
+    if (strpos($PAGE->url, '/forum/post.php')!== false && $CFG->enabletrusttext == 0) {
+        $disabled = true;
+    }
+
+    if ($add == "helixmedia" || $action == "grader" || $action == "grade") {
         $disabled = true;
     }
 
     //add our disabled param
     $params['disabled'] = $disabled;
     $params['baseurl'] = $CFG->wwwroot;
+    $params['ltiurl'] = get_config("helixmedia", "launchurl");
     $params['statusurl'] = helixmedia_get_status_url();
     $params['userid'] = $USER->id;
     $params['insertdelay'] = get_config('helixmedia', 'modal_delay');
+    $params['oauthConsumerKey'] = get_config('helixmedia', 'consumer_key');
     if ($params['insertdelay'] > -1)
         $params['hideinsert'] = get_config('atto_helixatto', 'hideinsert');
     else

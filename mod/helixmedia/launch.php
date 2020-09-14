@@ -1,7 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html  dir="ltr" lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
-<head><title>HML LTI Launcher</title></head>
-<body>
 <?php
 /**
  * This file contains all necessary code to view a helixmedia activity instance
@@ -17,6 +13,13 @@ global $COURSE, $PAGE;
 require_once("../../config.php");
 require_once($CFG->dirroot.'/mod/helixmedia/locallib.php');
 require_once($CFG->dirroot.'/mod/helixmedia/lib.php');
+
+?>
+<!DOCTYPE html>
+<html  dir="ltr" lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head><title>HML LTI Launcher</title></head>
+<body>
+<?php
 
 //Course module ID
 $id = optional_param('id', 0, PARAM_INT); // Course Module ID
@@ -309,11 +312,13 @@ if ($cap==null || !has_capability($cap, $context)) {
     die;
 }
 
-$hmli->debuglaunch=0;
-//*****Comment out the if to force debug mode in all cases*****
-if ($debug) {
-    $hmli->debuglaunch=1;
+$hmli->debuglaunch = 0;
+$mod_config=get_config("helixmedia");
+if ( ($mod_config->forcedebug && $mod_config->restrictdebug && is_siteadmin()) ||
+     ($mod_config->restrictdebug == false && $mod_config->forcedebug)) {
+    $hmli->debuglaunch = 1;
 }
+
 
 //Do the logging
 if ($type==HML_LAUNCH_NORMAL || $type==HML_LAUNCH_EDIT)

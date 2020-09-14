@@ -1,0 +1,7 @@
+.search_form form .col-md-3 {
+    display: none;
+}
+
+.search_form form .col-md-9 {
+    width: 50%;
+}

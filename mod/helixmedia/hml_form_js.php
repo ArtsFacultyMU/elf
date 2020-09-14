@@ -16,6 +16,7 @@ global $CFG;
 ?>
 var activity_dialog;
 var gotIn=false;
+var medial_interval;
 
 function checkStatus()
 {
@@ -26,7 +27,7 @@ function checkStatus()
     else
         xmlDoc = new XMLHttpRequest();
 
-    var params="resource_link_id="+resID+"&user_id="+userID;
+    var params="resource_link_id="+resID+"&user_id="+userID+"&oauth_consumer_key="+oauthConsumerKey;
     xmlDoc.open("POST", statusURL , false);
     xmlDoc.setRequestHeader("Content-type","application/x-www-form-urlencoded");
     xmlDoc.send(params);
@@ -34,21 +35,25 @@ function checkStatus()
     if (xmlDoc.responseText=="IN")
         gotIn=true;
     
-    if (xmlDoc.responseText!="OUT" || gotIn==false)
-        setTimeout(checkStatus, 2000);
+    if (xmlDoc.responseText!="OUT" || gotIn==false) {
+        if (medial_interval == null) {
+            medial_interval = setInterval(checkStatus, 2000);
+        }
+    } else {
 <?php 
     $mod_config=get_config("helixmedia");
     $delay = intval($mod_config->modal_delay);
     if ($delay==0)
-        echo "else closeDialogue();\n";
+        echo "closeDialogue();\n";
     else if ($delay>0)
-        echo "else setTimeout(closeDialogue, ".($delay*1000).");\n";
+        echo "setTimeout(closeDialogue, ".($delay*1000).");\n";
 ?>
-
+    }
 }
 
 function closeDialogue()
 {
+    clearInterval(medial_interval);
     var tframe=document.getElementById("thumbframe");
     if (tframe!=null && typeof(thumburl)!="undefined")
      tframe.contentWindow.location=thumburl;
@@ -58,6 +63,11 @@ function closeDialogue()
     }, 500);
 
     var mform1=document.getElementById("mform1");
+    if (mform1==null) {
+        var elements = document.getElementsByClassName("mform");
+        mform1 = elements[0];
+    }
+
     if (mform1!=null)
     {
         if (typeof mform1.elements['helixassign_activated']!="undefined")
@@ -72,6 +82,22 @@ function closeDialogue()
     }
 
     activity_dialog=null;
+
+    // Sometimes the yui_act_sel_dialog_mask element get duplicated (bug in Moodle?) and only one will be
+    // unmasked when the dialog is closed. So we need to find the duplicates and then hide them as well. Using the
+    // the id doesn't work because it only finds the first duplicate so we need to search for the mask class.
+
+    var maskdivs = document.getElementsByClassName("mask");
+    for (i=0; i < maskdivs.length; i++) {
+        if (maskdivs[i].id == "yui_act_sel_dialog_mask") {
+            maskdivs[i].style.display = "none";
+        }
+    }
+
+    while (maskdivs.length>1) {
+        maskdivs[0].parentNode.removeChild(maskdivs[0]);
+        maskdivs = document.getElementsByClassName("mask");
+    }
 }
 
 
@@ -131,22 +157,17 @@ if (typeof com.uol == 'undefined') {
         var wHeight=0;
         var top;
 
-        if( typeof( window.innerWidth ) == 'number' ) {
-            //Non-IE
-            wWidth=window.innerWidth;
-            wHeight=window.innerHeight;
-            top=window.pageYOffset;
-        }
-        else if( document.documentElement &&
-            ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
-            //IE 6+ in 'standards compliant mode'
-            wWidth=document.documentElement.clientWidth;
-            wHeight=document.documentElement.clientHeight;
-            top=document.documentElement.scrollTop;
-        }
+        wWidth=document.documentElement.clientWidth;
+        wHeight=document.documentElement.clientHeight;
+        top=document.documentElement.scrollTop;
 
-        this.width = wWidth-30;
-        this.height = wHeight-100;
+        if (this.detectMobile()) {
+            this.width = wWidth;
+            this.height = wHeight;
+        } else {
+            this.width = wWidth-6;
+            this.height = wHeight;
+        }
 
         if (this.width > 1000) {
             this.width = 1000;
@@ -155,26 +176,31 @@ if (typeof com.uol == 'undefined') {
             this.height = 1400;
         }
 
-        if (this.height < 480) {
-            this.height = 480;
-            this.y = top;
-        } else {
-            this.y = top + 50;
-        }
-
-        if (this.width < 770) {
-            this.width = 770;
-        }
-
+        this.y = top;
         this.x=(wWidth-this.width)/2;
+
         if (this.x>8) {
             this.x=this.x-8;
         } else {
             this.x=0;
         }
     },
- 
- 
+
+    this.PopupHandler.prototype.detectMobile = function() { 
+        if( navigator.userAgent.match(/Android/i)
+            || navigator.userAgent.match(/webOS/i)
+            || navigator.userAgent.match(/iPhone/i)
+            || navigator.userAgent.match(/iPad/i)
+            || navigator.userAgent.match(/iPod/i)
+            || navigator.userAgent.match(/BlackBerry/i)
+            || navigator.userAgent.match(/Windows Phone/i)
+        ){
+            return true;
+        } else {
+            return false;
+        }
+},
+
     /**
      * Method to call load the form
      */
@@ -208,10 +234,9 @@ if (typeof com.uol == 'undefined') {
                     y:e.argument[3],
                     modal: true,
                     width: e.argument[0] + 'px',
-                    top:'100px',
                     height: e.argument[1] + 'px',
-                    iframe: true,
-                    zIndex: 2000,
+                    iframe: false,
+                    zIndex: 9999,
                     fixedcenter: false,
                     visible: false,
                     close: true,
