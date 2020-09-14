@@ -66,13 +66,6 @@ class postprocessing_enrol_teacher extends \core\task\adhoc_task {
         mtrace('Call for enroling teacher.');
         $transfer_manager->enrol_teacher();
 
-        mtrace('Queue categorization task.');
-        $categorize_task = new postprocessing_categorize();
-        $categorize_task->set_custom_data(array(
-            'transfer_id' => $data->transfer_id,
-        ));
-        \core\task\manager::queue_adhoc_task($categorize_task);
-
         mtrace('Finish.');
         return true;
     }
