@@ -387,14 +387,28 @@ class transfer_manager {
             throw new transfer_manager_exception(transfer_manager_exception::CODE_RESTORE_INVALID_BACKUP_FILE);
         }
 
+        // If there is already course to be used (on repeted try, deletes current data).
         if ($this->transfer->courseid) {
             $this->change_status('restore_existingcourse', $this->transfer->courseid, self::STATUS_PROCESSING);
             $backup_target = \backup::TARGET_EXISTING_DELETING;
+
+        // If there is no such course.
         } else {
-            $this->change_status('restore_newcourse', null, self::STATUS_PROCESSING);
+            // Category lookup.
+            $this->change_status('categorization_started', null, self::STATUS_PROCESSING);
+
+            $this->change_status('categorization_gettingremotecatid', null, self::STATUS_PROCESSING);
+            $url = sprintf(self::URL_BASE_FORMAT, $this->remote->address, $this->remote->token) . self::URL_PARAMS_CATEGORYID;
+            $params = array('id' => $this->transfer->remotecourseid);
+            $curl = new \curl;
+            $results = json_decode($curl->post($url, $params));
+            $category = $this->_get_local_category($results->category);
+
+            $this->change_status('categorization_ended', null, self::STATUS_PROCESSING);
+
             // Create new course.
-            $folder             = $backupid; // as found in: $CFG->dataroot . '/temp/backup/' 
-            $categoryid         = 1;//$options['categoryid']; // e.g. 1 == Miscellaneous
+            $this->change_status('restore_newcourse', null, self::STATUS_PROCESSING);
+            $categoryid         = $category;
             $userdoingrestore   = $USER->id;
             $courseid           = \restore_dbops::create_new_course('', '', $categoryid);
         
@@ -409,16 +423,20 @@ class transfer_manager {
             $backup_target = \backup::TARGET_NEW_COURSE;            
         }
 
-
-        $DB->update_record('restore_itself', $transfer_data);
+        $this->change_status('restore_itself', null, self::STATUS_PROCESSING);
 
         // Transaction.
         $transaction = $DB->start_delegated_transaction();
 
         // Restore backup into course.
-        $controller = new \restore_controller($folder, $this->transfer->courseid, 
-        \backup::INTERACTIVE_NO, \backup::MODE_GENERAL, $userdoingrestore,
-        $backup_target);
+        $controller = new \restore_controller(
+                $backupid, // as found in: $CFG->dataroot . '/temp/backup/' 
+                $this->transfer->courseid, 
+                \backup::INTERACTIVE_NO,
+                \backup::MODE_GENERAL,
+                $USER->id,
+                $backup_target
+        );
     
         if ($controller->execute_precheck()) {
             $controller->execute_plan();
@@ -509,27 +527,7 @@ class transfer_manager {
 
         $manualenrol->enrol_user($enrolinstance, $this->transfer->userid, $teacherrole->id);
 
-        $this->change_status('teacherenrol_ended', null, self::STATUS_PROCESSING);
-    }
-
-    /**
-     * Putting course into corresponding category.
-     */
-    public function categorize() {
-        $this->change_status('categorization_started', null, self::STATUS_PROCESSING);
-
-        $this->change_status('categorization_gettingremotecatid', null, self::STATUS_PROCESSING);
-        $url = sprintf(self::URL_BASE_FORMAT, $this->remote->address, $this->remote->token) . self::URL_PARAMS_CATEGORYID;
-        $params = array('id' => $this->transfer->remotecourseid);
-        $curl = new \curl;
-        $results = json_decode($curl->post($url, $params));
-
-
-        $category = $this->_get_local_category($results->category);
-
-        move_courses([$this->transfer->courseid], $category);
-
-        $this->change_status('categorization_ended', null, self::STATUS_FINISHED);
+        $this->change_status('teacherenrol_ended', null, self::STATUS_FINISHED);
     }
 
     protected function _get_local_category($remotecategoryid) {

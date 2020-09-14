@@ -158,7 +158,7 @@ class admin_controller {
         // Print the transfer table.
         $transfers = $DB->get_records('local_remotebp_transfer', [
             'remoteid' => $remote_id,
-        ], 'timecreated DESC');
+        ], 'id DESC');
 
         echo $output->render_admin_transfer_log($transfers, $remote_id);
         echo $output->footer();
@@ -178,7 +178,7 @@ class admin_controller {
             redirect(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_transfer_log']), get_string('transfer_not_found', 'local_remote_backup_provider'), null, \core\output\notification::NOTIFY_WARNING);
         }
 
-        $logs = $DB->get_records('local_remotebp_transfer_log', ['transferid' => $transfer_id], 'timemodified DESC');
+        $logs = $DB->get_records('local_remotebp_transfer_log', ['transferid' => $transfer_id], 'id DESC');
         
         $output = $PAGE->get_renderer('local_remote_backup_provider');
         echo $output->header();

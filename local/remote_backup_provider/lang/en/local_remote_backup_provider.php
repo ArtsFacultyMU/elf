@@ -27,7 +27,6 @@ $string['create_backup_task'] = 'Create backup on remote';
 $string['transfer_backup_task'] = 'Move backup from remote to local instalation';
 $string['restore_backup_task'] = 'Restore course from backup';
 $string['enrol_teacher_task'] = 'Enrol teacher to the course';
-$string['categorize_task'] = 'Categorize the course';
 
 $string['import'] = 'Import from remote';
 $string['pluginname'] = 'Remote backup provider';
