@@ -37,6 +37,7 @@ class front_controller {
         
         $remote_id = optional_param('remote', 0, PARAM_INT);
         $search = optional_param('search', '', PARAM_NOTAGS);
+        $searchall = optional_param('searchall', false, PARAM_BOOL);
 
         require_login();
         $PAGE->set_url('/local/remote_backup_provider/index.php');
@@ -89,13 +90,14 @@ class front_controller {
         $search_form = new \local_remote_backup_provider\output\renderables\front_search_form_renderable();
         $search_form->setAction(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'list', 'remote' => $remote_id]));
         $search_form->setValue((string)$search);
+        $search_form->checkSearchall($searchall);
         echo $output->render($search_form);
 
 
         // Display the courses.
         if (!empty($search)) {
             // Get config settings and initiate transfer manager.
-            $courses = \local_remote_backup_provider\helper\transfer_manager::search($remote, $search);
+            $courses = \local_remote_backup_provider\helper\transfer_manager::search($remote, $search, $searchall);
             
             $course_list_renderable = new \local_remote_backup_provider\output\renderables\front_course_list_renderable($courses);
             $course_list_renderable->setRemote($remote);
@@ -123,6 +125,7 @@ class front_controller {
 
         $remote_course_ids = required_param_array('remote_id', PARAM_INT);
         $remote_id = required_param('remote', PARAM_INT);
+        $user_id = optional_param('userid', 0, PARAM_INT);
 
         $remote_manager = new \local_remote_backup_provider\helper\remote_manager();
 
@@ -130,24 +133,50 @@ class front_controller {
         $remote = $remote_manager->getRemote($remote_id);
 
         // Start building output.
+        $PAGE->set_context($context);
         $PAGE->set_url('/local/remote_backup_provider/index.php');
         $PAGE->set_pagelayout('report');
         $PAGE->set_title(get_string('import', 'local_remote_backup_provider'));
         $PAGE->set_heading(get_string('import', 'local_remote_backup_provider'));
         $output = $PAGE->get_renderer('local_remote_backup_provider');
 
-        // Iterate over remote courses.
-        foreach ($remote_course_ids as $remote_course_id) {
-            $transfer_id = \local_remote_backup_provider\helper\transfer_manager::add_new($remote, $remote_course_id);
-            
-            $create_backup_task = new \local_remote_backup_provider\task\transfer_create_backup();
-            $create_backup_task->set_custom_data(array(
-                'transfer_id' => $transfer_id,
-            ));
-            \core\task\manager::queue_adhoc_task($create_backup_task);
+        if (has_capability('local/remote_backup_provider:transferasother', $context) && $user_id != 0) {
+            if (!$DB->get_record('user', ['id'=> $user_id, 'deleted' => '0'])) {
+                redirect(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'list', 'remote' => $remote_id]), get_string('user_not_found', 'local_remote_backup_provider'), null, \core\output\notification::NOTIFY_WARNING);
+            }
+        } else {
+            $user_id = $USER->id;
         }
 
-        redirect(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'status', 'remote' => $remote_id]), get_string('courses_issued_for_transfer', 'local_remote_backup_provider'), null, \core\output\notification::NOTIFY_SUCCESS);
+        // Iterate over remote courses.
+        $errors = [];
+        foreach ($remote_course_ids as $remote_course_id) {
+            $existing_records = $DB->get_records('local_remotebp_transfer', ['remotecourseid' => $remote_course_id]);
+
+            if (has_capability('local/remote_backup_provider:multitransfer', $context) OR !$existing_records) {
+                $transfer_id = \local_remote_backup_provider\helper\transfer_manager::add_new($remote, $remote_course_id, $user_id);
+            
+                $create_backup_task = new \local_remote_backup_provider\task\transfer_create_backup();
+                $create_backup_task->set_custom_data(array(
+                    'transfer_id' => $transfer_id,
+                ));
+                \core\task\manager::queue_adhoc_task($create_backup_task);
+            } else {
+                $record = \array_shift($existing_records);
+                $errors[] = $record->remotecoursename;
+            }
+            
+        }
+
+        if (!$errors) {
+            redirect(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'status', 'remote' => $remote_id]), get_string('courses_issued_for_transfer', 'local_remote_backup_provider'), null, \core\output\notification::NOTIFY_SUCCESS);
+        }
+
+        $error_msg = get_string('courses_issued_for_transfer_error', 'local_remote_backup_provider');
+        $error_msg .= '<ul><li>' . implode('</li><li>', $errors) . '</li></ul>';
+
+        redirect(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'status', 'remote' => $remote_id]), $error_msg, null, \core\output\notification::NOTIFY_WARNING);
+        
     }
 
     /**

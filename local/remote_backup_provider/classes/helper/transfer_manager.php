@@ -47,6 +47,11 @@ class transfer_manager {
      * URL parameters to get course search.
      */
     const URL_PARAMS_SEARCH = '&wsfunction=local_remote_backup_provider_find_teacher_courses';
+
+    /**
+     * URL parameters to get course search in all courses.
+     */
+    const URL_PARAMS_SEARCHALL = '&wsfunction=local_remote_backup_provider_find_courses';
     
     /**
      * URL parameters to get course backup.
@@ -113,8 +118,9 @@ class transfer_manager {
      * 
      * @param stdClass $remote Information about remote.
      * @param string $search String to be searched for.
+     * @param bool $searchall If there is a desire to search in all courses.
      */
-    public static function search($remote, $search) {
+    public static function search($remote, $search, $searchall) {
         global $USER;
         
         if (empty($remote->address)) {
@@ -123,6 +129,18 @@ class transfer_manager {
 
         if (empty($remote->token)) {
             throw new configuration_exception(configuration_exception::CODE_NO_TOKEN);
+        }
+        
+        // If the searchall option is chosen, check the capability and search all courses if positive.
+        if ($searchall) {
+            $context = \context_system::instance();
+            if (has_capability('local/remote_backup_provider:searchall', $context)) {
+                $url = sprintf(self::URL_BASE_FORMAT, $remote->address, $remote->token) . self::URL_PARAMS_SEARCHALL;
+                $params = array('search' => $search);
+                $curl = new \curl;
+                $results = json_decode($curl->post($url, $params));
+                return $results;
+            }
         }
 
         $url = sprintf(self::URL_BASE_FORMAT, $remote->address, $remote->token) . self::URL_PARAMS_SEARCH;
@@ -158,8 +176,9 @@ class transfer_manager {
      * 
      * @param stdClass $remote Information about remote.
      * @param string $course_id Remote course ID.
+     * @param int $user_id
      */
-    public static function add_new($remote, $course_id) {
+    public static function add_new($remote, $course_id, $user_id) {
         global $DB, $USER;
         $remote_course_name = self::get_remote_course_name($remote, $course_id);
 
@@ -174,7 +193,8 @@ class transfer_manager {
             'remotebackupurl' => null,
             'courseid' => null,
             'status' => 'added',
-            'userid' => $USER->id,
+            'userid' => $user_id,
+            'issuer' => $USER->id,
             'timecreated' => $datetime->getTimestamp(),
             'timemodified' => $datetime->getTimestamp(),
         ];
@@ -634,5 +654,20 @@ class transfer_manager {
     public function cancel_manually() {
         global $USER;
         $this->change_status('cancelled_manually', $USER->id, self::STATUS_CANCELED);
+    }
+
+    /**
+     * Executes manual finishing of the course.
+     */
+    public function finish_manually($courseid) {
+        global $USER, $DB;
+        $transfer_data = (object) [
+            'id' => $this->transfer->id,
+            'courseid' => $courseid,
+        ];
+
+        $DB->update_record('local_remotebp_transfer', $transfer_data);
+        
+        $this->change_status('finished_manually', json_encode(['user' => $USER->id, 'course' => $courseid]), self::STATUS_FINISHED);
     }
 }

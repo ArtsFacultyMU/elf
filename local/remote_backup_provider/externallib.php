@@ -142,14 +142,14 @@ class local_remote_backup_provider_external extends external_api {
 
         // Capability check.
         if (!has_capability('moodle/course:viewhiddencourses', context_system::instance())) {
-            return false;
+            return [];
         }
 
 
         // Get user's ID by auth (method) & username.
         $user_lookup = $DB->get_record('user', array('username' => $username, 'auth' => $auth), 'id');
         if (!$user_lookup) {
-            return false;
+            return [];
         }
 
 
