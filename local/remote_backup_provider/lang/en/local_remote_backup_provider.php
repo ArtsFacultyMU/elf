@@ -28,6 +28,12 @@ $string['transfer_backup_task'] = 'Move backup from remote to local instalation'
 $string['restore_backup_task'] = 'Restore course from backup';
 $string['enrol_teacher_task'] = 'Enrol teacher to the course';
 
+$string['search_all'] = 'Search all courses';
+$string['transfer_as'] = 'Transfer as:';
+$string['user_not_found'] = 'User wasn\'t found.';
+$string['issued_by_other_user'] = 'Transfer was issued by other user.';
+$string['course_id'] = 'Course ID';
+
 $string['import'] = 'Import from remote';
 $string['pluginname'] = 'Remote backup provider';
 $string['privacy:metadata'] = 'The Remote backup provider plugin does not store any personal data.';
@@ -35,6 +41,11 @@ $string['remotesite'] = 'Remote site';
 $string['remotesite_desc'] = 'The fully-qualified domain of the remote site';
 $string['wstoken'] = 'Web service token';
 $string['wstoken_desc'] = 'Add the web service token from the remote site.';
+
+$string['remote_backup_provider:access'] = 'Course transfer – basic access';
+$string['remote_backup_provider:searchall'] = 'Search all courses on remote';
+$string['remote_backup_provider:transferasother'] = 'Transfer as different person';
+$string['remote_backup_provider:multitransfer'] = 'Override one issue per course limitation';
 
 $string['available_courses_search'] = 'Search available source courses';
 $string['available_courses'] = 'Available source courses';
@@ -55,6 +66,7 @@ $string['remote_course'] = 'Course on remote';
 $string['back_to_selection'] = 'Back to selection';
 $string['continue_to_course'] = 'Continue to transfered course';
 $string['courses_issued_for_transfer'] = 'Courses are issued to transfer';
+$string['courses_issued_for_transfer_error'] = 'Following courses were already issued earlier therefore skipped:';
 
 $string['restore_error_invalid_extension'] = 'Restore failed: Invalid file extension.';
 $string['exception_tm_restore_error_invalid_backup_file'] = 'Restore failed: Invalid backup file.';
@@ -69,8 +81,8 @@ $string['invalid_section'] = 'Invalid section';
 $string['no_remote'] = 'No remote found.';
 $string['no_token'] = 'Selected remote does not have token filled in.';
 $string['no_address'] = 'Selected remote does not have address filled in.';
-
 $string['remote_not_found'] = 'Remote not found.';
+$string['course_not_found'] = 'Course not found.';
 
 $string['admin_general_settings'] = "General settings";
 $string['admin_remote_list'] = 'List of remotes';
@@ -79,6 +91,7 @@ $string['admin_remote_add'] = 'Add remote';
 $string['admin_transfer_log'] = 'Transfer log';
 $string['admin_detailed_log'] = 'Detailed transfer log';
 $string['admin_manual_cancel'] = 'Cancel transfer manually';
+$string['admin_manual_finish'] = 'Finish transfer manually';
 
 $string['remote_name'] = 'Name';
 $string['remote_url'] = 'URL';
@@ -102,6 +115,8 @@ $string['transfer_already_canceled'] = 'Transfer was already canceled.';
 $string['transfer_already_finished'] = 'Transfer was already finished.';
 $string['transfer_manualcancel_areyousure'] = 'Are you sure to cancel the following course?';
 $string['transfer_canceled_successfully'] = 'Transfer was successfully canceled.';
+$string['transfer_finished_successfully'] = 'Transfer was successfully finished.';
+
 
 $string['transfer_status_added'] = 'Issued';
 $string['transfer_status_error'] = 'Error';
@@ -142,3 +157,4 @@ $string['transfer_fullstatus_categorization_creatingnewcat'] = 'Creating a new l
 $string['transfer_fullstatus_categorization_savingforlater'] = 'Saving link to newly created category for later use in transfers.';
 $string['transfer_fullstatus_cancelled_timeout'] = 'Transfer canceled on timeout.';
 $string['transfer_fullstatus_cancelled_manually'] = 'Transfer canceled manually.';
+$string['transfer_fullstatus_finished_manually'] = 'Transfer finished manually.';

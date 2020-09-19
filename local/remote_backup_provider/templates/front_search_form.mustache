@@ -28,9 +28,15 @@
 
 <div class="row">
     <div class="col-md-12 form-inline mt-3">
-        <form method="POST" action="{{{action}}}">
+        <form method="POST" action="{{{action}}}" id="local_remote_backup_provider_search_form">
             <input type="text" class="form-control " name="search" id="id_search" value="{{value}}" size="" />
             <input type="submit" class="btn btn-primary" name="submitbutton" id="id_submitbutton" value="{{#str}}search{{/str}}" />
         </form>
     </div>
+    {{#searchall}}
+        <div class="col-md-12 form-inline">
+            <input type="checkbox" {{{searchall_checked}}} class="form-control mr-3" name="searchall" id="searchall" value="1" form="local_remote_backup_provider_search_form" />
+            <label for="searchall">{{#str}} search_all, local_remote_backup_provider{{/str}}</label>
+        </div>
+    {{/searchall}}
 </div>

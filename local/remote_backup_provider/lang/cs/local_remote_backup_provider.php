@@ -36,9 +36,20 @@ $string['remotesite_desc'] = 'Úplná adresa vzdálené instalace';
 $string['wstoken'] = 'Token pro webové služby';
 $string['wstoken_desc'] = 'Doplňte token pro webové služby ze vzdálené instalace.';
 
+$string['remote_backup_provider:access'] = 'Převádění kurzů – základní přístup';
+$string['remote_backup_provider:searchall'] = 'Hledání napříč všemi kurzy';
+$string['remote_backup_provider:transferasother'] = 'Převádění za jiného uživatele';
+$string['remote_backup_provider:multitransfer'] = 'Přeskočení omezení jednoho převodu';
+
 $string['available_courses_search'] = 'Hledat kurzy ve vzdálené instalaci';
 $string['available_courses'] = 'Dostupné kurzy ve vzdálené instalaci';
 $string['issued_transfers'] = 'Zadané převody';
+
+$string['search_all'] = 'Vybírat ze všech kurzů';
+$string['transfer_as'] = 'Převést jako:';
+$string['user_not_found'] = 'Uživatel nebyl nalezen.';
+$string['issued_by_other_user'] = 'Převod byl zadán jiným uživatelem.';
+$string['course_id'] = 'ID kurzu';
 
 $string['short_course_name'] = 'Zkrácený název';
 $string['full_course_name'] = 'Celý název';
@@ -55,6 +66,7 @@ $string['remote_course'] = 'Kurz ve vzdálené instalaci';
 $string['back_to_selection'] = 'Zpět na výběr';
 $string['continue_to_course'] = 'Přejít do převedeného kurzu';
 $string['courses_issued_for_transfer'] = 'Kurzy jsou nachystány k převodu';
+$string['courses_issued_for_transfer_error'] = 'Následující kurzy nelze zadat k převodu, již byly převáděny:';
 
 $string['restore_error_invalid_extension'] = 'Obnova nebyla úspěšná: Neplatná přípona souboru.';
 $string['exception_tm_restore_error_invalid_backup_file'] = 'Obnova nebyla úspěšná: Neplatný soubor zálohy.';
@@ -70,6 +82,7 @@ $string['no_remote'] = 'Nebyla nalezena žádná vzdálená instalace.';
 $string['no_token'] = 'Vybraná vzdálená instalace nemá zadán přístupový token.';
 $string['no_address'] = 'Vybraná vzdálená instalace nemá zadanou adresu.';
 $string['remote_not_found'] = 'Vzdálená instalace nebyla nalezena.';
+$string['course_not_found'] = 'Kurz nenalezen.';
 
 $string['admin_general_settings'] = "Obecná nastavení";
 $string['admin_remote_list'] = 'Seznam vzdálených instalací';
@@ -78,6 +91,7 @@ $string['admin_remote_add'] = 'Přidat vzdálenou instalaci';
 $string['admin_transfer_log'] = 'Záznamy o převodech';
 $string['admin_detailed_log'] = 'Detailní záznamy o převodech';
 $string['admin_manual_cancel'] = 'Zrušit převod ručně';
+$string['admin_manual_finish'] = 'Dokončit převod ručně';
 
 $string['remote_name'] = 'Název';
 $string['remote_url'] = 'URL';
@@ -101,6 +115,8 @@ $string['transfer_already_canceled'] = 'Převod byl již zrušen.';
 $string['transfer_already_finished'] = 'Převod byl již dokončen.';
 $string['transfer_manualcancel_areyousure'] = 'Vážně chcete zrušit následující kurz?';
 $string['transfer_canceled_successfully'] = 'Převod byl úspěšně zrušen.';
+$string['transfer_canceled_successfully'] = 'Převod byl úspěšně dokončen.';
+
 
 $string['transfer_status_added'] = 'Přidáno';
 $string['transfer_status_error'] = 'Chyba';
@@ -141,3 +157,4 @@ $string['transfer_fullstatus_categorization_creatingnewcat'] = 'Vytváření nov
 $string['transfer_fullstatus_categorization_savingforlater'] = 'Ukládání vazby k nově vytvořené kategorii pro budoucí užití v přenosech.';
 $string['transfer_fullstatus_cancelled_timeout'] = 'Přenos zrušen kvůli vypršení limitu.';
 $string['transfer_fullstatus_cancelled_manually'] = 'Přenos zrušen ručně.';
+$string['transfer_fullstatus_finished_manually'] = 'Přenos dokončen ručně.';

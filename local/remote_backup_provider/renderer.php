@@ -25,18 +25,35 @@ class local_remote_backup_provider_renderer extends plugin_renderer_base {
     public function render_front_course_list(
         local_remote_backup_provider\output\renderables\front_course_list_renderable $renderable
     ) {
+        global $USER;
 
         $rendered = $renderable->render();
 
         if ($renderable->hasCourses()) {
+            $context = \context_system::instance();
+            $control = '';
+            if (has_capability('local/remote_backup_provider:transferasother', $context)) {
+                $control .= get_string('transfer_as', 'local_remote_backup_provider') . \html_writer::empty_tag(
+                    'input',
+                    ['class'=> 'form-control mr-1 ml-1', 'form' => $renderable::FORM_ID, 'name'=>'userid']
+                );
+            }
+
             $button_url = new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'process', 'remote' => $renderable->getRemote()->id]);
             
             $button = new \single_button($button_url, get_string('button_import', 'local_remote_backup_provider'), 'POST', true);
             $button->formid = $renderable::FORM_ID;
             $button->disabled = true;
 
-            $rendered .= $this->render($button)
-                    . \html_writer::script('', new \moodle_url('/local/remote_backup_provider/js/course_list.js'));
+            $control .= $this->render($button);
+
+
+            $rendered .= \html_writer::div(
+                $control, 
+                'col-md-12 form-inline'
+            );
+
+            $rendered .= \html_writer::script('', new \moodle_url('/local/remote_backup_provider/js/course_list.js'));
         }
 
         return $rendered;
@@ -112,7 +129,7 @@ class local_remote_backup_provider_renderer extends plugin_renderer_base {
         foreach ($transfers as $transfer) {    
             $row = [];
         
-            $row[] = $transfer->remotecoursename;
+            $row[] = $transfer->remotecoursename . (($transfer->userid != $transfer->issuer) ? ' ' . $this->pix_icon('i/user', get_string('issued_by_other_user', 'local_remote_backup_provider')) : '');
             $row[] = userdate($transfer->timecreated);
             $row[] = '<span class="badge badge-' . \local_remote_backup_provider\helper\transfer_manager::LABEL_FOR_STATUS[$transfer->status] . '">'
                     . get_string('transfer_status_' . $transfer->status, 'local_remote_backup_provider')
@@ -158,7 +175,7 @@ class local_remote_backup_provider_renderer extends plugin_renderer_base {
         foreach ($transfers as $transfer) {    
             $row = [];
         
-            $row[] = $transfer->remotecoursename;
+            $row[] = $transfer->remotecoursename . (($transfer->userid != $transfer->issuer) ? ' ' . $this->pix_icon('i/user', get_string('issued_by_other_user', 'local_remote_backup_provider')) : '');
             $row[] = userdate($transfer->timecreated);
             
             if (!isset($issuers[$transfer->userid])) {

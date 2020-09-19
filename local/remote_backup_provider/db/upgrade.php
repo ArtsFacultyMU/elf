@@ -236,4 +236,37 @@ function xmldb_local_remote_backup_provider_upgrade($oldversion) {
         // Remote_backup_provider savepoint reached.
         upgrade_plugin_savepoint(true, 2020091000, 'local', 'remote_backup_provider');
     }
+
+    if ($oldversion < 2020091000.01) {
+        // Remote_backup_provider savepoint reached.
+        upgrade_plugin_savepoint(true, 2020091000.01, 'local', 'remote_backup_provider');
+    }
+
+    if ($oldversion < 2020091000.02) {
+
+        // Define field issuer to be added to local_remotebp_transfer.
+        $table = new xmldb_table('local_remotebp_transfer');
+        $field = new xmldb_field('issuer', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'userid');
+
+        // Conditionally launch add field issuer.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Remote_backup_provider savepoint reached.
+        upgrade_plugin_savepoint(true, 2020091000.02, 'local', 'remote_backup_provider');
+    }
+
+    if ($oldversion < 2020091000.03) {
+        $DB->execute('UPDATE {local_remotebp_transfer} SET `issuer`=`userid`');
+
+        // Remote_backup_provider savepoint reached.
+        upgrade_plugin_savepoint(true, 2020091000.03, 'local', 'remote_backup_provider');
+    }
+
+    if ($oldversion < 2020092000) {
+        // Remote_backup_provider savepoint reached.
+        upgrade_plugin_savepoint(true, 2020092000, 'local', 'remote_backup_provider');
+    }
+
 }

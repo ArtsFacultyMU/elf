@@ -226,4 +226,56 @@ class admin_controller {
         );
         echo $output->footer();
     }
+
+    public function manualFinishAction() {
+        global $PAGE, $CFG, $DB;
+
+        $FORM_ID = 'manual_finish_form';
+
+        require_once($CFG->libdir . '/adminlib.php');
+        admin_externalpage_setup('local-remote_backup_provider-manual_finish');
+
+        $transfer_id = optional_param('id', 0, PARAM_INT);
+        $courseid = optional_param('courseid', 0, PARAM_INT);
+
+        // Prechecks
+        try {
+            $transfer_manager = new \local_remote_backup_provider\helper\transfer_manager($transfer_id);
+        } catch (\local_remote_backup_provider\exception\transfer_manager_exception $e) {
+            redirect(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_transfer_log']), get_string('transfer_not_found', 'local_remote_backup_provider'), null, \core\output\notification::NOTIFY_WARNING);
+        }
+        if ($transfer_manager->transfer->status == \local_remote_backup_provider\helper\transfer_manager::STATUS_FINISHED) {
+            redirect(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_transfer_log', 'remote' => $transfer_manager->remote->id]), get_string('transfer_already_finished', 'local_remote_backup_provider'), null, \core\output\notification::NOTIFY_WARNING);
+        }
+
+        // If already consented, change to canceled
+        if ($courseid) {
+            if (!$DB->get_record('course', ['id'=> $courseid])) {
+                redirect(new \moodle_url('/local/remote_backup_provider/index.php', ['section'=> 'admin_manual_finish', 'id' => $transfer_id]), get_string('course_not_found', 'local_remote_backup_provider'), null, \core\output\notification::NOTIFY_WARNING);
+            }
+            $transfer_manager->finish_manually($courseid);
+            redirect(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_transfer_log', 'remote' => $transfer_manager->remote->id]), get_string('transfer_finished_successfully', 'local_remote_backup_provider'), null, \core\output\notification::NOTIFY_SUCCESS);
+        }
+
+        // Otherwise show consent button
+        $output = $PAGE->get_renderer('local_remote_backup_provider');
+        echo $output->header();
+
+
+        $button_url = new \moodle_url('/local/remote_backup_provider/index.php', ['section'=> 'admin_manual_finish', 'id' => $transfer_id]);
+            
+        $button = new \single_button($button_url, get_string('continue'), 'POST', true);
+        $button->formid = $FORM_ID;
+
+        $control = get_string('course_id', 'local_remote_backup_provider') . ':'. \html_writer::empty_tag(
+            'input',
+            ['class'=> 'form-control mr-1 ml-1', 'form' => $FORM_ID, 'name'=>'courseid']
+        );
+        $control .= $output->render($button);
+        echo \html_writer::div(
+            $control, 
+            'col-md-12 form-inline'
+        );
+        echo $output->footer();
+    }
 }

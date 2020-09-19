@@ -47,4 +47,7 @@ if ($hassiteconfig) {
 
     $settings = new admin_externalpage('local-remote_backup_provider-manual_cancel', get_string('admin_manual_cancel', 'local_remote_backup_provider'), new moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_manual_cancel']), 'moodle/site:config', true);
     $ADMIN->add('local-remote_backup_provider', $settings);
+
+    $settings = new admin_externalpage('local-remote_backup_provider-manual_finish', get_string('admin_manual_finish', 'local_remote_backup_provider'), new moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_manual_finish']), 'moodle/site:config', true);
+    $ADMIN->add('local-remote_backup_provider', $settings);
 }

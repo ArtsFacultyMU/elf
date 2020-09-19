@@ -47,6 +47,13 @@ class front_search_form_renderable implements \renderable, \templatable {
     protected $value = null;
 
     /**
+     * Is "search all" checkbox checked?
+     * 
+     * @var bool
+     */
+    protected $searchall_checked = false;
+
+    /**
      * Changes the form action (e.g. target).
      * 
      * @param string $action New action.
@@ -64,12 +71,25 @@ class front_search_form_renderable implements \renderable, \templatable {
         $this->value = $value;
     }
 
+    /**
+     * (Un)Checks the "search all" checkbox.
+     * 
+     * @param bool $bool True if checkbox should be checked.
+     */
+    public function checkSearchall(string $bool) {
+        $this->searchall_checked = $bool;
+    }
+
     public function export_for_template(\renderer_base $output) {
+        global $USER;
+
+        $context = \context_system::instance();
         $output = new stdClass();
 
         $output->action = $this->action;
         $output->value = $this->value;
-
+        $output->searchall = has_capability('local/remote_backup_provider:searchall', $context);
+        $output->searchall_checked = $this->searchall_checked ? 'checked="checked"' : '';
         return $output;
     }
 }

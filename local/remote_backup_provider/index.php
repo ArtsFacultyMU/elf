@@ -67,6 +67,11 @@ switch ($section) {
         $controller->manualCancelAction();
         break;
 
+    case 'admin_manual_finish':
+        $controller = new local_remote_backup_provider\output\controllers\admin_controller();
+        $controller->manualFinishAction();
+        break;
+
     case '':
         redirect(new moodle_url('/local/remote_backup_provider/index.php', ['section' => 'list']));
         break;
