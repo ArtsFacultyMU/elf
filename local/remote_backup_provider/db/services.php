@@ -73,4 +73,11 @@ $functions = array(
           'type' => 'read',
           'capabilities' => 'moodle/course:viewhiddencourses',
      ),
+     'local_remote_backup_provider_delete_course_backup' => array(
+          'classname' => 'local_remote_backup_provider\external\delete_course_backup',
+          'methodname' => 'delete_course_backup',
+          'description' => 'Delete course backup.',
+          'type' => 'write',
+          'capabilities' => 'moodle/backup:backupcourse',
+     ),
 );

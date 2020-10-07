@@ -34,6 +34,9 @@ defined('MOODLE_INTERNAL') || die();
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class remove_old extends \core\task\scheduled_task {
+    const URL_BASE_FORMAT = '%s/webservice/rest/server.php?wstoken=%s&moodlewsrestformat=json';
+    const URL_PARAMS_BACKUPDELETE = '&wsfunction=local_remote_backup_provider_delete_course_backup';
+
     /**
      * Get the name of the task.
      *
@@ -50,27 +53,58 @@ class remove_old extends \core\task\scheduled_task {
      */
     public function execute() {
         global $DB;
-        mtrace('Deleting old remote backup files');
+        mtrace('Deleting old remote backup files.');
 
-        // Get component files.
-        $records = $DB->get_records('files', array('component' => 'local_remote_backup_provider', 'filearea' => 'backup'));
-        $fs = get_file_storage();
+        $records = $DB->get_records_select('local_remotebp_transfer', '(status = ? OR status = ?) AND remotebackupurl IS NOT NULL',
+                [\local_remote_backup_provider\helper\transfer_manager::STATUS_FINISHED, \local_remote_backup_provider\helper\transfer_manager::STATUS_CANCELED]);
 
-        foreach ($records as $record) {
-            if ($record->timemodified < (time() - DAYSECS) && ($record->filepath != '.')) {
-                $file = $fs->get_file(
-                    $record->contextid,
-                    $record->component,
-                    $record->filearea,
-                    $record->itemid,
-                    $record->filepath,
-                    $record->filename
+        mtrace('Found ' . count($records) . ' record(s).');
+
+        $counter = 0;
+
+        foreach($records as $record) {
+            $counter++;
+            mtrace('Processing ' . $counter . '/' . count($records) . '.');
+            $remotebackupurl_bits = array_reverse(explode('/', $record->remotebackupurl));
+            if (count($remotebackupurl_bits) < 2) {
+                mtrace('Backupurl invalid.');
+                continue;
+            }
+
+            $remote = (new \local_remote_backup_provider\helper\remote_manager())->getRemote($record->remoteid);
+            $timestamp = $remotebackupurl_bits[1];
+
+            $url = sprintf(self::URL_BASE_FORMAT, $remote->address, $remote->token) . self::URL_PARAMS_BACKUPDELETE;
+            $params = array('id' => $record->remotecourseid, 'timestamp' => $timestamp);
+            $curl = new \curl;
+            $results = json_decode($curl->post($url, $params));
+
+            if ($results) {
+                $context = \context_system::instance();
+                $fs = get_file_storage();
+
+                $fileinfo = array(
+                    'contextid' => $context->id,
+                    'component' => 'local_remote_backup_provider',
+                    'filearea' => 'transfer',
+                    'itemid' => $record->id,
+                    'filepath' => '/',
+                    'filename' => 'transfer.mbz',
                 );
+
+                $file = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
+                        $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
+
                 if ($file) {
                     $file->delete();
-                    mtrace('Deleted ' . $record->pathnamehash);
                 }
+
+                $DB->update_record('local_remotebp_transfer', ['id'=> $record->id, 'remotebackupurl' => NULL]);
+
+                mtrace('Success.');
+                continue;
             }
+            mtrace('Failed on remote file.');
         }
         return true;
     }
