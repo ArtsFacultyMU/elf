@@ -74,20 +74,51 @@ if (($data = $mform->get_data()) && confirm_sesskey()) {
             if ($field == 'api') { // Strip trailing slash from api.
                 $value = rtrim($value, '/');
             }
+            if ($field == 'unitid' && $value != 0) {
+                // Unset receiver address defaults.
+                $plagiarismdefaults = $DB->get_records_menu('plagiarism_urkund_config',
+                    array('cm' => 0), '', 'name, value'); // The cmid(0) is the default list.
+                $supportedmodules = urkund_supported_modules();
+                foreach ($supportedmodules as $sm) {
+                    $element = 'urkund_receiver';
+                    $element .= "_" . $sm;
+                    $newelement = new Stdclass();
+                    $newelement->cm = 0;
+                    $newelement->name = $element;
+                    $newelement->value = '';
+                    if (isset($plagiarismdefaults[$element])) {
+                        $newelement->id = $DB->get_field('plagiarism_urkund_config', 'id', (array('cm' => 0, 'name' => $element)));
+                        $DB->update_record('plagiarism_urkund_config', $newelement);
+                    }
+                }
+            }
             set_config($field, $value, 'plagiarism_urkund');
         }
     }
-    set_config('urkund_use', $data->enabled, 'plagiarism'); // TODO: remove when MDL-67872 is integrated.
 
-    $c = new curl(array('proxy' => true));
-    $c->setopt(array('CURLOPT_HTTPAUTH' => CURLAUTH_BASIC, 'CURLOPT_USERPWD' => $data->username.":".$data->password));
-    $html = $c->post($data->api);
-    $response = $c->getResponse();
+    set_config('urkund_use', $data->enabled, 'plagiarism'); // TODO: remove when MDL-67872 is integrated.
+    if (!defined('BEHAT_SITE_RUNNING')) {
+        $c = new curl(array('proxy' => true));
+        $c->setopt(array());
+        $c->setopt(array('CURLOPT_RETURNTRANSFER' => 1,
+            'CURLOPT_TIMEOUT' => 60, // Set to 60seconds just in case.
+            'CURLOPT_HTTPAUTH' => CURLAUTH_BASIC,
+            'CURLOPT_USERPWD' => $data->username . ":" . $data->password));
+
+        $html = $c->get($data->api . '/api/receivers');
+        $response = $c->getResponse();
+    } else {
+        // Fake a success for unit tests.
+        $c = new stdClass();
+        $c->info['http_code'] = '200';
+    }
     // Now check to see if username/password is correct. - this check could probably be improved further.
-    if ($c->info['http_code'] == '401') {
+    if ($c->info['http_code'] != '200') {
         // Disable urkund as this config isn't correct.
         set_config('enabled', 0, 'plagiarism_urkund');
         set_config('urkund_use', 0, 'plagiarism'); // TODO: remove when MDL-67872 is integrated.
+        echo $OUTPUT->notification(get_string('savedconfigfailed', 'plagiarism_urkund'), 'notifyproblem');
+        debugging("invalid httpstatuscode returned: ".$c->info['http_code']);
     } else {
         echo $OUTPUT->notification(get_string('savedconfigsuccess', 'plagiarism_urkund'), 'notifysuccess');
     }

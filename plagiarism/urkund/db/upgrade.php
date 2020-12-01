@@ -243,5 +243,85 @@ function xmldb_plagiarism_urkund_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2020020700, 'plagiarism', 'urkund');
     }
 
+    if ($oldversion < 2020021300) {
+        $DB->delete_records('user_preferences', array('name' => 'urkund_receiver'));
+
+        upgrade_plugin_savepoint(true, 2020021300, 'plagiarism', 'urkund');
+    }
+
+    if ($oldversion < 2020031900) {
+        if (get_config('plagiarism_urkund', 'unitid') != 0) {
+            $plagiarismdefaults = $DB->get_records_menu('plagiarism_urkund_config',
+                array('cm' => 0), '', 'name, value'); // The cmid(0) is the default list.
+            $supportedmodules = urkund_supported_modules();
+            foreach ($supportedmodules as $sm) {
+                $element = 'urkund_receiver';
+                $element .= "_" . $sm;
+                $newelement = new Stdclass();
+                $newelement->cm = 0;
+                $newelement->name = $element;
+                $newelement->value = '';
+                if (isset($plagiarismdefaults[$element])) {
+                    $newelement->id = $DB->get_field('plagiarism_urkund_config', 'id', (array('cm' => 0, 'name' => $element)));
+                    $DB->update_record('plagiarism_urkund_config', $newelement);
+                }
+            }
+
+            upgrade_plugin_savepoint(true, 2020031900, 'plagiarism', 'urkund');
+        }
+    }
+
+    if ($oldversion < 2020031903) {
+        // Check for old API address and update if required.
+        $apiaddress = get_config('plagiarism_urkund', 'api');
+        if ($apiaddress == 'https://secure.urkund.com/api/submissions') {
+            set_config('api', 'https://secure.urkund.com', 'plagiarism_urkund');
+        }
+
+        upgrade_plugin_savepoint(true, 2020031903, 'plagiarism', 'urkund');
+    }
+
+    if ($oldversion < 2020031908) {
+        require_once($CFG->dirroot . '/plagiarism/urkund/lib.php');
+        // New setting storeddocuments - find all existing coursemodules and set these to "yes".
+        if (!$DB->record_exists('plagiarism_urkund_config', array('name' => 'urkund_storedocuments'))) {
+            // If we don't have any existing activities with this setting it has just been added to the site.
+            $sql = "SELECT distinct cm
+                FROM {plagiarism_urkund_config}
+                WHERE cm <> 0";
+            $cms = $DB->get_records_sql($sql);
+            $records = array();
+            foreach ($cms as $cm) {
+                $con = new stdClass();
+                $con->cm = $cm->cm;
+                $con->name = 'urkund_storedocuments';
+                $con->value = 1;
+                $records[] = $con;
+            }
+            if (!empty($records)) {
+                $DB->insert_records('plagiarism_urkund_config', $records);
+            }
+        }
+
+        // Now set overall default for all supported modules to Yes.
+        $supportedmodules = urkund_supported_modules();
+        $plagiarismdefaults = $DB->get_records_menu('plagiarism_urkund_config',
+            array('cm' => 0), '', 'name, value'); // The cmid(0) is the default list.
+        foreach ($supportedmodules as $sm) {
+            $element = 'urkund_storedocuments';
+            $element .= "_" . $sm;
+            // Check if new setting is set to something.
+            if (!isset($plagiarismdefaults[$element])) {
+                $newelement = new stdclass();
+                $newelement->cm = 0;
+                $newelement->name = $element;
+                $newelement->value = 1;
+                $DB->insert_record('plagiarism_urkund_config', $newelement);
+            }
+        }
+
+        upgrade_plugin_savepoint(true, 2020031908, 'plagiarism', 'urkund');
+    }
+
     return true;
 }
