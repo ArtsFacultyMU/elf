@@ -11,20 +11,11 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
-define('STUDENT_ROLE', 5);
-
 /**
  * IS MU enrolment plugin implementation.
  * @author  Filip Benčo
  */
 class enrol_ismu_plugin extends enrol_plugin {
-
-    private $helper;
-    
-    public function __construct()
-    {
-        $this->helper = new \enrol_ismu\helper;
-    }
     
     /**
      * We are a good plugin and don't invent our own UI/validation code path.
@@ -72,29 +63,31 @@ class enrol_ismu_plugin extends enrol_plugin {
     {
         global $PAGE;
         
-        $currentPeriod = $this->helper->get_current_period();
-        $availalePeriods = $this->helper->get_available_periods($currentPeriod, 4);
-        $mform->addElement('select', 'enrol_ismu_period', get_string('period', 'enrol_ismu'), $availalePeriods);
+        $currentsemester = \enrol_ismu\helpers\semester::get_current_semester();
+
+        $semesters = \enrol_ismu\helpers\semester::get_coursesettings_semesters();
+        
+        $mform->addElement('select', 'enrol_ismu_period', get_string('period', 'enrol_ismu'), $semesters);
         $mform->addHelpButton('enrol_ismu_period', 'period', 'enrol_ismu');
 
         $mform->addElement('text', 'enrol_ismu_course_codes', get_string('course_codes', 'enrol_ismu'));
         $mform->addHelpButton('enrol_ismu_course_codes', 'course_codes', 'enrol_ismu');
         $mform->setType('enrol_ismu_course_codes', PARAM_RAW);
-        $mform->disabledIf('enrol_ismu_course_codes', 'enrol_ismu_period', 'neq', $currentPeriod['full']);
+        $mform->disabledIf('enrol_ismu_course_codes', 'enrol_ismu_period', 'neq', $currentsemester->full());
 
         $statusOpts = [
-            enrol_ismu\helper::ISMU_STUDENTS_NO_IMPORT => get_string('enrol_no', 'enrol_ismu'), 
-            enrol_ismu\helper::ISMU_STUDENTS_IMPORT_REGISTERED => get_string('enrol_registered', 'enrol_ismu'), 
-            enrol_ismu\helper::ISMU_STUDENTS_IMPORT_ENROLLED => get_string('enrol_enrolled', 'enrol_ismu')
+            enrol_ismu\ismu_enroler::ISMU_STUDENTS_NO_IMPORT => get_string('enrol_no', 'enrol_ismu'), 
+            enrol_ismu\ismu_enroler::ISMU_STUDENTS_IMPORT_REGISTERED => get_string('enrol_registered', 'enrol_ismu'), 
+            enrol_ismu\ismu_enroler::ISMU_STUDENTS_IMPORT_ENROLLED => get_string('enrol_enrolled', 'enrol_ismu')
         ];
         $mform->addElement('select', 'enrol_ismu_enrol_status', get_string('enrol_status', 'enrol_ismu'), $statusOpts);
         $mform->addHelpButton('enrol_ismu_enrol_status', 'enrol_status', 'enrol_ismu');
         $PAGE->requires->js_init_call('M.enrol_ismu.init');
-        $mform->disabledIf('enrol_ismu_enrol_status', 'enrol_ismu_period', 'neq', $currentPeriod['full']);
+        $mform->disabledIf('enrol_ismu_enrol_status', 'enrol_ismu_period', 'neq', $currentsemester->full());
 
         $seminarsOpts = [
-            enrol_ismu\helper::ISMU_SEMINARS_NO_CREATE => get_string('create_seminars_no', 'enrol_ismu'), 
-            enrol_ismu\helper::ISMU_SEMINARS_CREATE => get_string('create_seminars_yes', 'enrol_ismu')
+            enrol_ismu\ismu_enroler::ISMU_SEMINARS_NO_CREATE => get_string('create_seminars_no', 'enrol_ismu'), 
+            enrol_ismu\ismu_enroler::ISMU_SEMINARS_CREATE => get_string('create_seminars_yes', 'enrol_ismu')
         ];
         $mform->addElement(
             'select', 
@@ -104,7 +97,7 @@ class enrol_ismu_plugin extends enrol_plugin {
         );
         $mform->addHelpButton('enrol_ismu_create_seminars', 'create_seminars', 'enrol_ismu');
         $mform->disabledIf('enrol_ismu_create_seminars', 'enrol_ismu_enrol_status', 'neq', 2);
-        $mform->disabledIf('enrol_ismu_create_seminars', 'enrol_ismu_period', 'neq', $currentPeriod['full']);
+        $mform->disabledIf('enrol_ismu_create_seminars', 'enrol_ismu_period', 'neq', $currentsemester->full());
         
         $mform->addElement(
             'static', 
@@ -113,7 +106,7 @@ class enrol_ismu_plugin extends enrol_plugin {
             get_string('long_load_notice', 'enrol_ismu')
         );
         
-        $mform->setDefaults((array) $this->helper->convert_moodle_to_ismu_settings($instance));
+        $mform->setDefaults((array) enrol_ismu\helpers\converters::moodle_to_ismu_settings($instance));
     }
     
     /**
@@ -158,7 +151,7 @@ class enrol_ismu_plugin extends enrol_plugin {
      */
     public function add_default_instance($course) 
     {
-        $currentPeriod = $this->helper->get_current_period();
+        $currentsemester = \enrol_ismu\helpers\semester::get_current_semester();
         $fields = [
             'status' => ENROL_INSTANCE_ENABLED, 
             'enrolperiod' => 0, 
@@ -166,7 +159,7 @@ class enrol_ismu_plugin extends enrol_plugin {
             'customint1' => 0, 
             'customint2' => 0,
             'customchar1' => '',
-            'customchar2' => $currentPeriod['full']
+            'customchar2' => $currentsemester->full()
         ];
         return $this->add_instance($course, $fields);
     }
@@ -183,9 +176,9 @@ class enrol_ismu_plugin extends enrol_plugin {
         if ($DB->record_exists('enrol', ['courseid' => $course->id, 'enrol' => 'ismu'])) {
             return null;
         }
-        $data = (array) $this->helper->convert_ismu_to_moodle_settings((object) $fields);
+        $data = (array) enrol_ismu\helpers\converters::ismu_to_moodle_settings((object) $fields);
         $enrolId = parent::add_instance($course, $data);
-        $this->helper->task_sync_users_from_ismu($course->id, STUDENT_ROLE);
+        \enrol_ismu\helpers\tasks::sync_students_from_ismu($course->id);
         return $enrolId;
     }
     
@@ -195,23 +188,24 @@ class enrol_ismu_plugin extends enrol_plugin {
         $data = (object) $data;
         $update = parent::update_instance(
             $instance,
-            (object) $this->helper->convert_ismu_to_moodle_settings($data)
+            (object) enrol_ismu\helpers\converters::ismu_to_moodle_settings($data)
         );
         // perform archiving of user enrolments if neccessary.
-        $currentIsmuActivePeriod = $this->helper->get_current_period()['full'];
+        $currentsemester = \enrol_ismu\helpers\semester::get_current_semester();
+        $currentIsmuActivePeriod = $currentsemester->full();
         if (!empty($currentCoursePeriod)) {
             if ($data->enrol_ismu_period != $currentCoursePeriod) {
                 //we have selected different enrol period
-                $this->helper->task_archive_users($instance->courseid, $instance->id, $currentCoursePeriod);
+                \enrol_ismu\helpers\tasks::archive_users($instance->courseid, $instance->id, $currentCoursePeriod);
                 
                 if($data->enrol_ismu_period != $currentIsmuActivePeriod) {
                     //restore enrolments from archive
-                    $this->helper->task_sync_users_from_archive($instance->courseid, $instance->id, $data->enrol_ismu_period, STUDENT_ROLE);
+                    \enrol_ismu\helpers\tasks::sync_students_from_archive($instance->courseid, $instance->id, $data->enrol_ismu_period);
                 } 
             }
         }
         if($data->enrol_ismu_period == $currentIsmuActivePeriod) {
-            $this->helper->task_sync_users_from_ismu($instance->courseid, STUDENT_ROLE);
+            \enrol_ismu\helpers\tasks::sync_students_from_ismu($instance->courseid);
         }
         return $update;
     }
@@ -243,12 +237,12 @@ class enrol_ismu_plugin extends enrol_plugin {
             $data->enrol_ismu_course_codes = '';
         }
         if (!isset($data->enrol_ismu_period)) {
-            $currentPeriod = $this->helper->get_current_period();
-            $data->enrol_ismu_period = $currentPeriod['full'];
+            $currentsemester = \enrol_ismu\helpers\semester::get_current_semester();
+            $data->enrol_ismu_period = $currentsemester->full();
         }
 
         if ($inserted) {
-            $this->add_instance($course, $this->helper->convert_ismu_to_moodle_settings($data));
+            $this->add_instance($course, enrol_ismu\helpers\converters::ismu_to_moodle_settings($data));
             return;
         } 
         $instance = \enrol_ismu\moodle_enroler::get_instance_by_course_id($course->id);
@@ -260,23 +254,24 @@ class enrol_ismu_plugin extends enrol_plugin {
 
         // perform archiving of user enrolments if neccessary.
         $currentCoursePeriod = isset($instance->customchar2)?trim($instance->customchar2):'';
-        $currentIsmuActivePeriod = $this->helper->get_current_period()['full'];
+        $currentsemester = \enrol_ismu\helpers\semester::get_current_semester();
+        $currentIsmuActivePeriod = $currentsemester->full();
         if (!empty($currentCoursePeriod)) {
             if ($data->enrol_ismu_period != $currentCoursePeriod) {
                 //we have selected different enrol period
-                $this->helper->task_archive_users($course->id, $instance->id, $currentCoursePeriod);
+                \enrol_ismu\helpers\tasks::archive_users($course->id, $instance->id, $currentCoursePeriod);
                 
                 if($data->enrol_ismu_period != $currentIsmuActivePeriod) {
                     //restore enrolments from archive
-                    $this->helper->task_sync_users_from_archive($course->id, $instance->id, $data->enrol_ismu_period, STUDENT_ROLE);
+                    \enrol_ismu\helpers\tasks::sync_students_from_archive($course->id, $instance->id, $data->enrol_ismu_period);
                 } 
             }
         }
         if($data->enrol_ismu_period == $currentIsmuActivePeriod) {
-            $this->helper->task_sync_users_from_ismu($course->id, STUDENT_ROLE);
+            \enrol_ismu\helpers\tasks::sync_students_from_ismu($course->id);
         }
 
-        $DB->update_record('enrol', $this->helper->convert_ismu_to_moodle_settings($data, $instance));
+        $DB->update_record('enrol', enrol_ismu\helpers\converters::ismu_to_moodle_settings($data, $instance));
     }
     
     
@@ -327,8 +322,8 @@ class enrol_ismu_plugin extends enrol_plugin {
 
     public function allow_unenrol(stdClass $instance)
     {
-        if($instance->customint1 == \enrol_ismu\helper::ISMU_STUDENTS_NO_IMPORT 
-                || $instance->customchar2 != $this->helper->get_current_period()['full']
+        if($instance->customint1 == \enrol_ismu\ismu_enroler::ISMU_STUDENTS_NO_IMPORT 
+                || $instance->customchar2 != \enrol_ismu\helpers\semester::get_current_semester()->full()
         ) {
             return true;
         }
@@ -337,8 +332,9 @@ class enrol_ismu_plugin extends enrol_plugin {
     
     public function unenrol_user(stdClass $instance, $userid)
     {
-        if(!empty($instance->customchar2) && $instance->customchar2 != $this->helper->get_current_period()['full']) {
-            $this->helper->task_archive_users($instance->coursei, $instance->id, $instance->customchar2);
+        if(!empty($instance->customchar2) 
+                && $instance->customchar2 != \enrol_ismu\helpers\semester::get_current_semester()->full()) {
+                    \enrol_ismu\helpers\tasks::archive_users($instance->courseid, $instance->id, $instance->customchar2);
 		}
         parent::unenrol_user($instance, $userid);
     }

@@ -43,24 +43,30 @@ If you select the option <i><b>Create seminar groups</b></i>, seminar groups wil
 <b>NB:</b> If you want to use both automatically and manually-created groups in the ELF course, remember to disable the autoenrol function before creating the manual groups (<i>Autoenrol students from IS MU -- NO</i>). Otherwise, your manually-created groups will be deleted during the next automatic course enrolment update (app. every 30 minutes).";
 $string['create_seminars_no'] = 'Don\'t create seminar groups';
 $string['create_seminars_yes'] = 'Create seminar groups';
-$string['current_period'] = 'Current IS MU period';
-$string['current_period_desc'] = 'Current period, that is used for downloading data from IS MU';
+$string['current_period'] = 'Current IS MU semester';
+$string['current_period_desc'] = 'Current semester, that is used for downloading data from IS MU.';
 $string['enrol_enrolled'] = 'Yes - Enrol enrolled';
-$string['groupswarning'] = 'WARNING!!';
-$string['ismu:config'] = 'Configure IS MU instances';
-$string['ismu:unenrol'] = 'Unenrol users from the course';
-$string['ismu:unenrolself'] = 'Unenrol self from the course';
 $string['enrol_no'] = 'No';
 $string['enrol_registered'] = 'Yes - Enrol registered ';
 $string['enrol_status'] = 'Autoenrol students from IS MU';
 $string['enrol_status_help'] = '<p>Using this function, you can automatically enrol such students who have taken up the corresponding subject through IS MU (in the set academic period). The autoenrol function is typically made available at the beginning of the each term (according to the IS MU dates). If you planning on using the autoenrol function, remember to correctly fill in the fields <i>Couse ID number</i>, <i>Faculty</i> and <i>Semester</i> as well. If you want to automatically split students into groups (according to IS MU), set the appropriate value in the field <i>Creating seminar groups</i>.</p> <b>Using the IS MU autoenrol function</b> <ul><li><b><i>NO</i></b> - The autoenrol function in not enabled (has been disabled). </li><li><b><i>YES - ENROL REGISTERED</i></b> - All the students who have <b>registered</b> for the course in the Information system will be enrolled. This setting does not support the automatic set-up of IS MU seminar groups in the ELF course. </li><li><b><i>YES - ENROL ENROLLED</i></b> - All the students who are <b>enrolled</b> in the course in the Information system will be enrolled in the ELF course. This setting supports the automatic set-up of IS MU seminar groups (see the field <i>Creating seminar groups</i> further down on the <i>Course Settings</i> page).</ul><p><b>NB: </b>Even if you only want to open your course to its autoenrolled students, you still have to set up the <i><a href="http://elf.phil.muni.cz/elf/help.php?module=moodle&file=enrolmentkey.html">Enrolment key</a></i> – see the appropriate field below on the <i>Course Settings</i> page. <b>Notice: This service is <u>only</u> available for courses taught at the faculties of Arts, Social Sciences, and Sport Studies.</b> Mass collection of student course data from IS for other faculties has to be approved by the respective vice dean (for education). If interested, ask him/her!</p>';
+$string['exception_semester_invalid_semester'] = 'Invalid semester code, only "spring" and "autumn" are valid.';
+$string['exception_semester_invalid_year'] = 'Invalid year, value must be between 1980 and 2060.';
+$string['groupswarning'] = 'WARNING!';
+$string['ismu:config'] = 'Configure IS MU instances';
+$string['ismu:unenrol'] = 'Unenrol users from the course';
+$string['ismu:unenrolself'] = 'Unenrol self from the course';
 $string['groupswarning'] = '<p style="text-align: justify; padding: 5px; background-color: lightgrey; border: 2px solid red; max-width: 600px;"><span style="color: red; font-weight: bold;">NB:</span> At the moment, <strong>you are actively using the automatic enrolment of students from IS MU</strong>. All manually created groups will be automatically deleted! If you want to use manually-created groups, first disable the automatic enrolment in the course settings.</p>';
-$string['load_archived_students'] = 'Enrol all erchived students';
-$string['load_archived_students_help'] = 'Enrol all erchived students';
+$string['load_archived_students'] = 'Enrol all archived students';
+$string['load_archived_students_help'] = 'Enrol all archived students';
 $string['long_load_notice_label'] = 'Attention';
-$string['long_load_notice'] = 'Enrollig students from previous period will take some time. Please be patient.';
+$string['long_load_notice'] = 'Enrolling students from previous period will take some time. Please be patient.';
 $string['period'] = 'Enrolment period';
 $string['period_help'] = 'Help for enrolment period';
+$string['period_selection_start'] = 'Semester range start';
+$string['period_selection_start_desc'] = 'The first end of the range of semesters to be shown in the course.';
+$string['period_selection_end'] = 'Period range end';
+$string['period_selection_end_desc'] = 'The second end of the range of semesters to be shown in the course.';
 $string['pluginname'] = 'Autoenrol students from IS MU';
 $string['pluginname_desc'] = 'Settings for enrolment plugin against IS MU';
 $string['spring'] = 'Spring';
@@ -79,7 +85,3 @@ $string['teachers_groups_desc'] = 'Groups codes (ID) separated by commas (no spa
 $string['unenrolselfconfirm'] = 'Do you really want to unenrol yourself from course "{$a}"?';
 $string['task_sync_data_from_ismu'] = 'Download data from IS MU';
 $string['task_sync_global_enrolments'] = 'Sync global enrolments for students and teachers';
-
-
-
-

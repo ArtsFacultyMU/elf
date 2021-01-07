@@ -1,21 +1,35 @@
 <?php
 
 namespace enrol_ismu\tasks\cron;
-define('COURSE_CREATOR',2);
 
 class sync_data_from_ismu extends \core\task\scheduled_task 
 {
     // STATIC SETTINGS
+    const DATA_URL = 'https://is.muni.cz/export/studium_export_data.pl?fak=%s;obd=%s;format=dvojt;kodovani=il2;typ=%s';
+    const DATA_TYPE_STUDENTS = 1;
+    const DATA_TYPE_STUDIES = 2;
+    const DATA_TYPE_TEACHERS = 3;
+    
+    const FACULTY_PHIL = 1421; // Faculty of Arts.
+    const FACULTY_MED = 1411; // Faculty of Medicine.
+    const FACULTY_LAW = 1422; // Faculty of Law.
+    const FACULTY_FSS = 1423; // Faculty of Social Studies.
+    const FACULTY_SCI = 1431; // Faculty of Science.
+    const FACULTY_FI = 1433; // Faculty of Informatics.
+    const FACULTY_PED = 1441; // Faculty of Education.
+    const FACULTY_FSPS = 1451; // Faculty of Sports Studies.
+    const FACULTY_ECON = 1456; // Faculty of Economics and Administration.
+    const CUS = 1490; // Pan-university studies.
 
     /**
      * List of involved faculties
      * @var array
      */
     private static $interested_faculties = array(
-        \enrol_ismu\helper::ELF_FACULTY_FSS,
-        \enrol_ismu\helper::ELF_FACULTY_PHIL,
-        \enrol_ismu\helper::ELF_FACULTY_FSPS,
-        \enrol_ismu\helper::ELF_FACULTY_SCI
+        self::FACULTY_FSS,
+        self::FACULTY_PHIL,
+        self::FACULTY_FSPS,
+        self::FACULTY_SCI
     );
 
 
@@ -36,12 +50,11 @@ class sync_data_from_ismu extends \core\task\scheduled_task
      */
     public function execute()
     {
-        $helper = new \enrol_ismu\helper;
         $ismuEnroler = new \enrol_ismu\ismu_enroler;
         $moodleEnroler = new \enrol_ismu\moodle_enroler;
 
-        if($this->download_data_from_is_mu($helper, $ismuEnroler)) {
-            $this->update_current_enrolments($moodleEnroler, $helper);
+        if($this->download_data_from_is_mu($ismuEnroler)) {
+            $this->update_current_enrolments($moodleEnroler);
         } else {
             //todo add notifications
         }
@@ -72,21 +85,20 @@ class sync_data_from_ismu extends \core\task\scheduled_task
     /**
      * Downloads data from IS MUNI and stores them in the special db tables
      *
-     * @param \enrol_ismu\helper $helper
      * @param \enrol_ismu\ismu_enroler $ismuEnroller
      * @return bool
      * @throws \dml_transaction_exception
      */
-    protected function download_data_from_is_mu(\enrol_ismu\helper $helper, \enrol_ismu\ismu_enroler $ismuEnroller)
+    protected function download_data_from_is_mu(\enrol_ismu\ismu_enroler $ismuEnroller)
     {
         global $DB;
 
         // Creating period code
         $ismuPeriods = [
-            \enrol_ismu\helper::ELF_PERIOD_SPRING => 'jaro',
-            \enrol_ismu\helper::ELF_PERIOD_AUTUMN => 'podzim'];
-        $moodle_period = $helper->get_current_period();
-        $period = $ismuPeriods[$moodle_period['period']] . '%20' . $moodle_period['year'];
+            \enrol_ismu\helpers\semester::SEMESTER_SPRING => 'jaro',
+            \enrol_ismu\helpers\semester::SEMESTER_AUTUMN => 'podzim'];
+        $currentsemester = \enrol_ismu\helpers\semester::get_current_semester();
+        $period = $ismuPeriods[$currentsemester->semester()] . '%20' . $currentsemester->year();
 
 
         // Starting enrolments
@@ -100,9 +112,9 @@ class sync_data_from_ismu extends \core\task\scheduled_task
 
             /// Enrols teacher, students and studies into module-specific tables
             foreach(self::$interested_faculties as $faculty) {
-                $this->download_teachers_from_is_mu($period, $faculty, $ismuEnroller);
-                $this->download_students_from_is_mu($period, $faculty, $ismuEnroller);
-                $this->download_studies_from_is_mu($period, $faculty, $ismuEnroller);
+                $this->download_teachers_from_is_mu($period, $faculty);
+                $this->download_students_from_is_mu($period, $faculty);
+                $this->download_studies_from_is_mu($period, $faculty);
             }
 
             // Inserts teachers and students not in moodle yet
@@ -130,11 +142,10 @@ class sync_data_from_ismu extends \core\task\scheduled_task
      * @throws \coding_exception
      * @throws \dml_exception
      */
-    protected function download_students_from_is_mu($period, $faculty, \enrol_ismu\ismu_enroler $ismuEnroller)
+    protected function download_students_from_is_mu($period, $faculty)
     {
         global $DB;
-        $dataUrl = 'https://is.muni.cz/export/studium_export_data.pl?fak=' . $faculty . ';obd=' 
-                . $period . ';format=dvojt;kodovani=il2;typ=1';
+        $dataUrl = sprintf(self::DATA_URL, $faculty, $period, self::DATA_TYPE_STUDENTS);
         $handle = fopen($dataUrl, 'r');
         if ($handle) {
             $students = [];
@@ -168,11 +179,10 @@ class sync_data_from_ismu extends \core\task\scheduled_task
      * @throws \coding_exception
      * @throws \dml_exception
      */
-    protected function download_teachers_from_is_mu($period, $faculty, \enrol_ismu\ismu_enroler $ismuEnroller)
+    protected function download_teachers_from_is_mu($period, $faculty)
     {
         global $DB;
-        $dataUrl = 'https://is.muni.cz/export/studium_export_data.pl?fak=' . $faculty . ';obd=' 
-                . $period . ';format=dvojt;kodovani=il2;typ=3';
+        $dataUrl = sprintf(self::DATA_URL, $faculty, $period, self::DATA_TYPE_TEACHERS);
         $handle = fopen($dataUrl, 'r');
         if ($handle) {
             $teachers = [];
@@ -205,11 +215,10 @@ class sync_data_from_ismu extends \core\task\scheduled_task
      * @throws \coding_exception
      * @throws \dml_exception
      */
-    protected function download_studies_from_is_mu($period, $faculty, \enrol_ismu\ismu_enroler $ismuEnroller)
+    protected function download_studies_from_is_mu($period, $faculty)
     {
         global $DB;
-        $dataUrl = 'https://is.muni.cz/export/studium_export_data.pl?fak=' . $faculty . ';obd='
-                . $period . ';format=dvojt;kodovani=il2;typ=2';
+        $dataUrl = sprintf(self::DATA_URL, $faculty, $period, self::DATA_TYPE_STUDIES);
         $handle = fopen($dataUrl, 'r');
         if ($handle) {
             $studies = [];
@@ -236,14 +245,11 @@ class sync_data_from_ismu extends \core\task\scheduled_task
 
 
     // IS MU data <-> MOODLE synchronization
-    protected function update_current_enrolments(
-        \enrol_ismu\moodle_enroler $moodleEnroller,
-        \enrol_ismu\helper $helper
-    ) {
-        $currentPeriod = $helper->get_current_period();
-        $courses = $moodleEnroller->get_active_courses($currentPeriod['full']);
+    protected function update_current_enrolments(\enrol_ismu\moodle_enroler $moodleEnroller) {
+        $currentsemester = \enrol_ismu\helpers\semester::get_current_semester();
+        $courses = $moodleEnroller->get_active_courses($currentsemester->full());
         foreach($courses as $course) {
-            $helper->task_sync_users_from_ismu($course, 5);
+            \enrol_ismu\helpers\tasks::sync_students_from_ismu($course);
         }
     }
 
@@ -306,8 +312,9 @@ class sync_data_from_ismu extends \core\task\scheduled_task
             $context = \context_system::instance();
 
             // If teacher doesn't have "Course creator" role, adds it
-            if(!user_has_role_assignment($userId,COURSE_CREATOR, $context->id))
-                role_assign(COURSE_CREATOR, $userId, $context->id);
+            $coursecreatorrole = $DB->get_record('role', ['shortname' => 'coursecreator']);
+            if(!user_has_role_assignment($userId, $coursecreatorrole->id, $context->id))
+                role_assign($coursecreatorrole->id, $userId, $context->id);
         }
     }
 

@@ -9,22 +9,45 @@ class sync_global_enrolments extends \core\task\scheduled_task
         global $CFG;
         require_once("{$CFG->dirroot}/group/lib.php");
         require_once("{$CFG->dirroot}/mod//forum/lib.php");
-        $helper = new \enrol_ismu\helper;
         $ismuEnroler = new \enrol_ismu\ismu_enroler;
         $moodleEnroler = new \enrol_ismu\moodle_enroler;
 		require_once(__DIR__ . '/../../../lib.php');
         $enrolPlugin = new \enrol_ismu_plugin;
         
         $teachers = $ismuEnroler->get_teachers();
-        $this->sync_courses($helper->get_teacher_courses(), $teachers, $enrolPlugin, $moodleEnroler);
-        $this->sync_forums($helper->get_teacher_forums(), $teachers);
-        $this->sync_groups($helper->get_teacher_groups(), $teachers, $moodleEnroler);
+        $this->sync_courses(
+            $this->str_to_ids(get_config('enrol_ismu', 'teacherscourses')),
+            $teachers,
+            $enrolPlugin,
+            $moodleEnroler
+        );
+        $this->sync_forums(
+            $this->str_to_ids(get_config('enrol_ismu', 'teachersforums')),
+            $teachers
+        );
+        $this->sync_groups(
+            $this->str_to_ids(get_config('enrol_ismu', 'teachersgroups')),
+            $teachers,
+            $moodleEnroler
+        );
         unset($teachers);
         
         $students = $ismuEnroler->get_students();
-        $this->sync_courses($helper->get_student_courses(), $students, $enrolPlugin, $moodleEnroler);
-        $this->sync_forums($helper->get_student_forums(), $students);
-        $this->sync_groups($helper->get_student_groups(), $students, $moodleEnroler);
+        $this->sync_courses(
+            $this->str_to_ids(get_config('enrol_ismu', 'studentscourses')),
+            $students,
+            $enrolPlugin,
+            $moodleEnroler
+        );
+        $this->sync_forums(
+            $this->str_to_ids(get_config('enrol_ismu', 'studentsforums')),
+            $students
+        );
+        $this->sync_groups(
+            $this->str_to_ids(get_config('enrol_ismu', 'studentsgroups')),
+            $students,
+            $moodleEnroler
+        );
         unset($students);
         
     }
@@ -32,6 +55,11 @@ class sync_global_enrolments extends \core\task\scheduled_task
     public function get_name()
     {
         return get_string('task_sync_global_enrolments', 'enrol_ismu');
+    }
+
+    private function str_to_ids($string) 
+    {
+        return array_filter(array_map('trim',explode(",", (string)$string)));
     }
 
     private function sync_courses(

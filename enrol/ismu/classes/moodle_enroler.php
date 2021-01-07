@@ -73,7 +73,7 @@ class moodle_enroler
         return groups_create_group(
             (object) [
                 'courseid' => $courseId,
-                'description' => 'Automatically set up(IS import)',
+                'description' => 'Automatically set up (IS import)',
                 'name' => $name
             ]
         );

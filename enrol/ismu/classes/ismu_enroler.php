@@ -13,6 +13,13 @@ defined('MOODLE_INTERNAL') || die();
 
 class ismu_enroler
 {
+    const ISMU_STUDENTS_NO_IMPORT =  0;
+    const ISMU_STUDENTS_IMPORT_REGISTERED =  1;
+    const ISMU_STUDENTS_IMPORT_ENROLLED =  2;
+
+    const ISMU_SEMINARS_NO_CREATE =  0;
+    const ISMU_SEMINARS_CREATE =  1;
+    
     public static function filter_course_codes($courseCodesString)
     {
         return array_map(function($data) { return trim($data); }, explode(',', $courseCodesString));
@@ -35,14 +42,14 @@ class ismu_enroler
     {
         global $DB;
         switch ($enrolStatus) {
-            case helper::ISMU_STUDENTS_IMPORT_REGISTERED :
+            case self::ISMU_STUDENTS_IMPORT_REGISTERED :
                 $query = "SELECT DISTINCT(student.id) AS userid 
                     FROM
                         (SELECT su.username FROM (SELECT studyid FROM {ismu_studies} WHERE coursecode LIKE ?) AS st 
                             INNER JOIN {ismu_students} AS su ON st.studyid = su.studyid) AS studium 
                         INNER JOIN {user} AS student ON studium.username = student.username";
                 break;
-            case helper::ISMU_STUDENTS_IMPORT_ENROLLED :
+            case self::ISMU_STUDENTS_IMPORT_ENROLLED :
                 $query = "SELECT DISTINCT(student.id) AS userid 
                     FROM
                         (SELECT su.username FROM 

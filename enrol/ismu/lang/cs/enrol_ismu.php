@@ -22,6 +22,7 @@
  * @author    2012 Filip Benčo
  */
 
+$string['autumn'] = 'Podzim';
 $string['course_codes'] = 'Kód předmětu';
 $string['course_codes_help'] = '<p>Do tohoto pole napište kód přiřazený vašemu předmětu v Informačním systému. Tento kód neovlivní název kurzu v ELFu (nezaměňujte s polem <i>Krátký název</i> uvedeným výše na stránce nastavení kurzu), slouží pouze pro identifikace odpovídajícího předmětu v IS MU.</p>
 <b>Možnosti vkládání kódu podle IS MU</b> 
@@ -39,8 +40,9 @@ $string['create_seminars_help'] = '<p>Použití tohoto pole je možné pouze v p
 <p><b>POZOR:</b> Pokud chcete v kurzu používat jak automaticky vytvořené skupiny podle ISu, tak skupiny vytvořené manuálně, je nutné před manuálním vytvářením skupin vypnout automatický zápis podle ISu (<i>Automaticky zapsat studenty podle IS MU -- Ne</i>). Pokud tak neučiníte, budou Vám ručně vytvořené skupiny periodicky mazány ve shodě s obnovou automatického zápisu (interval přibližně každých 30 minut).</p>';
 $string['create_seminars_no'] = 'Nevytvářet skupiny';
 $string['create_seminars_yes'] = 'Vytvořit skupiny v kurzu';
+$string['current_period'] = 'Současný semestr IS MU';
+$string['current_period_desc'] = 'Semestr, který bude použit pro stahování dat z IS MU.';
 $string['enrol_enrolled'] = 'Ano - Zapsané studenty';
-$string['ismu:config'] = 'Konfigurovat instance IS MU';
 $string['enrol_no'] = 'Ne';
 $string['enrol_registered'] = 'Ano - Registrované studenty';
 $string['enrol_status'] = 'Automaticky zapsat studenty podle IS MU';
@@ -54,9 +56,38 @@ $string['enrol_status_help'] = "Zde můžete zvolit, zda chcete, aby byli jako �
 
 <b>Poznámka: Tato služba je dostupná <u>pouze</u> u předmětů vyčovaných na FF, FSS a FSpS MU.</b>
 Hromadné přebírání dat z IS MU pro jiné fakulty (v případě potřeby) musí být odsouhlaseno proděkanem příslušné fakulty.";
+$string['exception_semester_invalid_semester'] = 'Neplatný kód semestru. Lze použít pouze "spring" nebo "autumn".';
+$string['exception_semester_invalid_year'] = 'Neplatný rok. Hodnota musí být mezi 1980 a 2060.';
+$string['groupswarning'] = 'UPOZORNĚNÍ!';
+$string['ismu:config'] = 'Konfigurovat instance IS MU';
+$string['ismu:unenrol'] = 'Zrušit zápis uživatelů v kurzu';
+$string['ismu:unenrolself'] = 'Zrušit zápis sama sebe z kurzu';
 $string['groupswarning'] = '<strong>POZOR:</strong> Máte <strong>zapnutý automatický zápis podle IS MU</strong>. Všechny manuálně vytvořené skupiny budou automaticky vymazány. Pokud chcete používat manuálně vytvořené skupiny, vypněte nejprve automatický zápis v nastavení kurzu.';
+$string['load_archived_students'] = 'Zapsat všechny archivované studenty';
+$string['load_archived_students_help'] = 'Zapsat všechny archivované studenty';
+$string['long_load_notice_label'] = 'Pozor';
+$string['long_load_notice'] = 'Zápis studentů z předchozího období může chvíli trvat. Vyčkejte prosím.';
+$string['period'] = 'Období zápisu';
+$string['period_help'] = 'Nápověda pro období zápisu';
+$string['period_selection_start'] = 'Začátek rozmezí semestrů';
+$string['period_selection_start_desc'] = 'První konec rozmezí semestrů, které lze vybrat v kurzu.';
+$string['period_selection_end'] = 'Konec rozmezí semestrů';
+$string['period_selection_end_desc'] = 'Druhý konec rozmezí semestrů, které lze vybrat v kurzu.';
+$string['pluginname'] = 'Automatický zápis studentů podle IS MU';
 $string['pluginname_desc'] = 'Nastavení automatického zápis studentů podle IS MU';
+$string['spring'] = 'Jaro';
 $string['students_courses'] = 'Kurzy pro studenty';
 $string['students_courses_desc'] = 'Kódy kurzů (ID), oddělené čárkou, do kterých mají být automaticky zapsáni všichni studenti.';
 $string['teachers_courses'] = 'Kurzy pro učitele';
 $string['teachers_courses_desc'] = 'Kódy kurzů (ID), oddělené čárkou, do kterých mají být automaticky zapsáni všichni učitelé.';
+$string['students_forums'] = 'Fóra pro studenty';
+$string['students_forums_desc'] = 'Kódy fór (ID), oddělené čárkou, do kterých mají být automaticky zapsáni všichni studenti.';
+$string['teachers_forums'] = 'Fóra pro učitele';
+$string['teachers_forums_desc'] = 'Kódy fór (ID), oddělené čárkou, do kterých mají být automaticky zapsáni všichni učitelé.';
+$string['students_groups'] = 'Skupiny pro studenty';
+$string['students_groups_desc'] = 'Kódy skupin (ID), oddělené čárkou, do kterých mají být automaticky zapsáni všichni studenti.';
+$string['teachers_groups'] = 'Skupiny pro učitele';
+$string['teachers_groups_desc'] = 'Kódy skupin (ID), oddělené čárkou, do kterých mají být automaticky zapsáni všichni učitelé.';
+$string['unenrolselfconfirm'] = 'Opravdu chcete zrušit zápis sama sebe v kurzu "{$a}"?';
+$string['task_sync_data_from_ismu'] = 'Stahování dat z IS MU';
+$string['task_sync_global_enrolments'] = 'Synchronizace globálních zápisů studentů a učitelů';

@@ -35,7 +35,10 @@ class sync_users_from_archive extends \core\task\adhoc_task
 
         foreach($archivedUsers as $user) {
             $enrolPlugin->enrol_user($instance, $user);
-            if($data->roleId !== null) {role_assign($data->roleId, $user, $context->id);}
+            
+            // Get ID of the "student" role and assign it.
+            $studentrole = $DB->get_record('role', ['shortname' => 'student']);
+            role_assign($studentrole->id, $user, $context->id);
         }
         $archivedGroups = $archiver->get_archived_groups($data->courseid, $data->period);
         foreach($archivedGroups as $archivedGroup) {

@@ -14,15 +14,14 @@ class sync_users_from_ismu extends \core\task\adhoc_task
         global $CFG;
         require_once("{$CFG->dirroot}/group/lib.php");
         $data = $this->get_custom_data();
-        $helper = new \enrol_ismu\helper;
         $moodleEnroler = new \enrol_ismu\moodle_enroler;
         $ismuEnroler = new \enrol_ismu\ismu_enroler;
 		require_once(__DIR__ . '/../../../lib.php');
         $enrolPlugin = new \enrol_ismu_plugin;
         
         $instance = $moodleEnroler->get_instance_by_course_id($data->courseid);
-        if($instance->customchar2 != $helper->get_current_period()['full'] 
-            || $instance->customint1 == \enrol_ismu\helper::ISMU_STUDENTS_NO_IMPORT
+        if($instance->customchar2 != \enrol_ismu\helpers\semester::get_current_semester()->full()
+            || $instance->customint1 == \enrol_ismu\ismu_enroler::ISMU_STUDENTS_NO_IMPORT
             || empty(trim($instance->customchar1))) {
             return;
         }
@@ -31,10 +30,12 @@ class sync_users_from_ismu extends \core\task\adhoc_task
         $currentUsers = $moodleEnroler->get_enroled_students($instance->id);
         $ismuUsers = $ismuEnroler->get_students_to_enrol($courseCodes, $instance->customint1);
         
-        $enrolPlugin->sync_course_users($instance, $currentUsers, $ismuUsers, $data->roleId);
+        // Get ID of the "student" role.
+        $studentrole = $DB->get_record('role', ['shortname' => 'student']);
+        $enrolPlugin->sync_course_users($instance, $currentUsers, $ismuUsers, $studentrole->id);
         
         //customint2 stands for create seminars
-        if ($instance->customint2 == \enrol_ismu\helper::ISMU_SEMINARS_CREATE) {
+        if ($instance->customint2 == \enrol_ismu\ismu_enroler::ISMU_SEMINARS_CREATE) {
             //SYNCHRONIZACIA SKUPIN V MOODLE
             $currentGroups = array_map(
                 function($data) { return $data->name; }, 
