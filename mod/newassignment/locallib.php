@@ -2695,7 +2695,7 @@ class NewAssignment {
         $posttext = self::format_notification_message_text($messagetype, $info, $course, $context, $modulename, $assignmentname);
         $posthtml = ($userto->mailformat == 1) ? self::format_notification_message_html($messagetype, $info, $course, $context, $modulename, $coursemodule, $assignmentname) : '';
 
-        $eventdata = new stdClass();
+        $eventdata = new \core\message\message();
         $eventdata->modulename = 'newassignment';
         $eventdata->userfrom = $userfrom;
         $eventdata->userto = $userto;

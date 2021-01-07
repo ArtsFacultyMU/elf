@@ -14,20 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * version.php
- *
- * @package   plagiarism_urkund
- * @author    Dan Marsden <dan@danmarsden.com>
- * @copyright 2011 onwards Dan Marsden
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
+require_once('../../config.php');
+require_login();
 
-defined('MOODLE_INTERNAL') || die();
-
-$plugin->version = 2020031909;
-$plugin->requires = 2018051700; // Requires 3.5.
-$plugin->cron     = 0; // Cron function no longer used.
-$plugin->component = 'plagiarism_urkund';
-$plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = '3.8.7';
+?>
+OK
