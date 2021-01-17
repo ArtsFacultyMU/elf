@@ -6,6 +6,7 @@ class sync_users_from_archive extends \core\task\adhoc_task
 {
     public function execute()
     {
+        global $DB;
         $data = $this->get_custom_data();
         $archiver = new \enrol_ismu\archiver;
         $enroler = new \enrol_ismu\moodle_enroler;

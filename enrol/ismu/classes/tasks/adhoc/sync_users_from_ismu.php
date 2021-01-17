@@ -11,7 +11,7 @@ class sync_users_from_ismu extends \core\task\adhoc_task
      */
     public function execute()
     {
-        global $CFG;
+        global $CFG, $DB;
         require_once("{$CFG->dirroot}/group/lib.php");
         $data = $this->get_custom_data();
         $moodleEnroler = new \enrol_ismu\moodle_enroler;
