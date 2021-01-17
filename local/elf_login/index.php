@@ -31,6 +31,7 @@ $errormsg = '';
 
 // Take care of basic layout.
 $context = context_system::instance();
+$PAGE->set_url(new moodle_url('/local/elf_login/'));
 $PAGE->set_context($context);
 $PAGE->set_pagelayout('login');
 $PAGE->set_title("$SITE->fullname: " . get_string("loginsite"));

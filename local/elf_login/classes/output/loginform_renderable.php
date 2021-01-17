@@ -31,12 +31,15 @@ require_once(__DIR__ . '/../../../../config.php');
 
 use renderer_base;
 use context_course;
+use moodle_url;
 
 class loginform_renderable extends \core_auth\output\login {
     const LINK_IS_MUNI_FRONTPAGE = 'https://is.muni.cz';
     const LINK_IS_MUNI_PASSCHANGE = 'https://is.muni.cz/podpora/obnova_pristupu?akce=login';
 
     const PATH_SHIBBOLETH = '/auth/shibboleth/index.php';
+    const PATH_LOGINBUTTON_CS = '/local/elf_login/img/munilogin_light_cs.png';
+    const PATH_LOGINBUTTON_EN = '/local/elf_login/img/munilogin_light_en.png';
 
     public function export_for_template(renderer_base $output) {
         // $OUTPUT should not be used here, but rewriting
@@ -62,10 +65,12 @@ class loginform_renderable extends \core_auth\output\login {
         $data->shibboleth_path = new \moodle_url(self::PATH_SHIBBOLETH);
         $data->muni_is_front = self::LINK_IS_MUNI_FRONTPAGE . '?lang=en';
         $data->muni_is_pass = self::LINK_IS_MUNI_PASSCHANGE . ';lang=en';
+        $data->muni_login_button = new \moodle_url(self::PATH_LOGINBUTTON_EN);
         
         if (current_language() == 'cs') {
             $data->muni_is_front = self::LINK_IS_MUNI_FRONTPAGE . '?lang=cs';
             $data->muni_is_pass = self::LINK_IS_MUNI_PASSCHANGE . ';lang=cs';
+            $data->muni_login_button = new \moodle_url(self::PATH_LOGINBUTTON_CS);
         }
         return $data;
     }
