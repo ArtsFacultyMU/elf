@@ -26,7 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $functions = array(
     'local_remote_backup_provider_find_courses' => array(
-         'classname' => 'local_remote_backup_provider_external',
+         'classname' => 'local_remote_backup_provider\external\find_courses',
          'methodname' => 'find_courses',
          'classpath' => 'local/remote_backup_provider/externallib.php',
          'description' => 'Find courses matching a given string.',
@@ -34,7 +34,7 @@ $functions = array(
          'capabilities' => 'moodle/course:viewhiddencourses',
     ),
     'local_remote_backup_provider_find_teacher_courses' => array(
-         'classname' => 'local_remote_backup_provider_external',
+         'classname' => 'local_remote_backup_provider\external\find_teacher_courses',
          'methodname' => 'find_teacher_courses',
          'classpath' => 'local/remote_backup_provider/externallib.php',
          'description' => 'Find courses matching a given string (limited for teacher).',
@@ -42,33 +42,29 @@ $functions = array(
          'capabilities' => 'moodle/course:viewhiddencourses',
     ),
     'local_remote_backup_provider_get_course_backup_by_id' => array(
-         'classname' => 'local_remote_backup_provider_external',
+         'classname' => 'local_remote_backup_provider\external\get_course_backup_by_id',
          'methodname' => 'get_course_backup_by_id',
-         'classpath' => 'local/remote_backup_provider/externallib.php',
          'description' => 'Generate a course backup file and return a link.',
          'type' => 'read',
          'capabilities' => 'moodle/backup:backupcourse',
     ),
     'local_remote_backup_provider_get_course_name_by_id' => array(
-          'classname' => 'local_remote_backup_provider_external',
+          'classname' => 'local_remote_backup_provider\external\get_course_name_by_id',
           'methodname' => 'get_course_name_by_id',
-          'classpath' => 'local/remote_backup_provider/externallib.php',
           'description' => 'Return name of the course.',
           'type' => 'read',
           'capabilities' => 'moodle/course:viewhiddencourses',
      ),
      'local_remote_backup_provider_get_course_category_by_id' => array(
-          'classname' => 'local_remote_backup_provider_external',
+          'classname' => 'local_remote_backup_provider\external\get_course_category_by_id',
           'methodname' => 'get_course_category_by_id',
-          'classpath' => 'local/remote_backup_provider/externallib.php',
           'description' => 'Return category (id) of the course.',
           'type' => 'read',
           'capabilities' => 'moodle/course:viewhiddencourses',
      ),
      'local_remote_backup_provider_get_category_info' => array(
-          'classname' => 'local_remote_backup_provider_external',
+          'classname' => 'local_remote_backup_provider\external\get_category_info',
           'methodname' => 'get_category_info',
-          'classpath' => 'local/remote_backup_provider/externallib.php',
           'description' => 'Return name of the course.',
           'type' => 'read',
           'capabilities' => 'moodle/course:viewhiddencourses',
@@ -79,5 +75,22 @@ $functions = array(
           'description' => 'Delete course backup.',
           'type' => 'write',
           'capabilities' => 'moodle/backup:backupcourse',
+     ),
+);
+
+$services = array(
+     'local_remote_backup_provider' => array(
+          'functions' => array(
+               'local_remote_backup_provider_find_courses',
+               'local_remote_backup_provider_find_teacher_courses',
+               'local_remote_backup_provider_get_course_backup_by_id',
+               'local_remote_backup_provider_get_course_name_by_id',
+               'local_remote_backup_provider_get_course_category_by_id',
+               'local_remote_backup_provider_get_category_info',
+               'local_remote_backup_provider_delete_course_backup',
+          ), 
+          'restrictedusers' => 0, 
+          'enabled' => 1, 
+          'shortname' => 'local_remote_backup_provider',
      ),
 );

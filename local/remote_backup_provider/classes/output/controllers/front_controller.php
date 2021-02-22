@@ -29,6 +29,7 @@ require_once(__DIR__ . '/../../../../../config.php');
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class front_controller {
+    const ISSUE_TRANSFER_ERROR_LINK = 'http://moodledocs.phil.muni.cz/sprava-kurzu/zaloha-a-obnova';
     /**
      * Displays search form and course list.
      */
@@ -125,6 +126,7 @@ class front_controller {
 
         $remote_course_ids = required_param_array('remote_id', PARAM_INT);
         $remote_id = required_param('remote', PARAM_INT);
+        $transfer_as = optional_param('transferas', 'self', PARAM_TEXT);
         $user_id = optional_param('userid', 0, PARAM_INT);
 
         $remote_manager = new \local_remote_backup_provider\helper\remote_manager();
@@ -140,7 +142,7 @@ class front_controller {
         $PAGE->set_heading(get_string('import', 'local_remote_backup_provider'));
         $output = $PAGE->get_renderer('local_remote_backup_provider');
 
-        if (has_capability('local/remote_backup_provider:transferasother', $context) && $user_id != 0) {
+        if (has_capability('local/remote_backup_provider:transferasother', $context) && $transfer_as == 'other') {
             if (!$DB->get_record('user', ['id'=> $user_id, 'deleted' => '0'])) {
                 redirect(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'list', 'remote' => $remote_id]), get_string('user_not_found', 'local_remote_backup_provider'), null, \core\output\notification::NOTIFY_WARNING);
             }
@@ -162,18 +164,23 @@ class front_controller {
                 ));
                 \core\task\manager::queue_adhoc_task($create_backup_task);
             } else {
-                $record = \array_shift($existing_records);
-                $errors[] = $record->remotecoursename;
+                $record = \array_pop($existing_records);
+                $user = $DB->get_record('user', ['id' => $record->userid]);
+                if ($record->courseid !== NULL) {
+                    $errors[] = '<a href="' . new \moodle_url('/course/view.php', ['id' => $record->courseid]) . '">' . $record->remotecoursename . '</a>'
+                            . ' (' . get_string('issued_by', 'local_remote_backup_provider') . ' ' . $user->firstname . ' ' . $user->lastname . ')';
+                } else {
+                    $errors[] = $record->remotecoursename . ' (' . get_string('issued_by', 'local_remote_backup_provider') . ' ' . $user->firstname . ' ' . $user->lastname . ')';
+                }
             }
-            
         }
 
         if (!$errors) {
             redirect(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'status', 'remote' => $remote_id]), get_string('courses_issued_for_transfer', 'local_remote_backup_provider'), null, \core\output\notification::NOTIFY_SUCCESS);
         }
 
-        $error_msg = get_string('courses_issued_for_transfer_error', 'local_remote_backup_provider');
-        $error_msg .= '<ul><li>' . implode('</li><li>', $errors) . '</li></ul>';
+        $errors = '<ul><li>' . implode('</li><li>', $errors) . '</li></ul>';
+        $error_msg = get_string('courses_issued_for_transfer_error', 'local_remote_backup_provider', ['errors' => $errors, 'link' => self::ISSUE_TRANSFER_ERROR_LINK]);
 
         redirect(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'status', 'remote' => $remote_id]), $error_msg, null, \core\output\notification::NOTIFY_WARNING);
         
@@ -238,7 +245,7 @@ class front_controller {
             'remoteid' => $remote_id,
         ], 'timecreated');
 
-        echo $output->render_front_transfer_list($remote_id, $transfers);
+        echo $output->render_front_transfer_list($remote_id, array_reverse($transfers));
 
         // Print return link;
         echo \html_writer::tag('p', $output->larrow() . \html_writer::link(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'list', 'remote' => $remote_id]), get_string('back_to_selection', 'local_remote_backup_provider')));

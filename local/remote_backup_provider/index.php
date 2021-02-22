@@ -52,6 +52,16 @@ switch ($section) {
         $controller->remoteEditAction();
         break;
 
+    case 'admin_remote_show':
+        $controller = new local_remote_backup_provider\output\controllers\admin_controller();
+        $controller->remoteShowAction();
+        break;
+
+    case 'admin_remote_hide':
+        $controller = new local_remote_backup_provider\output\controllers\admin_controller();
+        $controller->remoteHideAction();
+        break;
+
     case 'admin_transfer_log':
         $controller = new local_remote_backup_provider\output\controllers\admin_controller();
         $controller->transferLogAction();
@@ -70,6 +80,11 @@ switch ($section) {
     case 'admin_manual_finish':
         $controller = new local_remote_backup_provider\output\controllers\admin_controller();
         $controller->manualFinishAction();
+        break;
+
+    case 'ajax_find_users':
+        $controller = new local_remote_backup_provider\output\controllers\ajax_controller();
+        $controller->findUsersAction();
         break;
 
     case '':

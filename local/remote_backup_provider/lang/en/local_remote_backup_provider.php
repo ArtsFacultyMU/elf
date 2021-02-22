@@ -33,6 +33,7 @@ $string['transfer_as'] = 'Transfer as:';
 $string['user_not_found'] = 'User wasn\'t found.';
 $string['issued_by_other_user'] = 'Transfer was issued by other user.';
 $string['course_id'] = 'Course ID';
+$string['issued_by'] = 'issued by';
 
 $string['import'] = 'Import from remote';
 $string['pluginname'] = 'Remote backup provider';
@@ -67,6 +68,14 @@ $string['back_to_selection'] = 'Back to selection';
 $string['continue_to_course'] = 'Continue to transfered course';
 $string['courses_issued_for_transfer'] = 'Courses are issued to transfer';
 $string['courses_issued_for_transfer_error'] = 'Following courses were already issued earlier therefore skipped:';
+$string['courses_issued_for_transfer_error'] = '<p>The following courses cannot be issued to transfer as they were issued to transfer to this ELF version in the past:</p>
+{$a->errors}
+<p>Name of the issuer is specified right next to the course name. If you need a new version of the course within current ELF instalation, you can create its copy (read the <a href="{$a->link}">instructions</a>).</p>';
+
+$string['remote_set_as_hidden'] = 'Remote was successfully hidden.';
+$string['remote_set_as_visible'] = 'Remote was successfully shown.';
+$string['remote_already_hidden'] = 'Remote was already hidden.';
+$string['remote_already_visible'] = 'Remote was already visible.';
 
 $string['restore_error_invalid_extension'] = 'Restore failed: Invalid file extension.';
 $string['exception_tm_restore_error_invalid_backup_file'] = 'Restore failed: Invalid backup file.';
@@ -117,6 +126,8 @@ $string['transfer_manualcancel_areyousure'] = 'Are you sure to cancel the follow
 $string['transfer_canceled_successfully'] = 'Transfer was successfully canceled.';
 $string['transfer_finished_successfully'] = 'Transfer was successfully finished.';
 
+$string['transfer_as_self'] = 'Import as myself';
+$string['transfer_as_other'] = 'Import as other user';
 
 $string['transfer_status_added'] = 'Issued';
 $string['transfer_status_error'] = 'Error';

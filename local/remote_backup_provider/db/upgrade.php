@@ -273,4 +273,9 @@ function xmldb_local_remote_backup_provider_upgrade($oldversion) {
         // Remote_backup_provider savepoint reached.
         upgrade_plugin_savepoint(true, 2020100700, 'local', 'remote_backup_provider');
     }
+
+    if ($oldversion < 2021012000) {
+        // Remote_backup_provider savepoint reached.
+        upgrade_plugin_savepoint(true, 2021012000, 'local', 'remote_backup_provider');
+    }
 }

@@ -50,6 +50,7 @@ $string['transfer_as'] = 'Převést jako:';
 $string['user_not_found'] = 'Uživatel nebyl nalezen.';
 $string['issued_by_other_user'] = 'Převod byl zadán jiným uživatelem.';
 $string['course_id'] = 'ID kurzu';
+$string['issued_by'] = 'zadal(a)';
 
 $string['short_course_name'] = 'Zkrácený název';
 $string['full_course_name'] = 'Celý název';
@@ -66,7 +67,14 @@ $string['remote_course'] = 'Kurz ve vzdálené instalaci';
 $string['back_to_selection'] = 'Zpět na výběr';
 $string['continue_to_course'] = 'Přejít do převedeného kurzu';
 $string['courses_issued_for_transfer'] = 'Kurzy jsou nachystány k převodu';
-$string['courses_issued_for_transfer_error'] = 'Následující kurzy nelze zadat k převodu, již byly převáděny:';
+$string['courses_issued_for_transfer_error'] = '<p>Následující kurzy nelze zadat k převodu, již byly do této verze ELFu převedeny:</p>
+{$a->errors}
+<p>Jméno toho, kdo převod zadal, vidíte přímo u názvu kurzu. Pokud potřebujete novou verzi kurzu v rámci stávající instalace ELFu, můžete vytvořit jeho kopii (viz <a href="{$a->link}">návod</a>).</p>';
+
+$string['remote_set_as_hidden'] = 'Vzdálená instalace byla úspěšně skryta.';
+$string['remote_set_as_visible'] = 'Vzdálená instalace byla úspěšně zobrazena.';
+$string['remote_already_hidden'] = 'Vzdálená instalace již byla skrytá.';
+$string['remote_already_visible'] = 'Vzdálená instalace již byla viditelná.';
 
 $string['restore_error_invalid_extension'] = 'Obnova nebyla úspěšná: Neplatná přípona souboru.';
 $string['exception_tm_restore_error_invalid_backup_file'] = 'Obnova nebyla úspěšná: Neplatný soubor zálohy.';
@@ -117,6 +125,8 @@ $string['transfer_manualcancel_areyousure'] = 'Vážně chcete zrušit následuj
 $string['transfer_canceled_successfully'] = 'Převod byl úspěšně zrušen.';
 $string['transfer_canceled_successfully'] = 'Převod byl úspěšně dokončen.';
 
+$string['transfer_as_self'] = 'Převést za sebe';
+$string['transfer_as_other'] = 'Převést jménem jiného uživatele';
 
 $string['transfer_status_added'] = 'Přidáno';
 $string['transfer_status_error'] = 'Chyba';
