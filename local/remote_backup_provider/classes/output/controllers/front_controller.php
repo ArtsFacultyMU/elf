@@ -102,7 +102,7 @@ class front_controller {
             
             $course_list_renderable = new \local_remote_backup_provider\output\renderables\front_course_list_renderable($courses);
             $course_list_renderable->setRemote($remote);
-            $course_list_renderable->setCourses($courses);
+            $course_list_renderable->setCourses((array)$courses);
             echo $output->render($course_list_renderable);
         }
 
