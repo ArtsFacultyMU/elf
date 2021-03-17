@@ -168,9 +168,9 @@ class front_controller {
                 $user = $DB->get_record('user', ['id' => $record->userid]);
                 if ($record->courseid !== NULL) {
                     $errors[] = '<a href="' . new \moodle_url('/course/view.php', ['id' => $record->courseid]) . '">' . $record->remotecoursename . '</a>'
-                            . ' (' . get_string('issued_by', 'local_remote_backup_provider') . ' ' . $user->firstname . ' ' . $user->lastname . ')';
+                            . ' (' . get_string('issued_by', 'local_remote_backup_provider') . ': ' . $user->firstname . ' ' . $user->lastname . ')';
                 } else {
-                    $errors[] = $record->remotecoursename . ' (' . get_string('issued_by', 'local_remote_backup_provider') . ' ' . $user->firstname . ' ' . $user->lastname . ')';
+                    $errors[] = $record->remotecoursename . ' (' . get_string('issued_by', 'local_remote_backup_provider') . ': ' . $user->firstname . ' ' . $user->lastname . ')';
                 }
             }
         }
@@ -247,8 +247,22 @@ class front_controller {
 
         echo $output->render_front_transfer_list($remote_id, array_reverse($transfers));
 
-        // Print return link;
-        echo \html_writer::tag('p', $output->larrow() . \html_writer::link(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'list', 'remote' => $remote_id]), get_string('back_to_selection', 'local_remote_backup_provider')));
+        // Print return link and link to the transfer section (if applyable).
+        $links = [];
+        $links[] = $output->larrow()
+                . \html_writer::link(
+                    new \moodle_url('/local/remote_backup_provider/index.php',
+                    ['section' => 'list', 'remote' => $remote_id]),
+                    get_string('back_to_selection', 'local_remote_backup_provider')
+                );
+        if (has_capability('local/remote_backup_provider:managetransfers',\context_system::instance())) {
+            $links[] = \html_writer::link(
+                new \moodle_url('/local/remote_backup_provider/index.php',
+                ['section' => 'admin_transfer_log', 'remote' => $remote_id]),
+                get_string('admin_transfer_log', 'local_remote_backup_provider')
+            );
+        }
+        echo \html_writer::tag('p', implode(' | ', $links));
 
         // Print footer.
         echo $output->footer();

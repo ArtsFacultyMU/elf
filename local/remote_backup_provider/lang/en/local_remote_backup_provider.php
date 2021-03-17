@@ -47,6 +47,7 @@ $string['remote_backup_provider:access'] = 'Course transfer – basic access';
 $string['remote_backup_provider:searchall'] = 'Search all courses on remote';
 $string['remote_backup_provider:transferasother'] = 'Transfer as different person';
 $string['remote_backup_provider:multitransfer'] = 'Override one issue per course limitation';
+$string['remote_backup_provider:managetransfers'] = 'Manage transfers';
 
 $string['available_courses_search'] = 'Search available source courses';
 $string['available_courses'] = 'Available source courses';
@@ -70,7 +71,7 @@ $string['courses_issued_for_transfer'] = 'Courses are issued to transfer';
 $string['courses_issued_for_transfer_error'] = 'Following courses were already issued earlier therefore skipped:';
 $string['courses_issued_for_transfer_error'] = '<p>The following courses cannot be issued to transfer as they were issued to transfer to this ELF version in the past:</p>
 {$a->errors}
-<p>Name of the issuer is specified right next to the course name. If you need a new version of the course within current ELF instalation, you can create its copy (read the <a href="{$a->link}">instructions</a>).</p>';
+<p>If you need a new version of the course within current ELF instalation, you can create its copy (read the <a href="{$a->link}">instructions</a>).</p>';
 
 $string['remote_set_as_hidden'] = 'Remote was successfully hidden.';
 $string['remote_set_as_visible'] = 'Remote was successfully shown.';

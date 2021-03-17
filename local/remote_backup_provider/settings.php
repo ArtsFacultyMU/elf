@@ -45,15 +45,15 @@ if ($hassiteconfig) {
     $settings = new admin_externalpage('local-remote_backup_provider-remote_hide', get_string('hide', 'local_remote_backup_provider'), new moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_remote_hide']), 'moodle/site:config', true);
     $ADMIN->add('local-remote_backup_provider', $settings);
 
-    $settings = new admin_externalpage('local-remote_backup_provider-transfer_log', get_string('admin_transfer_log', 'local_remote_backup_provider'), new moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_transfer_log']));
+    $settings = new admin_externalpage('local-remote_backup_provider-transfer_log', get_string('admin_transfer_log', 'local_remote_backup_provider'), new moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_transfer_log']), 'local/remote_backup_provider:managetransfers');
     $ADMIN->add('local-remote_backup_provider', $settings);
 
-    $settings = new admin_externalpage('local-remote_backup_provider-detailed_log', get_string('admin_detailed_log', 'local_remote_backup_provider'), new moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_detailed_log']), 'moodle/site:config', true);
+    $settings = new admin_externalpage('local-remote_backup_provider-detailed_log', get_string('admin_detailed_log', 'local_remote_backup_provider'), new moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_detailed_log']), 'local/remote_backup_provider:managetransfers', true);
     $ADMIN->add('local-remote_backup_provider', $settings);
 
-    $settings = new admin_externalpage('local-remote_backup_provider-manual_cancel', get_string('admin_manual_cancel', 'local_remote_backup_provider'), new moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_manual_cancel']), 'moodle/site:config', true);
+    $settings = new admin_externalpage('local-remote_backup_provider-manual_cancel', get_string('admin_manual_cancel', 'local_remote_backup_provider'), new moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_manual_cancel']), 'local/remote_backup_provider:managetransfers', true);
     $ADMIN->add('local-remote_backup_provider', $settings);
 
-    $settings = new admin_externalpage('local-remote_backup_provider-manual_finish', get_string('admin_manual_finish', 'local_remote_backup_provider'), new moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_manual_finish']), 'moodle/site:config', true);
+    $settings = new admin_externalpage('local-remote_backup_provider-manual_finish', get_string('admin_manual_finish', 'local_remote_backup_provider'), new moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_manual_finish']), 'local/remote_backup_provider:managetransfers', true);
     $ADMIN->add('local-remote_backup_provider', $settings);
 }

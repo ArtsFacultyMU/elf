@@ -190,7 +190,14 @@ class admin_controller {
 
         require_once($CFG->libdir . '/adminlib.php');
 
-        admin_externalpage_setup('local-remote_backup_provider-transfer_log');
+        require_login();
+        $context = \context_system::instance();
+        require_capability('local/remote_backup_provider:managetransfers', $context);
+        $PAGE->set_context($context);
+        $PAGE->set_pagelayout('admin');
+        $PAGE->set_url(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_transfer_log']));
+        $PAGE->set_title(get_string('admin_transfer_log', 'local_remote_backup_provider'));
+        $PAGE->set_heading(get_string('import', 'local_remote_backup_provider') . ': ' . get_string('admin_transfer_log', 'local_remote_backup_provider'));
 
         // Getting which remote courses to display.
         $remote_id = optional_param('remote', 0, PARAM_INT);
@@ -212,9 +219,6 @@ class admin_controller {
 
         // Get chosen remote data (throws an exception if invalid).
         $remote = $remote_manager->getRemote($remote_id);
-
-        $PAGE->set_title(get_string('import', 'local_remote_backup_provider'));
-        $PAGE->set_heading(get_string('import', 'local_remote_backup_provider'));
 
         $output = $PAGE->get_renderer('local_remote_backup_provider');
 
@@ -240,7 +244,14 @@ class admin_controller {
         global $PAGE, $CFG, $DB;
 
         require_once($CFG->libdir . '/adminlib.php');
-        admin_externalpage_setup('local-remote_backup_provider-detailed_log');
+        require_login();
+        $context = \context_system::instance();
+        require_capability('local/remote_backup_provider:managetransfers', $context);
+        $PAGE->set_context($context);
+        $PAGE->set_pagelayout('admin');
+        $PAGE->set_url(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_detailed_log']));
+        $PAGE->set_title(get_string('admin_detailed_log', 'local_remote_backup_provider'));
+        $PAGE->set_heading(get_string('import', 'local_remote_backup_provider') . ': ' . get_string('admin_detailed_log', 'local_remote_backup_provider'));
 
         $transfer_id = optional_param('id', 0, PARAM_INT);
 
@@ -262,7 +273,14 @@ class admin_controller {
         global $PAGE, $CFG, $DB;
 
         require_once($CFG->libdir . '/adminlib.php');
-        admin_externalpage_setup('local-remote_backup_provider-manual_cancel');
+        require_login();
+        $context = \context_system::instance();
+        require_capability('local/remote_backup_provider:managetransfers', $context);
+        $PAGE->set_context($context);
+        $PAGE->set_pagelayout('admin');
+        $PAGE->set_url(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_manual_cancel']));
+        $PAGE->set_title(get_string('admin_manual_cancel', 'local_remote_backup_provider'));
+        $PAGE->set_heading(get_string('import', 'local_remote_backup_provider') . ': ' . get_string('admin_manual_cancel', 'local_remote_backup_provider'));
 
         $transfer_id = optional_param('id', 0, PARAM_INT);
         $sure = optional_param('sure', 0, PARAM_INT);
@@ -305,7 +323,14 @@ class admin_controller {
         $FORM_ID = 'manual_finish_form';
 
         require_once($CFG->libdir . '/adminlib.php');
-        admin_externalpage_setup('local-remote_backup_provider-manual_finish');
+        require_login();
+        $context = \context_system::instance();
+        require_capability('local/remote_backup_provider:managetransfers', $context);
+        $PAGE->set_context($context);
+        $PAGE->set_pagelayout('admin');
+        $PAGE->set_url(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_manual_finish']));
+        $PAGE->set_title(get_string('admin_manual_finish', 'local_remote_backup_provider'));
+        $PAGE->set_heading(get_string('import', 'local_remote_backup_provider') . ': ' . get_string('admin_manual_finish', 'local_remote_backup_provider'));
 
         $transfer_id = optional_param('id', 0, PARAM_INT);
         $courseid = optional_param('courseid', 0, PARAM_INT);

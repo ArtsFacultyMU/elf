@@ -40,6 +40,7 @@ $string['remote_backup_provider:access'] = 'Převádění kurzů – základní 
 $string['remote_backup_provider:searchall'] = 'Hledání napříč všemi kurzy';
 $string['remote_backup_provider:transferasother'] = 'Převádění za jiného uživatele';
 $string['remote_backup_provider:multitransfer'] = 'Přeskočení omezení jednoho převodu';
+$string['remote_backup_provider:managetransfers'] = 'Správa převodů';
 
 $string['available_courses_search'] = 'Hledat kurzy ve vzdálené instalaci';
 $string['available_courses'] = 'Dostupné kurzy ve vzdálené instalaci';
@@ -50,7 +51,7 @@ $string['transfer_as'] = 'Převést jako:';
 $string['user_not_found'] = 'Uživatel nebyl nalezen.';
 $string['issued_by_other_user'] = 'Převod byl zadán jiným uživatelem.';
 $string['course_id'] = 'ID kurzu';
-$string['issued_by'] = 'zadal(a)';
+$string['issued_by'] = 'převedl';
 
 $string['short_course_name'] = 'Zkrácený název';
 $string['full_course_name'] = 'Celý název';
@@ -69,7 +70,7 @@ $string['continue_to_course'] = 'Přejít do převedeného kurzu';
 $string['courses_issued_for_transfer'] = 'Kurzy jsou nachystány k převodu';
 $string['courses_issued_for_transfer_error'] = '<p>Následující kurzy nelze zadat k převodu, již byly do této verze ELFu převedeny:</p>
 {$a->errors}
-<p>Jméno toho, kdo převod zadal, vidíte přímo u názvu kurzu. Pokud potřebujete novou verzi kurzu v rámci stávající instalace ELFu, můžete vytvořit jeho kopii (viz <a href="{$a->link}">návod</a>).</p>';
+<p>Pokud potřebujete novou verzi kurzu v rámci stávající instalace ELFu, můžete vytvořit jeho kopii (viz <a href="{$a->link}">návod</a>).</p>';
 
 $string['remote_set_as_hidden'] = 'Vzdálená instalace byla úspěšně skryta.';
 $string['remote_set_as_visible'] = 'Vzdálená instalace byla úspěšně zobrazena.';
