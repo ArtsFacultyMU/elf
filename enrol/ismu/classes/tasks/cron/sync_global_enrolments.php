@@ -68,6 +68,7 @@ class sync_global_enrolments extends \core\task\scheduled_task
         \enrol_ismu_plugin $enrolPlugin, 
         \enrol_ismu\moodle_enroler $moodleEnroler
     ) {
+        global $DB;
         foreach ($courseIds as $course) {
             $instance = \enrol_ismu\moodle_enroler::get_instance_by_course_id($course);
             if(!$instance) {
@@ -76,7 +77,8 @@ class sync_global_enrolments extends \core\task\scheduled_task
             }
             $currentUsers = $moodleEnroler->get_enroled_students($instance->id);
             
-            $enrolPlugin->sync_course_users($instance, $currentUsers, $users);
+            $studentrole = $DB->get_record('role', ['shortname' => 'student']);
+            $enrolPlugin->sync_course_users($instance, $currentUsers, $users, $studentrole->id);
         }
     }
     
