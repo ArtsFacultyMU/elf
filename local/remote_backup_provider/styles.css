@@ -1,0 +1,36 @@
+.search_form form .col-md-3 {
+    display: none;
+}
+
+.search_form form .col-md-9 {
+    width: 50%;
+}
+
+#transfer_as_who {
+    position: relative;
+}
+
+#transfer_suggestion_list {
+    position: absolute;
+    top: 37px;
+}
+
+#transfer_suggestion_list table {
+    background-color: #ffffff;
+    z-index: 10;  
+}
+
+#transfer_suggestion_list table tr td{
+    border: 1px solid #ced4da;
+    padding: .375rem .75rem;
+    white-space: nowrap;
+}
+
+#transfer_suggestion_list table tr td:hover {
+    background: rgb(242,242,242);
+    cursor: pointer;
+}
+
+#region-main {
+    overflow-x: visible !important;
+}
