@@ -594,9 +594,14 @@ class transfer_manager {
         $data->idnumber = $results->idnumber;
         $data->name = $results->name;
         $data->visible = (int)$results->visible;
-
-        $this->change_status('categorization_creatingnewcat', json_encode($data), self::STATUS_PROCESSING);
-        $category = \core_course_category::create($data);
+        
+        // Looking for the category with the same name
+        $category = $DB->get_record('course_categories', ['parent' => $data->parent ?? 0, 'name' => $results->name], '*', IGNORE_MULTIPLE);
+        if (!$category) {
+            // Creating new category
+            $this->change_status('categorization_creatingnewcat', json_encode($data), self::STATUS_PROCESSING);
+            $category = \core_course_category::create($data);
+        }
 
         $this->change_status('categorization_savingforlater', $category->id, self::STATUS_PROCESSING);
 

@@ -237,11 +237,6 @@ function xmldb_local_remote_backup_provider_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2020091000, 'local', 'remote_backup_provider');
     }
 
-    if ($oldversion < 2020091000.01) {
-        // Remote_backup_provider savepoint reached.
-        upgrade_plugin_savepoint(true, 2020091000.01, 'local', 'remote_backup_provider');
-    }
-
     if ($oldversion < 2020091000.02) {
 
         // Define field issuer to be added to local_remotebp_transfer.
@@ -264,28 +259,10 @@ function xmldb_local_remote_backup_provider_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2020091000.03, 'local', 'remote_backup_provider');
     }
 
-    if ($oldversion < 2020092000) {
-        // Remote_backup_provider savepoint reached.
-        upgrade_plugin_savepoint(true, 2020092000, 'local', 'remote_backup_provider');
-    }
+    if ($oldversion < 2021071600) {
+        $DB->delete_records('local_remotebp_categories');
 
-    if ($oldversion < 2020100700) {
         // Remote_backup_provider savepoint reached.
-        upgrade_plugin_savepoint(true, 2020100700, 'local', 'remote_backup_provider');
-    }
-
-    if ($oldversion < 2021012000) {
-        // Remote_backup_provider savepoint reached.
-        upgrade_plugin_savepoint(true, 2021012000, 'local', 'remote_backup_provider');
-    }
-
-    if ($oldversion < 2021030400) {
-        // Remote_backup_provider savepoint reached.
-        upgrade_plugin_savepoint(true, 2021030400, 'local', 'remote_backup_provider');
-    }
-
-    if ($oldversion < 2021031800) {
-        // Remote_backup_provider savepoint reached.
-        upgrade_plugin_savepoint(true, 2021031800, 'local', 'remote_backup_provider');
+        upgrade_plugin_savepoint(true, 2021071600, 'local', 'remote_backup_provider');
     }
 }

@@ -134,14 +134,16 @@ class local_remote_backup_provider_renderer extends plugin_renderer_base {
         return $table->finish_output();
     }
 
-    public function render_admin_transfer_log(array $transfers, int $remote) {
+    public function render_admin_transfer_log(array $transfers, int $remote_id) {
         global $CFG, $DB;
 
         require_once($CFG->libdir . '/tablelib.php');
         require_once($CFG->libdir . '/moodlelib.php');
 
+        $remote = (new \local_remote_backup_provider\helper\remote_manager)->getRemote($remote_id);
+
         $table = new \flexible_table('local_remote_backup_provider__transfer_list');
-        $table->define_baseurl(new moodle_url('/local/remote_backup_provider/index.php', ['section'=> 'admin_transfer_log', 'remote' => $remote]));
+        $table->define_baseurl(new moodle_url('/local/remote_backup_provider/index.php', ['section'=> 'admin_transfer_log', 'remote' => $remote_id]));
         $table->define_columns(['name', 'added', 'issuer', 'status', 'actions']);
         $table->define_headers([
             get_string('full_course_name', 'local_remote_backup_provider'),
@@ -177,6 +179,12 @@ class local_remote_backup_provider_renderer extends plugin_renderer_base {
                     . $this->pix_icon('i/scheduled', userdate($transfer->timemodified));
             
             $actions = [];
+
+            $actions[] = \html_writer::link(
+                $remote->address . '/course/view.php?id=' . $transfer->remotecourseid,
+                $this->pix_icon('i/publish', get_string('remote_course', 'local_remote_backup_provider'))
+            );
+
             $actions[] = \html_writer::link(
                 new \moodle_url('/local/remote_backup_provider/index.php', ['section'=> 'admin_detailed_log', 'id' => $transfer->id]),
                 $this->pix_icon('i/info', get_string('admin_detailed_log', 'local_remote_backup_provider'))
@@ -189,7 +197,8 @@ class local_remote_backup_provider_renderer extends plugin_renderer_base {
             ) {
                 $actions[] = \html_writer::link(
                     new \moodle_url('/local/remote_backup_provider/index.php', ['section'=> 'admin_manual_cancel', 'id' => $transfer->id]),
-                    $this->pix_icon('t/block', get_string('admin_manual_cancel', 'local_remote_backup_provider'))
+                    $this->pix_icon('t/block', get_string('admin_manual_cancel', 'local_remote_backup_provider')),
+                    ['target' => '_blank']
                 );
 
                 $actions[] = \html_writer::link(
