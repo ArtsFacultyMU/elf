@@ -106,6 +106,45 @@ class remove_old extends \core\task\scheduled_task {
             }
             mtrace('Failed on remote file.');
         }
+        mtrace('Deleting old remote backup files ended.');
+        mtrace('Deleting old local backup files.');
+
+        $records = $DB->get_records('files', ['component' => 'local_remote_backup_provider', 'filename' => '.']);
+        mtrace('Deleting invalid files (found ' . count($records)  . ' records).');
+        $count = $this->delete_file_records($records);
+        mtrace('Deleted ' . $count . ' files');
+
+        $interval = new \DateInterval('P3D');
+        $datetime = new \DateTime();
+        $datetime->sub($interval);
+
+        $records = $DB->get_records_select('files', 'component=? AND timecreated<?', ['local_remote_backup_provider', $datetime->getTimestamp()]);
+        mtrace('Deleting old files (found ' . count($records)  . ' records).');
+        $count = $this->delete_file_records($records);
+        mtrace('Deleted ' . $count . ' files');
+
+        mtrace('Deleting old local backup files ended.');
         return true;
     }
+
+    private function delete_file_records($records) {
+        $deleted_counter = 0;
+        $filestorage = get_file_storage();
+        foreach ($records as $record) {
+            $file = $filestorage->get_file(
+                $record->contextid,
+                $record->component,
+                $record->filearea,
+                $record->itemid,
+                $record->filepath,
+                $record->filename
+            );
+            if ($file) {
+                $file->delete();
+                $deleted_counter++;
+            }
+        }
+        return $deleted_counter;
+    }
 }
+
