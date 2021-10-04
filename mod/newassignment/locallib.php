@@ -604,8 +604,8 @@ class NewAssignment {
         $filename = str_replace(' ', '_', clean_filename($this->get_course()->shortname . '-' . $this->get_instance()->name . '-' . $groupname . $this->get_course_module()->id . ".zip")); //name of new zip file.
 
         $plugin = $this->get_submission_plugin();
-        require_once($CFG->dirroot . '/local/elf/elflib.php');
-        // get all the files for each submission
+	
+	// get all the files for each submission
         foreach ($submissions as $submission) {
             $userid = $submission->userid; //get userid
             if ((groups_is_member($groupid, $userid) or !$groupmode or !$groupid)) {
@@ -617,7 +617,7 @@ class NewAssignment {
 
                 $pluginfiles = $plugin->get_files($submission);				
 				foreach ($pluginfiles as $zipfilename => $file) {
-					$prefixedfilename = elf_unaccent(clean_filename($prefix . '_' . $zipfilename));
+					$prefixedfilename = $this->unaccent(clean_filename($prefix . '_' . $zipfilename));
 					$filesforzipping[$prefixedfilename] = $file;
 				}
             }
@@ -638,6 +638,22 @@ class NewAssignment {
 
             send_temp_file($zipfile, $filename); //send file and delete after sending.
         }
+    }
+
+    /**
+     * Removes accents and cleans other symbols from string.
+     *
+     * @param string $text Input text.
+     *
+     * @return string Cleaned text.
+     */
+    public function unaccent($text) {
+        $transliterator = \Transliterator::createFromRules(':: NFD; :: [:Nonspacing Mark:] Remove; :: NFC;', \Transliterator::FORWARD);
+        $normalized = $transliterator->transliterate($text);
+        $normalized = strtolower($normalized);
+        $normalized = preg_replace('/[^a-z0-9.,\?!_ -:]+/', '', $normalized);
+        $normalized = preg_replace('/[.,\?!_ -:]+/', '_', $normalized);
+        return $normalized;
     }
 
     /**

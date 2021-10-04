@@ -111,7 +111,7 @@ class mod_newassignment_submission_onlinetext {
         if ($onlinetextsubmission) {
             $user = $DB->get_record("user", array("id" => $submission->userid), 'id,username,firstname,lastname', MUST_EXIST);
 
-            $prefix = clean_filename(elf_unaccent(fullname($user) . "_" . $submission->version . "_"));
+            $prefix =  $this->_assignment->unaccent(clean_filename(fullname($user) . "_" . $submission->version . "_"));
             $finaltext = str_replace('@@PLUGINFILE@@/', $prefix, $onlinetextsubmission->text);
             $submissioncontent = "<html><body>" . format_text($finaltext, $onlinetextsubmission->format, array('context' => $this->_assignment->get_context())) . "</body></html>";      //fetched from database
 
