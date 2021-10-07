@@ -1,6 +1,30 @@
 History
 =============
+Version 3.9.1.4 - 01/07/21
+===========================
+ 1. Rewrite of update of displayed images process, such that should fix #143 when upgrades are conducted on
+    staged Moodle installations where there is no data folder.  This also speeds up in general the update process
+    as the displayed images are only regenerated when the course is accessed - thus a 'reset all' should be
+    much faster.  The downside of all of this is a slower page load for the first user to access a course that has
+    had the displayed images updated.
+ 2. Fix backup files do not contain 'alttext' field for the image.
+ 3. Fix 'Exception when using course import function' - #144.
+ 4. Fix 'Course restore fails with cannotgetimagesforcourse error' - #145.
+
+Version 3.9.1.3 - 19/05/21
+===========================
+ 1. Fix grid image placement for RTL languages.
+ 2. Fix missing 'set' prefix on 'section0ownpagenogridonesection' causing offset error on course restore.
+ 3. Fix 'PNG files not transparent' - #142.
+
+Version 3.9.1.2 - 15/05/21
+===========================
+ 1. Fix 'Site default not applied to setsection0ownpagenogridonesection'.
+ 2. Add new 'single page summary image' functionality (with settings) to show the section image in the section summary on a
+    single section page.
+
 Version 3.9.1.1 - 29/3/2021
+===========================
  1. Fix 'Duplicated section name' - #134.
  2. All course settings now have an option to track the value of the global default as set by the administrator.  Thus, when they change,
     then the course changes without any user interaction on the course.  The reset course functionality is still there and will

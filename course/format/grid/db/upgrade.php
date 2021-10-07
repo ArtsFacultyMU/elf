@@ -47,7 +47,8 @@ function xmldb_format_grid_upgrade($oldversion = 0) {
 
         // Launch create table for course_grid_summary.
         $dbman->create_table($table);
-        upgrade_plugin_savepoint(true, '2011041802', 'format', 'grid');
+
+        upgrade_plugin_savepoint(true, 2011041802, 'format', 'grid');
     }
 
     if ($oldversion < 2012011701) {
@@ -72,7 +73,7 @@ function xmldb_format_grid_upgrade($oldversion = 0) {
             }
         }
 
-        upgrade_plugin_savepoint(true, '2012011701', 'format', 'grid');
+        upgrade_plugin_savepoint(true, 2012011701, 'format', 'grid');
     }
 
     if ($oldversion < 2012071500) {
@@ -95,7 +96,7 @@ function xmldb_format_grid_upgrade($oldversion = 0) {
             $dbman->add_field($table, $field);
         }
 
-        upgrade_plugin_savepoint(true, '2012071500', 'format', 'grid');
+        upgrade_plugin_savepoint(true, 2012071500, 'format', 'grid');
     }
 
     if ($oldversion < 2013110400) {
@@ -111,12 +112,7 @@ function xmldb_format_grid_upgrade($oldversion = 0) {
             $dbman->add_field($table, $field);
         }
 
-        upgrade_plugin_savepoint(true, '2013110400', 'format', 'grid');
-    }
-
-    // Automatic 'Purge all caches'....
-    if ($oldversion < 2114052000) {
-        purge_all_caches();
+        upgrade_plugin_savepoint(true, 2013110400, 'format', 'grid');
     }
 
     if ($oldversion < 2019111702) {
@@ -128,7 +124,7 @@ function xmldb_format_grid_upgrade($oldversion = 0) {
             $dbman->add_field($table, $field);
         }
 
-        upgrade_plugin_savepoint(true, '2019111702', 'format', 'grid');
+        upgrade_plugin_savepoint(true, 2019111702, 'format', 'grid');
     }
 
     if ($oldversion < 2020070700) {
@@ -139,8 +135,41 @@ function xmldb_format_grid_upgrade($oldversion = 0) {
             $dbman->add_index($table, $index);
         }
 
-        upgrade_plugin_savepoint(true, '2020070700', 'format', 'grid');
+        upgrade_plugin_savepoint(true, 2020070700, 'format', 'grid');
     }
+
+    if ($oldversion < 2020070703) {
+        // Change in default name.
+        $value = get_config('format_grid', 'defaultsection0ownpagenogridonesection');
+        set_config('defaultsetsection0ownpagenogridonesection', $value, 'format_grid');
+
+        upgrade_plugin_savepoint(true, 2020070703, 'format', 'grid');
+    }
+
+    if ($oldversion < 2020070705) {
+        // Define field updatedisplayedimage to be added to format_grid_icon.
+        $table = new xmldb_table('format_grid_icon');
+        $field = new xmldb_field('updatedisplayedimage', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0', 'displayedimageindex');
+
+        // Conditionally launch add field updatedisplayedimage.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        /* This is a new mechanism and thus we now use it for the previous two versions update of the images.
+           Clearly this has to happen now that the new field is in the DB.
+           Background was removed from images and transparent PNG's need regenerating. */
+        global $CFG;
+        require_once($CFG->dirroot.'/course/format/grid/lib.php'); // For format_grid.
+
+        format_grid::update_displayed_images_callback();
+
+        // Grid savepoint reached.
+        upgrade_plugin_savepoint(true, 2020070705, 'format', 'grid');
+    }
+
+    // Automatic 'Purge all caches'....
+    purge_all_caches();
 
     return true;
 }
