@@ -652,7 +652,7 @@ class NewAssignment {
         $normalized = $transliterator->transliterate($text);
         $normalized = strtolower($normalized);
         $normalized = preg_replace('/[^a-z0-9.,\?!_ -:]+/', '', $normalized);
-        $normalized = preg_replace('/[.,\?!_ -:]+/', '_', $normalized);
+        $normalized = preg_replace('/[,\?!_ :-]+/', '_', $normalized);
         return $normalized;
     }
 
