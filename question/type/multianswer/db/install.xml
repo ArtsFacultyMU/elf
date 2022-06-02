@@ -5,6 +5,8 @@
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="question" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="textboxtype" TYPE="char" LENGTH="8" NOTNULL="true" DEFAULT="variable" SEQUENCE="false" COMMENT="Question whether textboxes should stretch or not."/>
+        <FIELD NAME="textboxsize" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="How big should textbox be if fixed size."/>
         <FIELD NAME="sequence" TYPE="text" NOTNULL="true" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>
