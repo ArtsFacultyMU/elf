@@ -45,10 +45,10 @@ class delete_course_backup extends \external_api {
     }
 
     /**
-     * Deletes course backup
+     * Deletes course backup.
      *
-     * @param int $timestamp Timestamp
-     * @return array|bool An array containing the url or false on failure
+     * @param int $timestamp Timestamp.
+     * @return array|bool An array containing the url or false on failure.
      */
     public static function delete_course_backup($id, $timestamp) {
         global $DB;
@@ -96,7 +96,7 @@ class delete_course_backup extends \external_api {
     }
 
     /**
-     * Parameter description for delete_course_backup().
+     * Return value description for delete_course_backup().
      *
      * @return \external_description
      */

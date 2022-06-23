@@ -37,6 +37,7 @@ class admin_remote_edit_form extends \moodleform {
         $mform = $this->_form;
         
         $mform->addElement('hidden', 'id', 0);
+        $mform->setType('id', PARAM_INT);
 
         $mform->addElement('text', 'name', get_string('remote_name', 'local_remote_backup_provider'));
         $mform->setType('name', PARAM_NOTAGS);
@@ -47,6 +48,6 @@ class admin_remote_edit_form extends \moodleform {
         $mform->addElement('text', 'token', get_string('remote_token', 'local_remote_backup_provider'));
         $mform->setType('token', PARAM_NOTAGS);
         
-        $this->add_action_buttons(false, get_string('edit'));
+        $this->add_action_buttons(false, get_string('save'));
     }
 }

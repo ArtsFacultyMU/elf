@@ -65,4 +65,14 @@ $capabilities = [
             'manager' => CAP_ALLOW
         ],
     ],
+
+    'local/remote_backup_provider:managetransfers' => [
+        'riskbitmask' => RISK_CONFIG | RISK_SPAM | RISK_PERSONAL | RISK_XSS,
+
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+        'archetypes' => [
+            'manager' => CAP_ALLOW
+        ],
+    ],
 ];

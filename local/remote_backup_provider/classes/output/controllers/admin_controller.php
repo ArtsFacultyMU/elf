@@ -113,12 +113,127 @@ class admin_controller {
         echo $output->footer();
     }
 
+    public function remoteShowAction() {
+        global $PAGE, $DB, $CFG;
+        require_once($CFG->libdir . '/adminlib.php');
+
+        admin_externalpage_setup('local-remote_backup_provider-remote_show');
+        // Fetch GET parameter with remote ID (if editing).
+        $remote_id = optional_param('remote', 0, PARAM_INT);
+
+        if ($DB->record_exists('local_remotebp_remotes', ['id' => $remote_id])) {
+            $PAGE->set_title(get_string('admin_remote_edit', 'local_remote_backup_provider'));
+            $PAGE->set_heading(get_string('admin_remote_edit', 'local_remote_backup_provider'));
+
+            $remote = $DB->get_record('local_remotebp_remotes', ['id' => $remote_id]);
+
+            if (!$remote->active) {
+                $remote = $DB->update_record('local_remotebp_remotes', 
+                        (object)['id' => $remote_id, 'active' => 1]);
+                redirect(
+                        new \moodle_url('/local/remote_backup_provider/index.php',
+                        ['section' => 'admin_remote_list']), 
+                        get_string('remote_set_as_visible', 'local_remote_backup_provider'),
+                        null, \core\output\notification::NOTIFY_SUCCESS);
+            } else {
+                redirect(
+                    new \moodle_url('/local/remote_backup_provider/index.php',
+                    ['section' => 'admin_remote_list']), 
+                    get_string('remote_already_visible', 'local_remote_backup_provider'),
+                    null, \core\output\notification::NOTIFY_WARNING);
+            }
+
+        // Redirect if tried to edit non-existing remote.
+        } else {
+            redirect(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_remote_list']), get_string('remote_not_found', 'local_remote_backup_provider'), null, \core\output\notification::NOTIFY_WARNING);
+        }
+    }
+
+    public function remoteHideAction() {
+        global $PAGE, $DB, $CFG;
+        require_once($CFG->libdir . '/adminlib.php');
+
+        admin_externalpage_setup('local-remote_backup_provider-remote_hide');
+        // Fetch GET parameter with remote ID (if editing).
+        $remote_id = optional_param('remote', 0, PARAM_INT);
+
+        if ($DB->record_exists('local_remotebp_remotes', ['id' => $remote_id])) {
+            $PAGE->set_title(get_string('admin_remote_edit', 'local_remote_backup_provider'));
+            $PAGE->set_heading(get_string('admin_remote_edit', 'local_remote_backup_provider'));
+
+            $remote = $DB->get_record('local_remotebp_remotes', ['id' => $remote_id]);
+
+            if ($remote->active) {
+                $remote = $DB->update_record('local_remotebp_remotes', 
+                        (object)['id' => $remote_id, 'active' => 0]);
+                redirect(
+                        new \moodle_url('/local/remote_backup_provider/index.php',
+                        ['section' => 'admin_remote_list']), 
+                        get_string('remote_set_as_hidden', 'local_remote_backup_provider'),
+                        null, \core\output\notification::NOTIFY_SUCCESS);
+            } else {
+                redirect(
+                    new \moodle_url('/local/remote_backup_provider/index.php',
+                    ['section' => 'admin_remote_list']), 
+                    get_string('remote_already_hidden', 'local_remote_backup_provider'),
+                    null, \core\output\notification::NOTIFY_WARNING);
+            }
+
+        // Redirect if tried to edit non-existing remote.
+        } else {
+            redirect(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_remote_list']), get_string('remote_not_found', 'local_remote_backup_provider'), null, \core\output\notification::NOTIFY_WARNING);
+        }
+    }
+
+    public function remoteMoveAction() {
+        global $DB, $CFG;
+
+        require_once($CFG->libdir . '/adminlib.php');
+        
+        admin_externalpage_setup('local-remote_backup_provider-remote_move');
+        // Fetch GET parameter with remote ID (if editing).
+        $remote_id = optional_param('remote', 0, PARAM_INT);
+        $direction = optional_param('direction', 'none', PARAM_TEXT);
+
+        if ($DB->record_exists('local_remotebp_remotes', ['id' => $remote_id])) {
+            if ($direction === 'up' || $direction === 'down') {
+                $remote = $DB->get_record('local_remotebp_remotes', ['id' => $remote_id]);
+                $neighbour_remotes = $DB->get_records_select(
+                    'local_remotebp_remotes',
+                    '`position` ' . ($direction === 'up' ? '<' : '>') . ' ?',
+                    [$remote->position],
+                    '`position` ' . ($direction === 'up' ? 'DESC' : 'ASC')
+                );
+                if ($neighbour_remotes) {
+                    $neighbour = array_shift($neighbour_remotes);
+                    $DB->update_record('local_remotebp_remotes', (object)['id' => $neighbour->id, 'position' => $remote->position]);
+                    $DB->update_record('local_remotebp_remotes', (object)['id' => $remote->id, 'position' => $neighbour->position]);
+                    redirect(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_remote_list']), get_string('move_successful', 'local_remote_backup_provider'), null, \core\output\notification::NOTIFY_SUCCESS);
+                } else {
+                    redirect(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_remote_list']), get_string('move_failed', 'local_remote_backup_provider'), null, \core\output\notification::NOTIFY_WARNING);
+                }
+            } else {
+                redirect(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_remote_list']), get_string('move_failed', 'local_remote_backup_provider'), null, \core\output\notification::NOTIFY_WARNING);
+            }
+        // Redirect if tried to edit non-existing remote.
+        } else {
+            redirect(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_remote_list']), get_string('remote_not_found', 'local_remote_backup_provider'), null, \core\output\notification::NOTIFY_WARNING);
+        }
+    }
+
     public function transferLogAction() {
         global $DB, $CFG, $PAGE;
 
         require_once($CFG->libdir . '/adminlib.php');
 
-        admin_externalpage_setup('local-remote_backup_provider-transfer_log');
+        require_login();
+        $context = \context_system::instance();
+        require_capability('local/remote_backup_provider:managetransfers', $context);
+        $PAGE->set_context($context);
+        $PAGE->set_pagelayout('admin');
+        $PAGE->set_url(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_transfer_log']));
+        $PAGE->set_title(get_string('admin_transfer_log', 'local_remote_backup_provider'));
+        $PAGE->set_heading(get_string('import', 'local_remote_backup_provider') . ': ' . get_string('admin_transfer_log', 'local_remote_backup_provider'));
 
         // Getting which remote courses to display.
         $remote_id = optional_param('remote', 0, PARAM_INT);
@@ -140,9 +255,6 @@ class admin_controller {
 
         // Get chosen remote data (throws an exception if invalid).
         $remote = $remote_manager->getRemote($remote_id);
-
-        $PAGE->set_title(get_string('import', 'local_remote_backup_provider'));
-        $PAGE->set_heading(get_string('import', 'local_remote_backup_provider'));
 
         $output = $PAGE->get_renderer('local_remote_backup_provider');
 
@@ -168,7 +280,14 @@ class admin_controller {
         global $PAGE, $CFG, $DB;
 
         require_once($CFG->libdir . '/adminlib.php');
-        admin_externalpage_setup('local-remote_backup_provider-detailed_log');
+        require_login();
+        $context = \context_system::instance();
+        require_capability('local/remote_backup_provider:managetransfers', $context);
+        $PAGE->set_context($context);
+        $PAGE->set_pagelayout('admin');
+        $PAGE->set_url(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_detailed_log']));
+        $PAGE->set_title(get_string('admin_detailed_log', 'local_remote_backup_provider'));
+        $PAGE->set_heading(get_string('import', 'local_remote_backup_provider') . ': ' . get_string('admin_detailed_log', 'local_remote_backup_provider'));
 
         $transfer_id = optional_param('id', 0, PARAM_INT);
 
@@ -190,7 +309,14 @@ class admin_controller {
         global $PAGE, $CFG, $DB;
 
         require_once($CFG->libdir . '/adminlib.php');
-        admin_externalpage_setup('local-remote_backup_provider-manual_cancel');
+        require_login();
+        $context = \context_system::instance();
+        require_capability('local/remote_backup_provider:managetransfers', $context);
+        $PAGE->set_context($context);
+        $PAGE->set_pagelayout('admin');
+        $PAGE->set_url(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_manual_cancel']));
+        $PAGE->set_title(get_string('admin_manual_cancel', 'local_remote_backup_provider'));
+        $PAGE->set_heading(get_string('import', 'local_remote_backup_provider') . ': ' . get_string('admin_manual_cancel', 'local_remote_backup_provider'));
 
         $transfer_id = optional_param('id', 0, PARAM_INT);
         $sure = optional_param('sure', 0, PARAM_INT);
@@ -233,7 +359,14 @@ class admin_controller {
         $FORM_ID = 'manual_finish_form';
 
         require_once($CFG->libdir . '/adminlib.php');
-        admin_externalpage_setup('local-remote_backup_provider-manual_finish');
+        require_login();
+        $context = \context_system::instance();
+        require_capability('local/remote_backup_provider:managetransfers', $context);
+        $PAGE->set_context($context);
+        $PAGE->set_pagelayout('admin');
+        $PAGE->set_url(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_manual_finish']));
+        $PAGE->set_title(get_string('admin_manual_finish', 'local_remote_backup_provider'));
+        $PAGE->set_heading(get_string('import', 'local_remote_backup_provider') . ': ' . get_string('admin_manual_finish', 'local_remote_backup_provider'));
 
         $transfer_id = optional_param('id', 0, PARAM_INT);
         $courseid = optional_param('courseid', 0, PARAM_INT);
@@ -248,7 +381,7 @@ class admin_controller {
             redirect(new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'admin_transfer_log', 'remote' => $transfer_manager->remote->id]), get_string('transfer_already_finished', 'local_remote_backup_provider'), null, \core\output\notification::NOTIFY_WARNING);
         }
 
-        // If already consented, change to canceled
+        // If already consented, change to finished
         if ($courseid) {
             if (!$DB->get_record('course', ['id'=> $courseid])) {
                 redirect(new \moodle_url('/local/remote_backup_provider/index.php', ['section'=> 'admin_manual_finish', 'id' => $transfer_id]), get_string('course_not_found', 'local_remote_backup_provider'), null, \core\output\notification::NOTIFY_WARNING);

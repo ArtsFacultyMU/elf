@@ -17,61 +17,18 @@
 defined('MOODLE_INTERNAL') || die();
 
 class local_remote_backup_provider_renderer extends plugin_renderer_base {
-    /**
-     * Renders the list of courses.
-     * 
-     * @return string Container with form or empty string.
-     */
-    public function render_front_course_list(
-        local_remote_backup_provider\output\renderables\front_course_list_renderable $renderable
-    ) {
-        global $USER;
-
-        $rendered = $renderable->render();
-
-        if ($renderable->hasCourses()) {
-            $context = \context_system::instance();
-            $control = '';
-            if (has_capability('local/remote_backup_provider:transferasother', $context)) {
-                $control .= get_string('transfer_as', 'local_remote_backup_provider') . \html_writer::empty_tag(
-                    'input',
-                    ['class'=> 'form-control mr-1 ml-1', 'form' => $renderable::FORM_ID, 'name'=>'userid']
-                );
-            }
-
-            $button_url = new \moodle_url('/local/remote_backup_provider/index.php', ['section' => 'process', 'remote' => $renderable->getRemote()->id]);
-            
-            $button = new \single_button($button_url, get_string('button_import', 'local_remote_backup_provider'), 'POST', true);
-            $button->formid = $renderable::FORM_ID;
-            $button->disabled = true;
-
-            $control .= $this->render($button);
-
-
-            $rendered .= \html_writer::div(
-                $control, 
-                'col-md-12 form-inline'
-            );
-
-            $rendered .= \html_writer::script('', new \moodle_url('/local/remote_backup_provider/js/course_list.js'));
-        }
-
-        return $rendered;
-    }
-
     public function render_admin_remote_list(array $remotes) {
         global $CFG;
 
         require_once($CFG->libdir . '/tablelib.php');
 
         $table = new \flexible_table('local_remote_backup_provider__remote_list');
-        $table->define_columns(['name', 'address', 'active', /*'position'*/]);
+        $table->define_baseurl(new \moodle_url('/local/remote_backup_provider/index.php', ['section'=> 'admin_remote_list']));
+        $table->define_columns(['name', 'address', 'edit']);
         $table->define_headers([
             get_string('remote_name', 'local_remote_backup_provider'),
             get_string('remote_url', 'local_remote_backup_provider'),
-            get_string('remote_active', 'local_remote_backup_provider'),
-            // @todo Implement move action
-            //get_string('remote_position', 'local_remote_backup_provider'),
+            get_string('actions', 'local_remote_backup_provider'),
         ]);
         $table->set_attribute('class', 'admintable generaltable');
         $table->setup();
@@ -83,29 +40,49 @@ class local_remote_backup_provider_renderer extends plugin_renderer_base {
             $row[] = $remote->name;
             $row[] = \html_writer::link($remote->address, $remote->address);
         
+            $actions = [];
             if ($remote->active) {
-                $row[] = $this->pix_icon('i/hide', get_string('hide', 'local_remote_backup_provider'));
+                $actions[] = \html_writer::link(
+                    new \moodle_url('/local/remote_backup_provider/index.php', ['section'=> 'admin_remote_hide', 'remote' => $remote->id]), 
+                    $this->pix_icon('i/hide', get_string('hide', 'local_remote_backup_provider'))
+                );
             } else {
-                $row[] = $this->pix_icon('i/show', get_string('show', 'local_remote_backup_provider'));
+                $actions[] = \html_writer::link(
+                    new \moodle_url('/local/remote_backup_provider/index.php', ['section'=> 'admin_remote_show', 'remote' => $remote->id]), 
+                    $this->pix_icon('i/show', get_string('show', 'local_remote_backup_provider'))
+                );
                 $class = 'dimmed_text';
             }
+            $actions[] = \html_writer::link(
+                new \moodle_url('/local/remote_backup_provider/index.php', ['section'=> 'admin_remote_edit', 'remote' => $remote->id]), 
+                $this->pix_icon('t/edit', get_string('edit'))
+            );
         
-            /* @todo Implement move action
-            $position = '';
             reset($remotes);
             if ($key !== key($remotes)) {
-                $position .= $this->pix_icon('i/up', get_string('move_up', 'local_remote_backup_provider'));
+                $actions[] = \html_writer::link(
+                    new \moodle_url('/local/remote_backup_provider/index.php', ['section'=> 'admin_remote_move', 'remote' => $remote->id, 'direction' => 'up']),
+                    $this->pix_icon('i/up', get_string('move_up', 'local_remote_backup_provider'))
+                );
             }
             end($remotes);
             if ($key !== key($remotes)) {
-                $position .= $this->pix_icon('i/down', get_string('move_down', 'local_remote_backup_provider'));
+                $actions[] = \html_writer::link(
+                    new \moodle_url('/local/remote_backup_provider/index.php', ['section'=> 'admin_remote_move', 'remote' => $remote->id, 'direction' => 'down']),
+                    $this->pix_icon('i/down', get_string('move_down', 'local_remote_backup_provider'))
+                );
             }
-            $row[] = $position;
-            */
+            $row[] = implode(' ', $actions);
 
             $table->add_data($row, $class);
         }
-        return $table->finish_output();
+
+        $new_link = \html_writer::tag('p',\html_writer::link(
+            new \moodle_url('/local/remote_backup_provider/index.php', ['section'=> 'admin_remote_edit']), 
+            get_string('admin_remote_add', 'local_remote_backup_provider')
+        ));
+
+        return $table->finish_output() . $new_link;
     }
 
     public function render_front_transfer_list(int $remote_id, array $transfers) {
@@ -137,6 +114,12 @@ class local_remote_backup_provider_renderer extends plugin_renderer_base {
                     . $this->pix_icon('i/scheduled', userdate($transfer->timemodified));
             
             $actions = [];
+            if (has_capability('local/remote_backup_provider:managetransfers',\context_system::instance())) {
+                $actions[] = \html_writer::link(
+                    new \moodle_url('/local/remote_backup_provider/index.php', ['section'=> 'admin_detailed_log', 'id' => $transfer->id]),
+                    $this->pix_icon('i/info', get_string('admin_detailed_log', 'local_remote_backup_provider'))
+                );
+            }
             if ($transfer->courseid !== null
                     && $transfer->status === \local_remote_backup_provider\helper\transfer_manager::STATUS_FINISHED) {
                 $actions[] = \html_writer::link(
@@ -144,21 +127,23 @@ class local_remote_backup_provider_renderer extends plugin_renderer_base {
                         $this->pix_icon('t/right', get_string('continue_to_course', 'local_remote_backup_provider'))
                 );
             }
-                    $row[] = implode(' ', $actions);
+            $row[] = implode(' ', $actions);
         
             $table->add_data($row);
         }
         return $table->finish_output();
     }
 
-    public function render_admin_transfer_log(array $transfers, int $remote) {
+    public function render_admin_transfer_log(array $transfers, int $remote_id) {
         global $CFG, $DB;
 
         require_once($CFG->libdir . '/tablelib.php');
         require_once($CFG->libdir . '/moodlelib.php');
 
+        $remote = (new \local_remote_backup_provider\helper\remote_manager)->getRemote($remote_id);
+
         $table = new \flexible_table('local_remote_backup_provider__transfer_list');
-        $table->define_baseurl(new moodle_url('/local/remote_backup_provider/index.php', ['section'=> 'admin_transfer_log', 'remote' => $remote]));
+        $table->define_baseurl(new moodle_url('/local/remote_backup_provider/index.php', ['section'=> 'admin_transfer_log', 'remote' => $remote_id]));
         $table->define_columns(['name', 'added', 'issuer', 'status', 'actions']);
         $table->define_headers([
             get_string('full_course_name', 'local_remote_backup_provider'),
@@ -182,14 +167,24 @@ class local_remote_backup_provider_renderer extends plugin_renderer_base {
                 $user = $DB->get_record('user', ['id' => $transfer->userid], 'id, firstname, lastname');
                 $issuers[$user->id] = mb_substr($user->firstname, 0, 1, "UTF-8") . '. ' . $user->lastname;
             }
-            $row[] = $issuers[$transfer->userid];
-            
+            if (!isset($issuers[$transfer->issuer])) {
+                $user = $DB->get_record('user', ['id' => $transfer->issuer], 'id, firstname, lastname');
+                $issuers[$user->id] = mb_substr($user->firstname, 0, 1, "UTF-8") . '. ' . $user->lastname;
+            }
+            $row[] = $issuers[$transfer->userid]. (($transfer->userid != $transfer->issuer) ? '<br />(' . $issuers[$transfer->issuer] . ')' : '');
+
             $row[] = '<span class="badge badge-' . \local_remote_backup_provider\helper\transfer_manager::LABEL_FOR_STATUS[$transfer->status] . '">'
                     . get_string('transfer_status_' . $transfer->status, 'local_remote_backup_provider')
                     . '</span> ' 
                     . $this->pix_icon('i/scheduled', userdate($transfer->timemodified));
             
             $actions = [];
+
+            $actions[] = \html_writer::link(
+                $remote->address . '/course/view.php?id=' . $transfer->remotecourseid,
+                $this->pix_icon('i/publish', get_string('remote_course', 'local_remote_backup_provider'))
+            );
+
             $actions[] = \html_writer::link(
                 new \moodle_url('/local/remote_backup_provider/index.php', ['section'=> 'admin_detailed_log', 'id' => $transfer->id]),
                 $this->pix_icon('i/info', get_string('admin_detailed_log', 'local_remote_backup_provider'))
@@ -203,6 +198,11 @@ class local_remote_backup_provider_renderer extends plugin_renderer_base {
                 $actions[] = \html_writer::link(
                     new \moodle_url('/local/remote_backup_provider/index.php', ['section'=> 'admin_manual_cancel', 'id' => $transfer->id]),
                     $this->pix_icon('t/block', get_string('admin_manual_cancel', 'local_remote_backup_provider'))
+                );
+
+                $actions[] = \html_writer::link(
+                    new \moodle_url('/local/remote_backup_provider/index.php', ['section'=> 'admin_manual_finish', 'id' => $transfer->id]),
+                    $this->pix_icon('t/check', get_string('admin_manual_finish', 'local_remote_backup_provider'))
                 );
             }
 
@@ -220,27 +220,61 @@ class local_remote_backup_provider_renderer extends plugin_renderer_base {
     }
 
     public function render_admin_detailed_log(int $id, array $logs) {
+        global $CFG, $DB;
+
+        require_once($CFG->libdir . '/tablelib.php');
+        require_once($CFG->libdir . '/moodlelib.php');
         $table = new \flexible_table('local_remote_backup_provider__transfer_log');
         $table->define_baseurl(new moodle_url('/local/remote_backup_provider/index.php', ['section'=> 'admin_detailed_log', 'id' => $id]));
-        $table->define_columns(['timestamp', 'status', 'notes']);
+        $table->define_columns(['timestamp', 'status', 'subplugin', 'notes']);
         $table->define_headers([
             get_string('timestamp', 'local_remote_backup_provider'),
             get_string('status', 'local_remote_backup_provider'),
+            get_string('subplugin', 'local_remote_backup_provider'),
             get_string('notes', 'local_remote_backup_provider'),
         ]);
         $table->set_attribute('class', 'admintable generaltable');
         $table->setup();
 
+        $subtransfer_plugins = [];
+
         foreach ($logs as $log) {
+            if ($log->subtransferid != null) {
+                if (!isset($subtransfer_plugins[$log->subtransferid])) {
+                    $subtransfer_plugins[$log->subtransferid] =
+                            $this->_get_subtransfer_plugin((int)$log->subtransferid);
+                }
+                
+                $fullstatus = get_string(
+                    'transfer_fullstatus_' . $log->fullstatus,
+                    $subtransfer_plugins[$log->subtransferid]
+                );
+                $subplugin = get_string(
+                    'pluginname',
+                    $subtransfer_plugins[$log->subtransferid]
+                );
+            } else {
+                $fullstatus = get_string('transfer_fullstatus_' . $log->fullstatus, 'local_remote_backup_provider');
+                $subplugin = '';
+            }
+
             $row = [];
             $row[] = userdate($log->timemodified);
             $row[] = '<span class="badge badge-' . \local_remote_backup_provider\helper\transfer_manager::LABEL_FOR_STATUS[$log->status] . '">'
-                    . get_string('transfer_fullstatus_' . $log->fullstatus, 'local_remote_backup_provider')
+                    . $fullstatus
                     . '</span> ';
+            $row[] = $subplugin;
             $row[] = $log->notes;
             $table->add_data($row);
         }
         
         return $table->finish_output();
+    }
+
+    protected function _get_subtransfer_plugin(int $subtransfer_id) {
+        global $DB;
+
+        $subtransfer = $DB->get_record('local_remotebp_subtransfer', ['id' => $subtransfer_id]);
+        return $subtransfer->plugin;
     }
 }

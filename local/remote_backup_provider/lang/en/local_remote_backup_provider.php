@@ -33,6 +33,7 @@ $string['transfer_as'] = 'Transfer as:';
 $string['user_not_found'] = 'User wasn\'t found.';
 $string['issued_by_other_user'] = 'Transfer was issued by other user.';
 $string['course_id'] = 'Course ID';
+$string['issued_by'] = 'issued by';
 
 $string['import'] = 'Import from remote';
 $string['pluginname'] = 'Remote backup provider';
@@ -46,6 +47,7 @@ $string['remote_backup_provider:access'] = 'Course transfer – basic access';
 $string['remote_backup_provider:searchall'] = 'Search all courses on remote';
 $string['remote_backup_provider:transferasother'] = 'Transfer as different person';
 $string['remote_backup_provider:multitransfer'] = 'Override one issue per course limitation';
+$string['remote_backup_provider:managetransfers'] = 'Manage transfers';
 
 $string['available_courses_search'] = 'Search available source courses';
 $string['available_courses'] = 'Available source courses';
@@ -55,6 +57,7 @@ $string['short_course_name'] = 'Short name';
 $string['full_course_name'] = 'Full name';
 $string['time_created'] = 'Issued';
 $string['status'] = 'Status';
+$string['subplugin'] = 'Subplugin';
 $string['issuer'] = 'Issuer';
 $string['actions'] = 'Actions';
 $string['no_courses_found'] = 'No courses found';
@@ -66,7 +69,14 @@ $string['remote_course'] = 'Course on remote';
 $string['back_to_selection'] = 'Back to selection';
 $string['continue_to_course'] = 'Continue to transfered course';
 $string['courses_issued_for_transfer'] = 'Courses are issued to transfer';
-$string['courses_issued_for_transfer_error'] = 'Following courses were already issued earlier therefore skipped:';
+$string['courses_issued_for_transfer_error'] = '<p>The following courses cannot be issued to transfer as they were issued to transfer to this ELF version in the past:</p>
+{$a->errors}
+<p>If you need a new version of the course within current ELF instalation, you can create its copy (read the <a href="{$a->link}">instructions</a>).</p>';
+
+$string['remote_set_as_hidden'] = 'Remote was successfully hidden.';
+$string['remote_set_as_visible'] = 'Remote was successfully shown.';
+$string['remote_already_hidden'] = 'Remote was already hidden.';
+$string['remote_already_visible'] = 'Remote was already visible.';
 
 $string['restore_error_invalid_extension'] = 'Restore failed: Invalid file extension.';
 $string['exception_tm_restore_error_invalid_backup_file'] = 'Restore failed: Invalid backup file.';
@@ -92,6 +102,8 @@ $string['admin_transfer_log'] = 'Transfer log';
 $string['admin_detailed_log'] = 'Detailed transfer log';
 $string['admin_manual_cancel'] = 'Cancel transfer manually';
 $string['admin_manual_finish'] = 'Finish transfer manually';
+$string['admin_setting_note'] = 'Note';
+$string['admin_setting_note_description'] = 'Note will be displayed on transfer page.';
 
 $string['remote_name'] = 'Name';
 $string['remote_url'] = 'URL';
@@ -107,6 +119,9 @@ $string['show'] = 'Show';
 $string['move_up'] = 'Move up';
 $string['move_down'] = 'Move down';
 
+$string['move_successful'] = 'Remote was successfully moved.';
+$string['move_failed'] = 'Remote wasn\'t moved.';
+
 $string['remote_not_found'] = 'Remote wasn\'t found.';
 $string['remote_added'] = 'Remote was successfully added.';
 $string['remote_updated'] = 'Remote was successfully updated.';
@@ -117,6 +132,8 @@ $string['transfer_manualcancel_areyousure'] = 'Are you sure to cancel the follow
 $string['transfer_canceled_successfully'] = 'Transfer was successfully canceled.';
 $string['transfer_finished_successfully'] = 'Transfer was successfully finished.';
 
+$string['transfer_as_self'] = 'Import as myself';
+$string['transfer_as_other'] = 'Import as other user';
 
 $string['transfer_status_added'] = 'Issued';
 $string['transfer_status_error'] = 'Error';
@@ -144,17 +161,10 @@ $string['transfer_fullstatus_restore_newcourse'] = 'No local course found for re
 $string['transfer_fullstatus_restore_newcoursefinished'] = 'Empty course for restore was created.';
 $string['transfer_fullstatus_restore_itself'] = 'Restoration itself started.';
 $string['transfer_fullstatus_restore_ended'] = 'Restoration ended successfully.';
-$string['transfer_fullstatus_teacherenrol_started'] = 'Enroling teacher to the course.';
-$string['transfer_fullstatus_teacherenrol_ended'] = 'Teacher enroled successfully.';
-$string['transfer_fullstatus_categorization_started'] = 'Categorizing the course.';
-$string['transfer_fullstatus_categorization_gettingremotecatid'] = 'Getting category id from remote.';
-$string['transfer_fullstatus_categorization_ended'] = 'Categorization finished successfully.';
-$string['transfer_fullstatus_categorization_lookingforlocalcat'] = 'Looking for corresponding local category.';
-$string['transfer_fullstatus_categorization_catfound'] = 'Category found.';
-$string['transfer_fullstatus_categorization_remotenotfoundlocally'] = 'Remote category not found locally, creating.';
-$string['transfer_fullstatus_categorization_lookingforparent'] = 'Looking for parent category.';
-$string['transfer_fullstatus_categorization_creatingnewcat'] = 'Creating a new local category.';
-$string['transfer_fullstatus_categorization_savingforlater'] = 'Saving link to newly created category for later use in transfers.';
 $string['transfer_fullstatus_cancelled_timeout'] = 'Transfer canceled on timeout.';
 $string['transfer_fullstatus_cancelled_manually'] = 'Transfer canceled manually.';
 $string['transfer_fullstatus_finished_manually'] = 'Transfer finished manually.';
+$string['transfer_fullstatus_post_subtransfers_finished'] = 'Post subtransfers finished.';
+
+$string['subplugintype_remotebppost'] = 'Post-transfer action';
+$string['subplugintype_remotebppost_plural'] = 'Post-transfer actions';

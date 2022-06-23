@@ -31,7 +31,7 @@ require_once($CFG->libdir . '/outputcomponents.php');
  * @author    Vojtěch Mrkývka <vojtech.mrkyvka@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class front_course_list_renderable implements \renderable {
+class front_course_list_renderable implements \renderable, \templatable {
     const FORM_ID = 'remote_form';
 
     /**
@@ -64,25 +64,18 @@ class front_course_list_renderable implements \renderable {
         return (bool)$this->courses;
     }
 
-    /**
-     * Render the list of courses.
-     */
-    public function render() {
-        
-        if ($this->courses) {
-            # Course links
-            $table = new \html_table();
-            $table->head = ['', get_string('short_course_name', 'local_remote_backup_provider'), get_string('full_course_name', 'local_remote_backup_provider')];
-            
-            array_map(function($course) use ($table) {
-                $table->data[] = [
-                    \html_writer::checkbox('remote_id[]', $course->id, false, null, ['form' => self::FORM_ID, 'class'=>'remote_course_checkbox']),
-                    $course->shortname,
-                    \html_writer::link($this->remote->address . '/course/view.php?id=' . $course->id, $course->fullname, ['target' => '_blank', 'title' => get_string('remote_course', 'local_remote_backup_provider')]),
-                ];
-            }, $this->courses);
-            return \html_writer::div(\html_writer::table($table), "", ['style' => 'margin: 20px 0']);
-        } 
-        return \html_writer::div(\html_writer::tag('i', get_string('no_courses_found', 'local_remote_backup_provider')) . '.', "", ['style' => 'margin-bottom: 20px']);
+    public function export_for_template(\renderer_base $output) {
+        $output = new \stdClass();
+
+        $output->found_courses = (bool)$this->courses;
+        $output->courses = $this->courses;
+        $output->form_id = self::FORM_ID;
+        $output->remote_address = $this->remote->address;
+        $output->remote_id = $this->remote->id;
+
+        $context = \context_system::instance();
+        $output->transfer_as_other = has_capability('local/remote_backup_provider:transferasother', $context);
+
+        return $output;
     }
 }

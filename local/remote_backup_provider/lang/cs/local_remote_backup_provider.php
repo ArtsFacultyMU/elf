@@ -40,6 +40,7 @@ $string['remote_backup_provider:access'] = 'Převádění kurzů – základní 
 $string['remote_backup_provider:searchall'] = 'Hledání napříč všemi kurzy';
 $string['remote_backup_provider:transferasother'] = 'Převádění za jiného uživatele';
 $string['remote_backup_provider:multitransfer'] = 'Přeskočení omezení jednoho převodu';
+$string['remote_backup_provider:managetransfers'] = 'Správa převodů';
 
 $string['available_courses_search'] = 'Hledat kurzy ve vzdálené instalaci';
 $string['available_courses'] = 'Dostupné kurzy ve vzdálené instalaci';
@@ -50,11 +51,13 @@ $string['transfer_as'] = 'Převést jako:';
 $string['user_not_found'] = 'Uživatel nebyl nalezen.';
 $string['issued_by_other_user'] = 'Převod byl zadán jiným uživatelem.';
 $string['course_id'] = 'ID kurzu';
+$string['issued_by'] = 'převedl';
 
 $string['short_course_name'] = 'Zkrácený název';
 $string['full_course_name'] = 'Celý název';
 $string['time_created'] = 'Čas přidání';
 $string['status'] = 'Stav';
+$string['subplugin'] = 'Submodul';
 $string['issuer'] = 'Zadal(a)';
 $string['actions'] = 'Akce';
 $string['no_courses_found'] = 'Nebyly nalezeny žádné kurzy';
@@ -66,7 +69,14 @@ $string['remote_course'] = 'Kurz ve vzdálené instalaci';
 $string['back_to_selection'] = 'Zpět na výběr';
 $string['continue_to_course'] = 'Přejít do převedeného kurzu';
 $string['courses_issued_for_transfer'] = 'Kurzy jsou nachystány k převodu';
-$string['courses_issued_for_transfer_error'] = 'Následující kurzy nelze zadat k převodu, již byly převáděny:';
+$string['courses_issued_for_transfer_error'] = '<p>Následující kurzy nelze zadat k převodu, již byly do této verze ELFu převedeny:</p>
+{$a->errors}
+<p>Pokud potřebujete novou verzi kurzu v rámci stávající instalace ELFu, můžete vytvořit jeho kopii (viz <a href="{$a->link}">návod</a>).</p>';
+
+$string['remote_set_as_hidden'] = 'Vzdálená instalace byla úspěšně skryta.';
+$string['remote_set_as_visible'] = 'Vzdálená instalace byla úspěšně zobrazena.';
+$string['remote_already_hidden'] = 'Vzdálená instalace již byla skrytá.';
+$string['remote_already_visible'] = 'Vzdálená instalace již byla viditelná.';
 
 $string['restore_error_invalid_extension'] = 'Obnova nebyla úspěšná: Neplatná přípona souboru.';
 $string['exception_tm_restore_error_invalid_backup_file'] = 'Obnova nebyla úspěšná: Neplatný soubor zálohy.';
@@ -92,6 +102,8 @@ $string['admin_transfer_log'] = 'Záznamy o převodech';
 $string['admin_detailed_log'] = 'Detailní záznamy o převodech';
 $string['admin_manual_cancel'] = 'Zrušit převod ručně';
 $string['admin_manual_finish'] = 'Dokončit převod ručně';
+$string['admin_setting_note'] = 'Poznámka';
+$string['admin_setting_note_description'] = 'Text poznámky se zobrazí na stránce s převodem.';
 
 $string['remote_name'] = 'Název';
 $string['remote_url'] = 'URL';
@@ -107,6 +119,9 @@ $string['show'] = 'Zobrazit';
 $string['move_up'] = 'Posunout nahoru';
 $string['move_down'] = 'Posunout dolů';
 
+$string['move_successful'] = 'Vzdálená instalace byla úspěšně posunuta.';
+$string['move_failed'] = 'Vzdálená instalace nebyla posunuta.';
+
 $string['remote_not_found'] = 'Vzdálená instalace nebyla nalezena.';
 $string['remote_added'] = 'Vzdálená instalace byla úspěšně přidána.';
 $string['remote_updated'] = 'Vzdálená instalace byla úspěšně upravena.';
@@ -117,6 +132,8 @@ $string['transfer_manualcancel_areyousure'] = 'Vážně chcete zrušit následuj
 $string['transfer_canceled_successfully'] = 'Převod byl úspěšně zrušen.';
 $string['transfer_canceled_successfully'] = 'Převod byl úspěšně dokončen.';
 
+$string['transfer_as_self'] = 'Převést za sebe';
+$string['transfer_as_other'] = 'Převést jménem jiného uživatele';
 
 $string['transfer_status_added'] = 'Přidáno';
 $string['transfer_status_error'] = 'Chyba';
@@ -144,17 +161,10 @@ $string['transfer_fullstatus_restore_newcourse'] = 'Při obnově nebyl nalezen e
 $string['transfer_fullstatus_restore_newcoursefinished'] = 'Byl vytvořen nový kurz pro obnovu kurzu.';
 $string['transfer_fullstatus_restore_itself'] = 'Začala samotná obnova.';
 $string['transfer_fullstatus_restore_ended'] = 'Obnova skončila úspěchem.';
-$string['transfer_fullstatus_teacherenrol_started'] = 'Začalo zapisování učitele do kurzu.';
-$string['transfer_fullstatus_teacherenrol_ended'] = 'Zapisování učitele do kurzu skončilo úspěchem.';
-$string['transfer_fullstatus_categorization_started'] = 'Začalo řazení kurzu do kategorie.';
-$string['transfer_fullstatus_categorization_gettingremotecatid'] = 'Získávání ID kategorie.';
-$string['transfer_fullstatus_categorization_ended'] = 'Kategorizace skončila úspěchem.';
-$string['transfer_fullstatus_categorization_lookingforlocalcat'] = 'Hledání odpovídající lokální kategorie.';
-$string['transfer_fullstatus_categorization_catfound'] = 'Kategorie nalezena.';
-$string['transfer_fullstatus_categorization_remotenotfoundlocally'] = 'Nebyla nalezena lokální kategorie odpovídající vzdálené, vytváří se nová.';
-$string['transfer_fullstatus_categorization_lookingforparent'] = 'Hledání nadřazené kategorie.';
-$string['transfer_fullstatus_categorization_creatingnewcat'] = 'Vytváření nové lokální kategorie.';
-$string['transfer_fullstatus_categorization_savingforlater'] = 'Ukládání vazby k nově vytvořené kategorii pro budoucí užití v přenosech.';
 $string['transfer_fullstatus_cancelled_timeout'] = 'Přenos zrušen kvůli vypršení limitu.';
 $string['transfer_fullstatus_cancelled_manually'] = 'Přenos zrušen ručně.';
 $string['transfer_fullstatus_finished_manually'] = 'Přenos dokončen ručně.';
+$string['transfer_fullstatus_post_subtransfers_finished'] = 'Akce po přenosu dokončeny.';
+
+$string['subplugintype_remotebppost'] = 'Akce po přenosu';
+$string['subplugintype_remotebppost_plural'] = 'Akce po přenosu';

@@ -414,23 +414,13 @@ class transfer_manager {
 
         // If there is no such course.
         } else {
-            // Category lookup.
-            $this->change_status('categorization_started', null, self::STATUS_PROCESSING);
-
-            $this->change_status('categorization_gettingremotecatid', null, self::STATUS_PROCESSING);
-            $url = sprintf(self::URL_BASE_FORMAT, $this->remote->address, $this->remote->token) . self::URL_PARAMS_CATEGORYID;
-            $params = array('id' => $this->transfer->remotecourseid);
-            $curl = new \curl;
-            $results = json_decode($curl->post($url, $params));
-            $category = $this->_get_local_category($results->category);
-
-            $this->change_status('categorization_ended', null, self::STATUS_PROCESSING);
-
             // Create new course.
             $this->change_status('restore_newcourse', null, self::STATUS_PROCESSING);
-            $categoryid         = $category;
-            $userdoingrestore   = $USER->id;
-            $courseid           = \restore_dbops::create_new_course('', '', $categoryid);
+            /// Get first root category.
+            $categoryfromdb = $DB->get_records('course_categories', 
+                    ['parent' => 0], 'id', 'id', 0, 1);
+            $categoryid = array_pop($categoryfromdb)->id;
+            $courseid = \restore_dbops::create_new_course('', '', $categoryid);
         
             // Save data to the database.
             $transfer_data = (object) [
@@ -489,15 +479,20 @@ class transfer_manager {
      * @param string|null $notes Additional information about the status.
      * @param string|null $public_status Public status to be changed to (if not already that status).
      */
-    public function change_status(string $fullstatus, ?string $notes = null, ?string $public_status = null) {
+    public function change_status(
+            string $fullstatus, ?string $notes = null, 
+            ?string $public_status = null, ?int $subtransferid = null,
+            ?\DateTime $datetime = null) {
         global $DB;
         
         // Get datetime once to prevent having public and private status out of sync.
-        $datetime = new \DateTime();
+        // (Datetime can be passed on, but I advice against it – except for submodules.)
+        $datetime = $datetime ?? new \DateTime();
 
         // Insert status information into the log table.
         $log_data = (object) [
             'transferid' => $this->transfer->id,
+            'subtransferid' => $subtransferid,
             'timemodified' => $datetime->getTimestamp(),
             'status' => $public_status,
             'fullstatus' => $fullstatus,
@@ -508,7 +503,9 @@ class transfer_manager {
         // If set, change also public status in the transfer table,
         // but make change if and only if the transfer
         // does not already have the given status.
-        if ($public_status !== null && $public_status != $this->transfer->status) {
+        // (Also do not change public status if the log record is
+        // connected to any submodule.)
+        if ($public_status !== null && $public_status != $this->transfer->status && $subtransferid == null) {
             $transfer_data = (object) [
                 'id' => $this->transfer->id,
                 'status' => $public_status,
@@ -530,83 +527,6 @@ class transfer_manager {
      */
     public function get_remote_url() {
         return $this->remote->address;
-    }
-
-    /**
-     * Enrol user as (editing) teacher
-     */
-    public function enrol_teacher() {
-        global $DB;
-
-        $this->change_status('teacherenrol_started', null, self::STATUS_PROCESSING);
-
-        $teacherrole = $DB->get_record('role', ['shortname' => 'editingteacher']);
-        $manualenrol = enrol_get_plugin('manual');
-        
-        $enrolinstance = $DB->get_record('enrol', array('courseid' => $this->transfer->courseid, 'enrol'=>'manual'), '*', MUST_EXIST);
-
-        $manualenrol->enrol_user($enrolinstance, $this->transfer->userid, $teacherrole->id);
-
-        $this->change_status('teacherenrol_ended', null, self::STATUS_FINISHED);
-    }
-
-    protected function _get_local_category($remotecategoryid) {
-        global $DB;
-
-        $this->change_status('categorization_lookingforlocalcat',
-                json_encode(['remote' => $this->remote->id, 'remote_category' => $remotecategoryid]),
-                self::STATUS_PROCESSING);
-
-        $record = $DB->get_record('local_remotebp_categories', [
-                    'remoteid' => $this->remote->id,
-                    'remotecategoryid' => $remotecategoryid,
-                ], 'categoryid', IGNORE_MULTIPLE);
-
-        // If found, return its local ID
-        if ($record) {
-            $this->change_status('categorization_catfound',
-                    $record->categoryid,
-                    self::STATUS_PROCESSING);
-
-            return (int)$record->categoryid;
-        }
-
-        // If not, create a new one
-        $this->change_status('categorization_remotenotfoundlocally',
-                json_encode(['remote' => $this->remote->id, 'remote_category' => $remotecategoryid]),
-                self::STATUS_PROCESSING);
-
-        $url = sprintf(self::URL_BASE_FORMAT, $this->remote->address, $this->remote->token) . self::URL_PARAMS_CATEGORYINFO;
-        $params = array('id' => $remotecategoryid);
-        $curl = new \curl;
-        $results = json_decode($curl->post($url, $params));
-
-        $data = new \stdClass();
-        
-        $this->change_status('categorization_lookingforparent', $results->path, self::STATUS_PROCESSING);
-        $path = explode('/', $results->path);
-        array_pop($path); // Removing current category from the end.
-        $parent = array_pop($path);        
-        if ($parent !== '') {
-            $data->parent = $this->_get_local_category($parent);
-        }
-
-        $data->idnumber = $results->idnumber;
-        $data->name = $results->name;
-        $data->visible = (int)$results->visible;
-
-        $this->change_status('categorization_creatingnewcat', json_encode($data), self::STATUS_PROCESSING);
-        $category = \core_course_category::create($data);
-
-        $this->change_status('categorization_savingforlater', $category->id, self::STATUS_PROCESSING);
-
-        $record = $DB->insert_record('local_remotebp_categories', (object)[
-            'remoteid' => $this->remote->id,
-            'remotecategoryid' => $remotecategoryid,
-            'categoryid' => $category->id,
-        ], 'categoryid', IGNORE_MULTIPLE);
-
-        return (int)$category->id;
     }
 
     /**

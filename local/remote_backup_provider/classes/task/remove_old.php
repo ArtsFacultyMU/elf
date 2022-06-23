@@ -147,4 +147,3 @@ class remove_old extends \core\task\scheduled_task {
         return $deleted_counter;
     }
 }
-

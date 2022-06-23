@@ -237,11 +237,6 @@ function xmldb_local_remote_backup_provider_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2020091000, 'local', 'remote_backup_provider');
     }
 
-    if ($oldversion < 2020091000.01) {
-        // Remote_backup_provider savepoint reached.
-        upgrade_plugin_savepoint(true, 2020091000.01, 'local', 'remote_backup_provider');
-    }
-
     if ($oldversion < 2020091000.02) {
 
         // Define field issuer to be added to local_remotebp_transfer.
@@ -264,13 +259,156 @@ function xmldb_local_remote_backup_provider_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2020091000.03, 'local', 'remote_backup_provider');
     }
 
-    if ($oldversion < 2020092000) {
+    if ($oldversion < 2021071600) {
+        $DB->delete_records('local_remotebp_categories');
+
         // Remote_backup_provider savepoint reached.
-        upgrade_plugin_savepoint(true, 2020092000, 'local', 'remote_backup_provider');
+        upgrade_plugin_savepoint(true, 2021071600, 'local', 'remote_backup_provider');
     }
 
-    if ($oldversion < 2020100700) {
+    
+
+    if ($oldversion < 2022060700) {
+        // Define table local_remotebp_subtransfer to be created.
+        $table = new xmldb_table('local_remotebp_subtransfer');
+
+        // Adding fields to table local_remotebp_subtransfer.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('transferid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('plugin', XMLDB_TYPE_CHAR, '50', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('settings', XMLDB_TYPE_TEXT, null, null, XMLDB_NOTNULL, null, null);
+        $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('status', XMLDB_TYPE_CHAR, '20', null, XMLDB_NOTNULL, null, null);
+
+        // Adding keys to table local_remotebp_subtransfer.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+
+        // Conditionally launch create table for local_remotebp_subtransfer.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // Define field subtransferid to be added to local_remotebp_transfer.
+        $table = new xmldb_table('local_remotebp_transfer_log');
+        $field = new xmldb_field('subtransferid', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'id');
+
+        // Conditionally launch add field subtransferid.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
         // Remote_backup_provider savepoint reached.
-        upgrade_plugin_savepoint(true, 2020100700, 'local', 'remote_backup_provider');
+        upgrade_plugin_savepoint(true, 2022060700, 'local', 'remote_backup_provider');
+    }
+
+    if ($oldversion < 2022062200) {
+        // Define table local_remotebp_categories to be dropped.
+        $table = new xmldb_table('local_remotebp_categories');
+
+        // Conditionally launch drop table for local_remotebp_categories.
+        if ($dbman->table_exists($table)) {
+            $dbman->drop_table($table);
+        }
+
+        // Remote_backup_provider savepoint reached.
+        upgrade_plugin_savepoint(true, 2022062200, 'local', 'remote_backup_provider');
+    }
+
+    if ($oldversion < 2022062300) {
+        $statuses_categorization = [
+            'categorization_started' => 'categorization_started',
+            'categorization_gettingremotecatid' => 'categorization_gettingremotecatid', 
+            'categorization_ended' => 'categorization_ended',
+            'categorization_lookingforlocalcat' => 'categorization_lookingforlocalcat',
+            'categorization_catfound' => 'categorization_catfound',
+            'categorization_remotenotfoundlocally' => 'categorization_remotenotfoundlocally',
+            'categorization_lookingforparent' => 'categorization_lookingforparent',
+            'categorization_creatingnewcat' => 'categorization_creatingnewcat',
+            'categorization_savingforlater' => 'categorization_savingforlater',
+        ];
+        $statuses_teacher = [
+            'teacherenrol_started' => 'started',
+            'teacherenrol_ended' => 'finished',
+        ];
+
+        $records = $DB->get_records('local_remotebp_transfer_log', ['subtransferid' => null]);
+
+        $finished_time = [];
+        $new_subcats = [];
+
+        foreach ($records as $record) {
+            if (!isset($finished_time[$record->transferid])) {$finished_time[$record->transferid] = (int)$record->timemodified;}
+            if ((int)$finished_time[$record->transferid] < (int)$record->timemodified) {$finished_time[$record->transferid] = (int)$record->timemodified;}
+
+            if (in_array($record->fullstatus, array_keys($statuses_categorization))) {
+                if (!isset($new_subcats[$record->transferid])) {$new_subcats[$record->transferid] = [];}
+                if (!isset($new_subcats[$record->transferid]['categorization'])) {$new_subcats[$record->transferid]['categorization'] = [];}
+
+                $new_subcats[$record->transferid]['categorization'][] = $record;
+            }
+
+            if (in_array($record->fullstatus, array_keys($statuses_teacher))) {
+                if (!isset($new_subcats[$record->transferid])) {$new_subcats[$record->transferid] = [];}
+                if (!isset($new_subcats[$record->transferid]['teacher'])) {$new_subcats[$record->transferid]['teacher'] = [];}
+
+                $new_subcats[$record->transferid]['teacher'][] = $record;
+            }
+        }
+
+        foreach ($new_subcats as $transferid => $ns) {
+            if (isset($ns['categorization'])) {
+                $data = (object)[
+                    'transferid' => $transferid,
+                    'plugin' => 'remotebppost_categorize',
+                    'settings' => '',
+                    'timemodified' => $finished_time[$transferid],
+                    'status' => 'finished',
+                ];
+                $subtransferid = $DB->insert_record('local_remotebp_subtransfer', $data);
+                foreach ($ns['categorization'] as $record) {
+                    $data = (object)[
+                        'id' => $record->id,
+                        'subtransferid' => $subtransferid,
+                        'status' => ($record->fullstatus == 'categorization_savingforlater' ?
+                                'finished' : 'processing'),
+                        'fullstatus' => $statuses_categorization[$record->fullstatus]
+                    ];
+                    $DB->update_record('local_remotebp_transfer_log', $data);
+                }
+            }
+
+            if (isset($ns['teacher'])) {
+                $data = (object)[
+                    'transferid' => $transferid,
+                    'plugin' => 'remotebppost_teacher_enrol',
+                    'settings' => '',
+                    'timemodified' => $finished_time[$transferid],
+                    'status' => 'finished',
+                ];
+                $subtransferid = $DB->insert_record('local_remotebp_subtransfer', $data);
+                foreach ($ns['teacher'] as $record) {
+                    $data = (object)[
+                        'id' => $record->id,
+                        'subtransferid' => $subtransferid,
+                        'status' => ($record->fullstatus == 'teacherenrol_ended' ?
+                                'finished' : 'processing'),
+                        'fullstatus' => $statuses_teacher[$record->fullstatus]
+                    ];
+                    $DB->update_record('local_remotebp_transfer_log', $data);
+                }
+            }
+
+            $data = (object)[
+                'subtransferid' => null,
+                'transferid' => $transferid,
+                'timemodified' => $finished_time[$transferid],
+                'status' => 'finished',
+                'fullstatus' => 'finished',
+                'notes' => null,
+            ];
+            $DB->insert_record('local_remotebp_transfer_log', $data);
+        }
+
+        upgrade_plugin_savepoint(true, 2022062300, 'local', 'remote_backup_provider');
     }
 }
