@@ -15,17 +15,17 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * local_remote_backup_provider version information
+ * Subplugin version information.
  *
- * @package    local_remote_backup_provider
- * @copyright  2015 Lafayette College ITS
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    remotebppost_categorize
+ * @copyright  2022 Masaryk University
+ * @author     Vojtěch Mrkývka <vojtech.mrkyvka@gmail.com>
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'local_remote_backup_provider';
+$plugin->component = 'remotebppost_categorize';
 $plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = 'v4.2.0';
+$plugin->release   = 'v0.0.1';
 $plugin->requires  = 2018051700; // MOODLE 3.5 (LTS).
-$plugin->version   = 2022062300;
+$plugin->version   = 2022062200;

@@ -156,7 +156,7 @@ class front_controller {
         // Iterate over remote courses.
         $errors = [];
         foreach ($remote_course_ids as $remote_course_id) {
-            $existing_records = $DB->get_records('local_remotebp_transfer', ['remotecourseid' => $remote_course_id]);
+            $existing_records = $DB->get_records('local_remotebp_transfer', ['remoteid' => $remote_id, 'remotecourseid' => $remote_course_id]);
 
             if (has_capability('local/remote_backup_provider:multitransfer', $context) OR !$existing_records) {
                 $transfer_id = \local_remote_backup_provider\helper\transfer_manager::add_new($remote, $remote_course_id, $user_id);

@@ -1,5 +1,18 @@
 # Changelog
 
+## 4.3.0 - 2022-06-23
+
+- Extracted categorization from core into submodule.
+- Refactored log table to move existing log data into supposed submodules.
+- Made the interface for dynamic submodule external connection.
+
+## 4.2.0 - 2022-06-07
+
+- Added support for postprocessing submodules.
+- Fixed existing course transfer check (checked only remote course ID
+  neglegent to different remotes).
+- Manual cancelation of transfer no longer opens in the new window.
+
 ## 4.1.0
 
 - Changed transfer to the series of ad hoc tasks

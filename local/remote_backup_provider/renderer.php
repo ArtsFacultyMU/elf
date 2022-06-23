@@ -197,8 +197,7 @@ class local_remote_backup_provider_renderer extends plugin_renderer_base {
             ) {
                 $actions[] = \html_writer::link(
                     new \moodle_url('/local/remote_backup_provider/index.php', ['section'=> 'admin_manual_cancel', 'id' => $transfer->id]),
-                    $this->pix_icon('t/block', get_string('admin_manual_cancel', 'local_remote_backup_provider')),
-                    ['target' => '_blank']
+                    $this->pix_icon('t/block', get_string('admin_manual_cancel', 'local_remote_backup_provider'))
                 );
 
                 $actions[] = \html_writer::link(
@@ -227,25 +226,55 @@ class local_remote_backup_provider_renderer extends plugin_renderer_base {
         require_once($CFG->libdir . '/moodlelib.php');
         $table = new \flexible_table('local_remote_backup_provider__transfer_log');
         $table->define_baseurl(new moodle_url('/local/remote_backup_provider/index.php', ['section'=> 'admin_detailed_log', 'id' => $id]));
-        $table->define_columns(['timestamp', 'status', 'notes']);
+        $table->define_columns(['timestamp', 'status', 'subplugin', 'notes']);
         $table->define_headers([
             get_string('timestamp', 'local_remote_backup_provider'),
             get_string('status', 'local_remote_backup_provider'),
+            get_string('subplugin', 'local_remote_backup_provider'),
             get_string('notes', 'local_remote_backup_provider'),
         ]);
         $table->set_attribute('class', 'admintable generaltable');
         $table->setup();
 
+        $subtransfer_plugins = [];
+
         foreach ($logs as $log) {
+            if ($log->subtransferid != null) {
+                if (!isset($subtransfer_plugins[$log->subtransferid])) {
+                    $subtransfer_plugins[$log->subtransferid] =
+                            $this->_get_subtransfer_plugin((int)$log->subtransferid);
+                }
+                
+                $fullstatus = get_string(
+                    'transfer_fullstatus_' . $log->fullstatus,
+                    $subtransfer_plugins[$log->subtransferid]
+                );
+                $subplugin = get_string(
+                    'pluginname',
+                    $subtransfer_plugins[$log->subtransferid]
+                );
+            } else {
+                $fullstatus = get_string('transfer_fullstatus_' . $log->fullstatus, 'local_remote_backup_provider');
+                $subplugin = '';
+            }
+
             $row = [];
             $row[] = userdate($log->timemodified);
             $row[] = '<span class="badge badge-' . \local_remote_backup_provider\helper\transfer_manager::LABEL_FOR_STATUS[$log->status] . '">'
-                    . get_string('transfer_fullstatus_' . $log->fullstatus, 'local_remote_backup_provider')
+                    . $fullstatus
                     . '</span> ';
+            $row[] = $subplugin;
             $row[] = $log->notes;
             $table->add_data($row);
         }
         
         return $table->finish_output();
+    }
+
+    protected function _get_subtransfer_plugin(int $subtransfer_id) {
+        global $DB;
+
+        $subtransfer = $DB->get_record('local_remotebp_subtransfer', ['id' => $subtransfer_id]);
+        return $subtransfer->plugin;
     }
 }

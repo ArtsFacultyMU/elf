@@ -15,17 +15,11 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * local_remote_backup_provider version information
+ * Support for legacy subplugin definition (MOODLE < 3.8).
+ * See subplugins.json for the actual information about subplugin types.
  *
  * @package    local_remote_backup_provider
- * @copyright  2015 Lafayette College ITS
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @copyright  2022 Masaryk University
+ * @author     Vojtěch Mrkývka <vojtech.mrkyvka@gmail.com>
  */
-
-defined('MOODLE_INTERNAL') || die();
-
-$plugin->component = 'local_remote_backup_provider';
-$plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = 'v4.2.0';
-$plugin->requires  = 2018051700; // MOODLE 3.5 (LTS).
-$plugin->version   = 2022062300;
+$subplugins = (array) json_decode(file_get_contents(__DIR__ . "/subplugins.json"))->plugintypes;

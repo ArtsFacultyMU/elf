@@ -66,13 +66,12 @@ class transfer_restore_backup extends \core\task\adhoc_task {
         mtrace('Call for restore.');
         $transfer_manager->restore();
 
-        mtrace('Queue teacher enrol task.');
-        $enrol_task = new postprocessing_enrol_teacher();
+        mtrace('Queue subtransfer task.');
+        $enrol_task = new run_subtransfers_post();
         $enrol_task->set_custom_data(array(
             'transfer_id' => $data->transfer_id,
         ));
         \core\task\manager::queue_adhoc_task($enrol_task);
-
         mtrace('Finish.');
         return true;
     }
