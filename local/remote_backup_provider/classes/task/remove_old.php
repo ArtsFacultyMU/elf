@@ -123,7 +123,7 @@ class remove_old extends \core\task\scheduled_task {
         $count = $this->delete_file_records($records);
         mtrace('Deleted ' . $count . ' files');
 
-        mtrace('Deleting old local backup files.');
+        mtrace('Deleting old local backup files ended.');
         return true;
     }
 
@@ -147,4 +147,3 @@ class remove_old extends \core\task\scheduled_task {
         return $deleted_counter;
     }
 }
-

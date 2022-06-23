@@ -82,6 +82,9 @@ class front_controller {
             echo $output->heading(get_string('available_courses', 'local_remote_backup_provider'), 2);
         }
 
+        // Print note if present
+        echo get_config('local_remote_backup_provider', 'note');
+
         $remote_tabs = new \local_remote_backup_provider\output\renderables\front_remote_tabs_renderable();
         $remote_tabs->setRemote($remote_id);
         $remote_tabs->setRemotes($remotes);
@@ -153,7 +156,7 @@ class front_controller {
         // Iterate over remote courses.
         $errors = [];
         foreach ($remote_course_ids as $remote_course_id) {
-            $existing_records = $DB->get_records('local_remotebp_transfer', ['remotecourseid' => $remote_course_id]);
+            $existing_records = $DB->get_records('local_remotebp_transfer', ['remoteid' => $remote_id, 'remotecourseid' => $remote_course_id]);
 
             if (has_capability('local/remote_backup_provider:multitransfer', $context) OR !$existing_records) {
                 $transfer_id = \local_remote_backup_provider\helper\transfer_manager::add_new($remote, $remote_course_id, $user_id);

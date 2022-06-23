@@ -48,6 +48,6 @@ class admin_remote_edit_form extends \moodleform {
         $mform->addElement('text', 'token', get_string('remote_token', 'local_remote_backup_provider'));
         $mform->setType('token', PARAM_NOTAGS);
         
-        $this->add_action_buttons(false, get_string('edit'));
+        $this->add_action_buttons(false, get_string('save'));
     }
 }

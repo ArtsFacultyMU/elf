@@ -24,6 +24,8 @@
 
 namespace local_remote_backup_provider\task;
 
+use local_remote_backup_provider\helper\subtransfer\post_subtransfer_manager;
+
 defined('MOODLE_INTERNAL') || die();
 
 /**
@@ -34,14 +36,14 @@ defined('MOODLE_INTERNAL') || die();
  * @author     Vojtěch Mrkývka <vojtech.mrkyvka@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class postprocessing_enrol_teacher extends \core\task\adhoc_task {
+class run_subtransfers_post extends \core\task\adhoc_task {
     /**
      * Get the name of the task.
      *
      * @return string the name of the task
      */
     public function get_name() {
-        return get_string('enrol_teacher_task', 'local_remote_backup_provider');
+        return get_string('run_subtransfers_post_task', 'local_remote_backup_provider');
     }
 
     /**
@@ -63,8 +65,17 @@ class postprocessing_enrol_teacher extends \core\task\adhoc_task {
             return true;
         }
 
-        mtrace('Call for enroling teacher.');
-        $transfer_manager->enrol_teacher();
+        mtrace('Call for the subprocesses themselves.');
+        $subplugins = post_subtransfer_manager::get_subplugins();
+        foreach ($subplugins as $subplugin) {
+            $subtransfer_id = post_subtransfer_manager::add_new((int)$data->transfer_id, $subplugin);
+            $subtransfer_task_name = '\remotebppost_' . $subplugin . '\task\main';
+            $subtransfer_task = new $subtransfer_task_name();
+            $subtransfer_task->set_custom_data(array(
+                'subtransfer_id' => $subtransfer_id,
+            ));
+            \core\task\manager::queue_adhoc_task($subtransfer_task);
+        }
 
         mtrace('Finish.');
         return true;

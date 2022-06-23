@@ -62,6 +62,11 @@ switch ($section) {
         $controller->remoteHideAction();
         break;
 
+    case 'admin_remote_move':
+        $controller = new local_remote_backup_provider\output\controllers\admin_controller();
+        $controller->remoteMoveAction();
+        break;
+
     case 'admin_transfer_log':
         $controller = new local_remote_backup_provider\output\controllers\admin_controller();
         $controller->transferLogAction();
