@@ -14,18 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * local_remote_backup_provider version information
- *
- * @package    local_remote_backup_provider
- * @copyright  2015 Lafayette College ITS
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
+$string['pluginname'] = 'Teacher enrolment';
 
-defined('MOODLE_INTERNAL') || die();
+$string['task_main'] = 'Main task';
 
-$plugin->component = 'local_remote_backup_provider';
-$plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = 'v4.2.0';
-$plugin->requires  = 2018051700; // MOODLE 3.5 (LTS).
-$plugin->version   = 2022062300;
+$string['transfer_fullstatus_added'] = 'Added.';
+$string['transfer_fullstatus_started'] = 'Started processing.';
+$string['transfer_fullstatus_stopped_on_preflight'] = 'Stopped on preflight.';
+$string['transfer_fullstatus_enroling_teacher'] = 'Enroling teacher.';
+$string['transfer_fullstatus_enroling_teacher_ended'] = 'Enroling teacher ended.';
+$string['transfer_fullstatus_finished'] = 'Finished.';

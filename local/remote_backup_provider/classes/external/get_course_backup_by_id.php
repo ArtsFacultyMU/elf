@@ -124,7 +124,6 @@ class get_course_backup_by_id extends \external_api {
             $file->delete();
 
             // Make the link.
-            $filepath = $storedfile->get_filepath() . $storedfile->get_filename();
             $fileurl = \moodle_url::make_webservice_pluginfile_url(
                 $storedfile->get_contextid(),
                 $storedfile->get_component(),
