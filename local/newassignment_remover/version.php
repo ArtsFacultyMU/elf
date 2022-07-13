@@ -25,10 +25,10 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_newassignment_remover';
-$plugin->version = 2022031000;
+$plugin->version = 2022071300;
 $plugin->requires = 2020061500; // MOODLE 3.9 (LTS)
 $plugin->maturity	= MATURITY_BETA;
-$plugin->release = 'v3.9-r0.2';
+$plugin->release = 'v3.9-r0.3';
 $plugin->dependencies = [
     'mod_assign' => ANY_VERSION,
     'mod_newassignment' => ANY_VERSION,

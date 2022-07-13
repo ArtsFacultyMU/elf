@@ -35,16 +35,21 @@ class converter {
         list($module, $context, $cw, $cm, $data) = prepare_new_moduleinfo_data($course, 'assign', (int)$newassignment->section);
 
         // Convert original mod_newassignment data as close as possible,
-        $data = self::_mapDataToAssign($course, $newassignment, $module, $data);
+        $data = self::_mapDataToAssign($course, $newassignment, $module, $data, $context);
         
         // Create new mod_assign instance with given data.
         $assign = self::_createAssign($course, $data, $cw, $cm);
+
+        // If the advanced grading is used, use the same values as the original instance.
+        if (in_array($data->advancedgradingmethod_submissions, ['guide', 'rubric'])) {
+            self::_mapAdvancedGrading($newassignment, $assign, $data->advancedgradingmethod_submissions);
+        }
 
         // Move new mod_assign instance to the correct position in the course.
         self::_positionAssign($newassignment, $assign);
     }
 
-    protected static function _mapDataToAssign($course, $newassignment, $module, $data) {
+    protected static function _mapDataToAssign($course, $newassignment, $module, $data, $context) {
         global $DB;
         // Get additional data about the original mod_newassignment instance from the other database tables.
         $course_module = $DB->get_record('course_modules', ['id' => $newassignment->coursemodule], '*', MUST_EXIST);
@@ -53,6 +58,13 @@ class converter {
             'itemmodule' => 'newassignment',
             'iteminstance' => $course_module->instance,
         ], '*', MUST_EXIST);
+        $context = $DB->get_record('context', [
+            'contextlevel' => '70', // Course module context
+            'instanceid' => $newassignment->coursemodule
+        ], '*', MUST_EXIST);
+        $grading_areas = $DB->get_record('grading_areas', [
+            'contextid' => $context->id,
+        ]);
         // Set the corresponding data.
         /// General.
         $data->name = $newassignment->name;
@@ -113,7 +125,7 @@ class converter {
             $data->grade = null;
         }
         $data->grade_rescalegrades = null; // ???
-        $data->advancedgradingmethod_submissions = ''; // Grading method. WIP.
+        $data->advancedgradingmethod_submissions = $grading_areas ? $grading_areas->activemethod : ''; // Grading method.
         $data->gradecat = $grade_items->categoryid; // Grade category.
         $data->gradepass = $grade_items->gradepass; // Grade category.
         $data->blindmarking = '0'; // Anonymous submissions. Probably not in mod_newassignment.
@@ -172,6 +184,98 @@ class converter {
         $fromform = (object)$mform->getForm()->exportValues();
         // Create new mod_assign instance based on the data above & store its information for later use.
         return add_moduleinfo($fromform, $course, $mform);
+    }
+
+    protected static function _mapAdvancedGrading($newassignment, $assign, $gradingmethod) {
+        global $DB;
+        
+        // Fetch base newassignment data.
+        $na_context = $DB->get_record('context', [
+            'contextlevel' => '70', // Course module context
+            'instanceid' => $newassignment->coursemodule
+        ], '*', MUST_EXIST);
+        $na_grading_areas = $DB->get_record('grading_areas', [
+            'contextid' => $na_context->id,
+            'activemethod' => $gradingmethod,
+        ], '*', MUST_EXIST);
+
+        // Fetch base assign data.
+        $a_context = $DB->get_record('context', [
+            'contextlevel' => '70', // Course module context
+            'instanceid' => $assign->coursemodule
+        ], '*', MUST_EXIST);
+        $a_grading_areas = $DB->get_record('grading_areas', [
+            'contextid' => $a_context->id,
+            'activemethod' => $gradingmethod,
+        ], '*', MUST_EXIST);
+
+        foreach ($DB->get_records('grading_definitions', [
+                'areaid' => $na_grading_areas->id, 'method' => $gradingmethod]) as $na_definition) {
+            $a_definition_id = $DB->insert_record('grading_definitions', (object)[
+                'areaid' => $a_grading_areas->id,
+                'method' => $gradingmethod,
+                'name' => $na_definition->name,
+                'description' => $na_definition->description,
+                'descriptionformat' => $na_definition->descriptionformat,
+                'status' => $na_definition->status,
+                'copiedfromid' => $na_definition->copiedfromid,
+                'timecreated' => $na_definition->timecreated,
+                'usercreated' => $na_definition->usercreated,
+                'timemodified' => $na_definition->timemodified,
+                'usermodified' => $na_definition->usermodified,
+                'timecopied' => $na_definition->timecopied,
+                'options' => $na_definition->options,
+            ]);
+
+            if ($gradingmethod == 'guide') {
+                foreach ($DB->get_records('gradingform_guide_comments', 
+                        ['definitionid' => $na_definition->id]) as $na_guide_comment) {
+                    $DB->insert_record('gradingform_guide_comments', (object)[
+                        'definitionid' => $a_definition_id,
+                        'sortorder' => $na_guide_comment->sortorder,
+                        'description' => $na_guide_comment->description,
+                        'descriptionformat' => $na_guide_comment->descriptionformat,
+                    ]);
+                }
+
+                foreach ($DB->get_records('gradingform_guide_criteria', 
+                        ['definitionid' => $na_definition->id]) as $na_guide_criterion) {
+                    $DB->insert_record('gradingform_guide_criteria', (object)[
+                        'definitionid' => $a_definition_id,
+                        'sortorder' => $na_guide_criterion->sortorder,
+                        'shortname' => $na_guide_criterion->shortname,
+                        'description' => $na_guide_criterion->description,
+                        'descriptionformat' => $na_guide_criterion->descriptionformat,
+                        'descriptionmarkers' => $na_guide_criterion->descriptionmarkers,
+                        'descriptionmarkersformat' => $na_guide_criterion->descriptionmarkersformat,
+                        'maxscore' => $na_guide_criterion->maxscore,
+                    ]);
+                }
+            }
+
+            if ($gradingmethod == 'rubric') {
+                foreach ($DB->get_records('gradingform_rubric_criteria', 
+                        ['definitionid' => $na_definition->id]) as $na_rubric_criterion) {
+                    $a_rubric_criterion_id = $DB->insert_record('gradingform_rubric_criteria', (object)[
+                        'definitionid' => $a_definition_id,
+                        'sortorder' => $na_rubric_criterion->sortorder,
+                        'description' => $na_rubric_criterion->description,
+                        'descriptionformat' => $na_rubric_criterion->descriptionformat,
+                    ]);
+
+                    foreach ($DB->get_records('gradingform_rubric_levels', 
+                            ['criterionid' => $na_rubric_criterion->id]) as $na_rubric_level) {
+                        $DB->insert_record('gradingform_rubric_levels', (object)[
+                            'criterionid' => $a_rubric_criterion_id,
+                            'score' => $na_rubric_level->score,
+                            'definition' => $na_rubric_level->definition,
+                            'definitionformat' => $na_rubric_level->definitionformat,
+                        ]);
+                    }
+                }
+            }
+        }
+
     }
 
     protected static function _positionAssign($newassignment, $assign) {
