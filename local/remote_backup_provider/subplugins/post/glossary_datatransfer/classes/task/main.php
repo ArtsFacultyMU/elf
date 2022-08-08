@@ -98,7 +98,7 @@ class main extends \core\task\adhoc_task {
                 $glossary = $DB->get_record('glossary', array('id'=>$instance->id));
                 $context = \context_module::instance($instance->coursemodule);
                 $xmlstring = base64_decode(array_shift($xmlstrings));
-                helper::import_data($glossary, $context, $xmlstring);
+                helper::import_data($glossary, $context, $xmlstring, $transfer_manager->transfer->userid);
             }
             $subtransfer_manager->change_status('filling_instances_ended', null, transfer_manager::STATUS_PROCESSING);
         }

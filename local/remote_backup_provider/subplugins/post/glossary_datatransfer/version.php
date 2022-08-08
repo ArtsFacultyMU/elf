@@ -26,9 +26,9 @@ defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'remotebppost_glossary_datatransfer';
 $plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = 'v0.0.1';
+$plugin->release   = 'v0.0.2';
 $plugin->requires  = 2018051700; // MOODLE 3.5
-$plugin->version   = 2022071800;
+$plugin->version   = 2022080800;
 $plugin->dependencies = [
   'mod_glossary' => ANY_VERSION,
 ];

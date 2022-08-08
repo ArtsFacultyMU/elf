@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.4.0 - 2022-08-08
+
+- Cleaned list of services.
+- Enabled manual finish on cancelled items.
+
 ## 4.3.0 - 2022-06-23
 
 - Extracted categorization from core into submodule.

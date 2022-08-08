@@ -199,7 +199,11 @@ class local_remote_backup_provider_renderer extends plugin_renderer_base {
                     new \moodle_url('/local/remote_backup_provider/index.php', ['section'=> 'admin_manual_cancel', 'id' => $transfer->id]),
                     $this->pix_icon('t/block', get_string('admin_manual_cancel', 'local_remote_backup_provider'))
                 );
+            }
 
+            if (
+                $transfer->status !== \local_remote_backup_provider\helper\transfer_manager::STATUS_FINISHED
+            ) {
                 $actions[] = \html_writer::link(
                     new \moodle_url('/local/remote_backup_provider/index.php', ['section'=> 'admin_manual_finish', 'id' => $transfer->id]),
                     $this->pix_icon('t/check', get_string('admin_manual_finish', 'local_remote_backup_provider'))

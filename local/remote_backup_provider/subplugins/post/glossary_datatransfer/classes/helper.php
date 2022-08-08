@@ -3,7 +3,7 @@
 namespace remotebppost_glossary_datatransfer;
 
 class helper {
-    public static function import_data($glossary, $glossarycontext, $xmlstring) {
+    public static function import_data($glossary, $glossarycontext, $xmlstring, $user_id) {
         global $CFG, $DB;
         
         // Large exports are likely to take their time and memory.
@@ -54,9 +54,10 @@ class helper {
                 $newentry->glossaryid       = $glossary->id;
                 $newentry->sourceglossaryid = 0;
                 $newentry->approved         = 1;
-                $newentry->userid           = 0; #$USER->id;
+                $newentry->userid           = $user_id;
                 $newentry->teacherentry     = 1;
                 $newentry->definitionformat = $xmlentry['#']['FORMAT'][0]['#'];
+                $newentry->definitiontrust  = 1;
                 $newentry->timecreated      = time();
                 $newentry->timemodified     = time();
 
