@@ -1,5 +1,0 @@
-{
-    "plugintypes": {
-        "remotebppost": "local/remote_backup_provider/subplugins/post"
-    }
-}
