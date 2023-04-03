@@ -1003,6 +1003,57 @@ EOD;
     }
 
     /**
+     * Create a grade_grade.
+     *
+     * @param array $record
+     * @return grade_grade the grade record
+     */
+    public function create_grade_grade(?array $record = null): grade_grade {
+        global $DB, $USER;
+
+        $item = $DB->get_record('grade_items', ['id' => $record['itemid']]);
+        $userid = $record['userid'] ?? $USER->id;
+
+        unset($record['itemid']);
+        unset($record['userid']);
+
+        if ($item->itemtype === 'mod') {
+            $cm = get_coursemodule_from_instance($item->itemmodule, $item->iteminstance);
+            $module = new $item->itemmodule(context_module::instance($cm->id), $cm, false);
+            $record['attemptnumber'] = $record['attemptnumber'] ?? 0;
+
+            $module->save_grade($userid, (object) $record);
+
+            $grade = grade_grade::fetch(['userid' => $userid, 'itemid' => $item->id]);
+        } else {
+            $grade = grade_grade::fetch(['userid' => $userid, 'itemid' => $item->id]);
+            $record['rawgrade'] = $record['rawgrade'] ?? $record['grade'] ?? null;
+            $record['finalgrade'] = $record['finalgrade'] ?? $record['grade'] ?? null;
+
+            unset($record['grade']);
+
+            if ($grade) {
+                $fields = $grade->required_fields + array_keys($grade->optional_fields);
+
+                foreach ($fields as $field) {
+                    $grade->{$field} = $record[$field] ?? $grade->{$field};
+                }
+
+                $grade->update();
+            } else {
+                $record['userid'] = $userid;
+                $record['itemid'] = $item->id;
+
+                $grade = new grade_grade($record, false);
+
+                $grade->insert();
+            }
+        }
+
+        return $grade;
+    }
+
+    /**
      * Create a grade_item.
      *
      * @param array|stdClass $record
@@ -1256,4 +1307,120 @@ EOD;
             "data generators yet. Class {$classname} not found.");
     }
 
+    /**
+     * Create a new category for custom profile fields.
+     *
+     * @param array $data Array with 'name' and optionally 'sortorder'
+     * @return \stdClass New category object
+     */
+    public function create_custom_profile_field_category(array $data): \stdClass {
+        global $DB;
+
+        // Pick next sortorder if not defined.
+        if (!array_key_exists('sortorder', $data)) {
+            $data['sortorder'] = (int)$DB->get_field_sql('SELECT MAX(sortorder) FROM {user_info_category}') + 1;
+        }
+
+        $category = (object)[
+            'name' => $data['name'],
+            'sortorder' => $data['sortorder']
+        ];
+        $category->id = $DB->insert_record('user_info_category', $category);
+
+        return $category;
+    }
+
+    /**
+     * Creates a new custom profile field.
+     *
+     * Optional fields are:
+     *
+     * categoryid (or use 'category' to specify by name). If you don't specify
+     * either, it will add the field to a 'Testing' category, which will be created for you if
+     * necessary.
+     *
+     * sortorder (if you don't specify this, it will pick the next one in the category).
+     *
+     * all the other database fields (if you don't specify this, it will pick sensible defaults
+     * based on the data type).
+     *
+     * @param array $data Array with 'datatype', 'shortname', and 'name'
+     * @return \stdClass Database object from the user_info_field table
+     */
+    public function create_custom_profile_field(array $data): \stdClass {
+        global $DB, $CFG;
+        require_once($CFG->dirroot . '/user/profile/lib.php');
+
+        // Set up category if necessary.
+        if (!array_key_exists('categoryid', $data)) {
+            if (array_key_exists('category', $data)) {
+                $data['categoryid'] = $DB->get_field('user_info_category', 'id',
+                        ['name' => $data['category']], MUST_EXIST);
+            } else {
+                // Make up a 'Testing' category or use existing.
+                $data['categoryid'] = $DB->get_field('user_info_category', 'id', ['name' => 'Testing']);
+                if (!$data['categoryid']) {
+                    $created = $this->create_custom_profile_field_category(['name' => 'Testing']);
+                    $data['categoryid'] = $created->id;
+                }
+            }
+        }
+
+        // Pick sort order if necessary.
+        if (!array_key_exists('sortorder', $data)) {
+            $data['sortorder'] = (int)$DB->get_field_sql(
+                    'SELECT MAX(sortorder) FROM {user_info_field} WHERE categoryid = ?',
+                    [$data['categoryid']]) + 1;
+        }
+
+        // Defaults for other values.
+        $defaults = [
+            'description' => '',
+            'descriptionformat' => 0,
+            'required' => 0,
+            'locked' => 0,
+            'visible' => PROFILE_VISIBLE_ALL,
+            'forceunique' => 0,
+            'signup' => 0,
+            'defaultdata' => '',
+            'defaultdataformat' => 0,
+            'param1' => '',
+            'param2' => '',
+            'param3' => '',
+            'param4' => '',
+            'param5' => ''
+        ];
+
+        // Type-specific defaults for other values.
+        $typedefaults = [
+            'text' => [
+                'param1' => 30,
+                'param2' => 2048
+            ],
+            'menu' => [
+                'param1' => "Yes\nNo",
+                'defaultdata' => 'No'
+            ],
+            'datetime' => [
+                'param1' => '2010',
+                'param2' => '2015',
+                'param3' => 1
+            ],
+            'checkbox' => [
+                'defaultdata' => 0
+            ]
+        ];
+        foreach ($typedefaults[$data['datatype']] ?? [] as $field => $value) {
+            $defaults[$field] = $value;
+        }
+
+        foreach ($defaults as $field => $value) {
+            if (!array_key_exists($field, $data)) {
+                $data[$field] = $value;
+            }
+        }
+
+        $data['id'] = $DB->insert_record('user_info_field', $data);
+        return (object)$data;
+    }
 }

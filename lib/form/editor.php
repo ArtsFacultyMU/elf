@@ -64,6 +64,9 @@ class MoodleQuickForm_editor extends HTML_QuickForm_element implements templatab
     /** @var array values for editor */
     protected $_values     = array('text'=>null, 'format'=>null, 'itemid'=>null);
 
+    /** @var bool if true label will be hidden */
+    protected $_hiddenLabel = false;
+
     /**
      * Constructor
      *
@@ -441,6 +444,7 @@ class MoodleQuickForm_editor extends HTML_QuickForm_element implements templatab
         $context['id'] = $id;
         $context['value'] = $text;
         $context['format'] = $format;
+        $context['formatlabel'] = get_string('editorxformat', 'editor', $this->_label);
 
         if (!is_null($this->getAttribute('onblur')) && !is_null($this->getAttribute('onchange'))) {
             $context['changelistener'] = true;
@@ -495,5 +499,15 @@ class MoodleQuickForm_editor extends HTML_QuickForm_element implements templatab
     function getFrozenHtml() {
 
         return '';
+    }
+
+    /**
+     * Sets label to be hidden.
+     *
+     * @param bool $hiddenLabel Whether the label should be hidden or not.
+     * @return void
+     */
+    function setHiddenLabel($hiddenLabel) {
+        $this->_hiddenLabel = $hiddenLabel;
     }
 }

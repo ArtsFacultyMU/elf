@@ -99,9 +99,6 @@ class mod_quiz_generator extends testing_module_generator {
     /**
      * Create a quiz attempt for a particular user at a particular course.
      *
-     * Currently this method can only create a first attempt for each
-     * user at each quiz. TODO remove this limitation.
-     *
      * @param int $quizid the quiz id (from the mdl_quit table, not cmid).
      * @param int $userid the user id.
      * @param array $forcedrandomquestions slot => questionid. Optional,
@@ -116,12 +113,18 @@ class mod_quiz_generator extends testing_module_generator {
         // Build quiz object and load questions.
         $quizobj = quiz::create($quizid, $userid);
 
-        if (quiz_get_user_attempts($quizid, $userid, 'all', true)) {
-            throw new coding_exception('mod_quiz_generator is currently limited to only ' .
-                    'be able to create one attempt for each user. (This should be fixed.)');
+        $attemptnumber = 1;
+        $attempt = null;
+
+        if ($attempts = quiz_get_user_attempts($quizid, $userid, 'all', true)) {
+            // There is/are already an attempt/some attempts.
+            // Take the last attempt.
+            $attempt = end($attempts);
+            // Take the attempt number of the last attempt and increase it.
+            $attemptnumber = $attempt->attempt + 1;
         }
 
-        return quiz_prepare_and_start_new_attempt($quizobj, 1, null, false,
+        return quiz_prepare_and_start_new_attempt($quizobj, $attemptnumber, $attempt, false,
                 $forcedrandomquestions, $forcedvariants);
     }
 
@@ -179,6 +182,7 @@ class mod_quiz_generator extends testing_module_generator {
     public function create_override(array $data): void {
         global $DB;
 
+        // Validate.
         if (!isset($data['quiz'])) {
             throw new coding_exception('Must specify quiz (id) when creating a quiz override.');
         }
@@ -191,6 +195,10 @@ class mod_quiz_generator extends testing_module_generator {
             throw new coding_exception('Cannot specify both userid and groupid when creating a quiz override.');
         }
 
+        // Create the override.
         $DB->insert_record('quiz_overrides', (object) $data);
+
+        // Update any associated calendar events, if necessary.
+        quiz_update_events($DB->get_record('quiz', ['id' => $data['quiz']], '*', MUST_EXIST));
     }
 }
