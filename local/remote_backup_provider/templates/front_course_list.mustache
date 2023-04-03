@@ -1,0 +1,177 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+
+{{!
+    @template templates/front_course_list
+
+    List of courses after search.
+
+    @package    local_remote_backup_provider
+    @copyright  2020 Masaryk University
+    @author     Vojtěch Mrkývka <vojtech.mrkyvka@gmail.com>
+    @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+}}
+
+{{#found_courses}}
+    <div style="margin: 20px 0;">
+        <table class="generaltable">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>{{#str}} short_course_name, local_remote_backup_provider {{/str}}</th>
+                    <th>{{#str}} full_course_name, local_remote_backup_provider {{/str}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#courses}}
+                    <tr>
+                        <td><input type="checkbox" form="remote_form" class="remote_course_checkbox" value="{{id}}" name="remote_id[]" /></td>
+                        <td>{{shortname}}</td>
+                        <td><a title="{{#str}} remote_course, local_remote_backup_provider {{/str}}" href="{{remote_address}}/course/view.php?id={{id}}" target="_blank">{{fullname}}</a></td>
+                    </tr>
+                {{/courses}}
+            </tbody>
+        </table>
+    </div>
+    {{#transfer_as_other}}
+        <div>
+            <div><label><input type="radio" name="transferas" form="remote_form" value="self" checked /> {{#str}} transfer_as_self, local_remote_backup_provider {{/str}}</label></div>
+            <div>
+                <label><input type="radio" name="transferas" form="remote_form" value="other" /> {{#str}} transfer_as_other, local_remote_backup_provider {{/str}}: </label>
+                <span id="transfer_as_who__selected" style="display: none;">
+                    <input type="hidden" name="userid"  form="remote_form" value="" />
+                    <b><span class="lastname"></span>, 
+                    <span class="firstname"></span></b> 
+                    (id: <span class="id"></span>, e-mail: <span class="email"></span>)
+                    <span class="nope">{{#pix}}t/delete{{/pix}}</span>
+                </span>
+                <div id="transfer_as_who" class="form-inline" style="display: inline-block">
+                    <input id="transfer_as_who__search" type="text" class="form-control" autocomplete="off" />
+                    <div id="transfer_suggestion_list">
+                    <table></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{/transfer_as_other}}
+    <div>
+        <form method="POST" id="remote_form" action="?section=process&remote={{remote_id}}">
+            <button type="submit" class="btn btn-primary">{{#str}} button_import, local_remote_backup_provider {{/str}}</button>
+        </form>
+    </div>
+
+    {{#js}}
+        document.querySelectorAll('.remote_course_checkbox')
+                .forEach(e => e.addEventListener('change', toggleImportButton));
+
+        function toggleImportButton(e) {
+            let checked = document.querySelectorAll('.remote_course_checkbox:checked');
+            document.querySelector('#remote_form button, #remote_form input[type="button"]').disabled = (checked.length==0);
+        }
+
+        toggleImportButton();
+
+        const search = document.getElementById('transfer_as_who__search');
+        search.addEventListener('keyup', findUsers);
+        
+        function findUsers(e) {
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', '?section=ajax_find_users&search=' + e.target.value);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    const table = document.querySelector('#transfer_as_who table');
+                    const users = JSON.parse(xhr.responseText);
+
+                    let tableText = '';
+
+                    users.forEach(function(user) {
+                        tableText += `<tr><td class="transfer_suggestion"><b><span class="lastname">${user.lastname}</span>, <span class="firstname">${user.firstname}</span></b><br />(id: <span class="id">${user.id}</span>, e-mail: <span class="email">${user.email}</span>)</td></tr>`;
+                    })
+                    table.innerHTML = tableText;
+                    
+                    const suggestions = document.querySelectorAll('.transfer_suggestion');
+                    suggestions.forEach(function(suggestion) {
+                        suggestion.addEventListener('click', () => {selectUser(suggestion)});
+                    })
+                }
+                else {
+                    alert('Request failed.  Returned status of ' + xhr.status);
+                }
+            };
+            xhr.send();
+        }
+
+        function selectUser(user) {
+            const search = document.getElementById('transfer_as_who');
+            const output = document.getElementById('transfer_as_who__selected');
+            
+            const sourceLastname = user.querySelector('.lastname');
+            const sourceFirstname = user.querySelector('.firstname');
+            const sourceEmail = user.querySelector('.email');
+            const sourceId = user.querySelector('.id');
+
+            const targetLastname = output.querySelector('.lastname');
+            const targetFirstname = output.querySelector('.firstname');
+            const targetEmail = output.querySelector('.email');
+            const targetId = output.querySelector('.id');
+            const targetHidden = output.querySelector('input[name="userid"]');
+
+            targetLastname.innerHTML = sourceLastname.innerHTML;
+            targetFirstname.innerHTML = sourceFirstname.innerHTML;
+            targetEmail.innerHTML = sourceEmail.innerHTML;
+            targetId.innerHTML = sourceId.innerHTML;
+            targetHidden.value = sourceId.innerHTML;
+
+            output.style.display = '';
+            search.style.display = 'none';
+            document.querySelector('input[name="transferas"][value="other"]').checked = true;
+        }
+
+        document.querySelector('#transfer_as_who__selected .nope').addEventListener('click', unselectUser);
+
+        function unselectUser(e) {
+            const searchWrapper = document.getElementById('transfer_as_who');
+            const output = document.getElementById('transfer_as_who__selected');
+            const search = document.getElementById('transfer_as_who__search');
+            const table = document.querySelector('#transfer_as_who table')
+
+            const targetLastname = output.querySelector('.lastname');
+            const targetFirstname = output.querySelector('.firstname');
+            const targetId = output.querySelector('.id');
+            const targetHidden = output.querySelector('input[name="userid"]');
+
+            targetLastname.innerHTML = '';
+            targetFirstname.innerHTML = '';
+            targetId.innerHTML = '';
+            targetHidden.value = '';
+
+            search.value = '';
+            table.innerHTML = '';
+
+            output.style.display = 'none';
+            searchWrapper.style.display = 'inline-block';
+            document.querySelector('input[name="transferas"][value="self"]').checked = true;
+        }
+        
+    {{/js}}
+{{/found_courses}}
+
+{{^found_courses}}
+    <div style="margin-bottom: 20px;">
+        <i>{{#str}} no_courses_found, local_remote_backup_provider {{/str}}.</i>
+    </div>
+{{/found_courses}}
