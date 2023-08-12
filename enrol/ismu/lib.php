@@ -226,12 +226,7 @@ class enrol_ismu_plugin extends enrol_plugin {
         if (!has_capability('enrol/ismu:config', $context)) {
             return;
         }
-
-        if ($inserted) {
-            $this->add_instance($course, enrol_ismu\helpers\converters::ismu_to_moodle_settings($data));
-            return;
-        } 
-
+        
         if (!isset($data->enrol_ismu_enrol_status)) {
             $data->enrol_ismu_enrol_status = 0;
         }
@@ -246,6 +241,10 @@ class enrol_ismu_plugin extends enrol_plugin {
             $data->enrol_ismu_period = $currentsemester->full();
         }
 
+        if ($inserted) {
+            $this->add_instance($course, enrol_ismu\helpers\converters::ismu_to_moodle_settings($data));
+            return;
+        } 
         $instance = \enrol_ismu\moodle_enroler::get_instance_by_course_id($course->id);
         if (!$instance) {
             return;
