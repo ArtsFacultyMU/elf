@@ -227,16 +227,16 @@ class enrol_ismu_plugin extends enrol_plugin {
             return;
         }
         
-        if (!isset($data->enrol_ismu_enrol_status)) {
+        if ($data && !isset($data->enrol_ismu_enrol_status)) {
             $data->enrol_ismu_enrol_status = 0;
         }
-        if (!isset($data->enrol_ismu_create_seminars)) {
+        if ($data && !isset($data->enrol_ismu_create_seminars)) {
             $data->enrol_ismu_create_seminars = 0;
         }
-        if (!isset($data->enrol_ismu_course_codes)) {
+        if ($data && !isset($data->enrol_ismu_course_codes)) {
             $data->enrol_ismu_course_codes = '';
         }
-        if (!isset($data->enrol_ismu_period)) {
+        if ($data && !isset($data->enrol_ismu_period)) {
             $currentsemester = \enrol_ismu\helpers\semester::get_current_semester();
             $data->enrol_ismu_period = $currentsemester->full();
         }
