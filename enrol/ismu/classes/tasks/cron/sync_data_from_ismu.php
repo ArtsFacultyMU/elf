@@ -311,12 +311,14 @@ class sync_data_from_ismu extends \core\task\scheduled_task
             $userId = $DB->insert_record('user', $user);
             $context = \context_system::instance();
 
-            // If teacher doesn't have "Course creator" role, adds it
+           // If teacher doesn't have "Course creator" role, adds it
+	    // (If such role is present)
             $coursecreatorrole = $DB->get_record('role', ['shortname' => 'coursecreator']);
-            if(!user_has_role_assignment($userId, $coursecreatorrole->id, $context->id))
+            if($coursecreatorrole && !user_has_role_assignment($userId, $coursecreatorrole->id, $context->id))
                 role_assign($coursecreatorrole->id, $userId, $context->id);
         }
     }
+
 
 
 
