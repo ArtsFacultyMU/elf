@@ -47,9 +47,9 @@ switch($errorcode) {
     case 2:
         $errormsg = get_string('username').': '.get_string("invalidusername");
         break;
-    case AUTH_LOGIN_UNAUTHORISED:
-        $errormsg = get_string("unauthorisedlogin", "", clean_param($_GET["username"], PARAM_RAW));
-        break;
+    //case AUTH_LOGIN_UNAUTHORISED:
+      //  $errormsg = get_string("unauthorisedlogin", "", clean_param($_GET["username"], PARAM_RAW));
+        //break;
     case 3:
         $errormsg = get_string("invalidlogin");
         break;
